@@ -65,13 +65,9 @@ function GameScreen:__init()
 	for i = 1, 10 do
 		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random(), love.graphics.getHeight() * math.random() ) )
 	end
-
-  camera:newLayer(1, function()
-    self.whale:render()
-		for k,v in ipairs( self.objects ) do
-			v:render()
-		end
-  end)
+ 
+  bg = love.graphics.newImage("assets/sprites/testBG.png")
+  camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
 end
 
 function GameScreen:update( dt )
@@ -84,7 +80,6 @@ function GameScreen:update( dt )
 	
 	camera:setPosition(self.whale:getX() - love.window.getWidth() / 2,
     self.whale:getY() - love.window.getHeight() / 2)
-
 
 	local removals = {}
 	for i, obj in ipairs( self.objects ) do
@@ -102,8 +97,13 @@ function GameScreen:update( dt )
 end
 
 function GameScreen:render()
-	
-	camera:draw()
+	camera:set()
+	love.graphics.draw(bg)
+  self.whale:render()
+  for k,v in ipairs( self.objects ) do
+    v:render()
+	end
+  camera:unset()
 end
 
 
