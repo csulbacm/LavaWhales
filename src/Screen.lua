@@ -99,11 +99,11 @@ end
 function GameScreen:render()
 	camera:set()
 	love.graphics.draw(bg)
-  self.whale:render()
-  for k,v in ipairs( self.objects ) do
-    v:render()
-	end
-  camera:unset()
+   self.whale:render()
+   for k,v in ipairs( self.objects ) do
+     v:render()
+	 end
+   camera:unset()
 end
 
 
