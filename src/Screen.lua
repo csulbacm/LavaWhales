@@ -1,7 +1,7 @@
 class = require "external/30log/30log"
 
 Screen = class()
-
+require('assets/camera/camera')
 
 
 function Screen:__init( name )
@@ -43,8 +43,10 @@ function  HelpScreen:__init()
 end
 
 function HelpScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}	}
-	gui.Label{text="These will be instructions on how to not play the game"}
+	gui.group.push{grow="down",pos={200,100}}
+	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.",
+		size={2}}
+	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
 		ActiveScreen = TitleScreen()
 	end
@@ -54,15 +56,22 @@ end
 GameScreen = Screen:extends()
 
 function GameScreen:__init()
+  self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 	GameScreen.super:__init( "GameScreen" )
-	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
-	self.dwarf = Dwarves( 0, 0 )
+
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
 	for i = 1, 10 do
 		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random(), love.graphics.getHeight() * math.random() ) )
 	end
+
+  camera:newLayer(1, function()
+    self.whale:render()
+		for k,v in ipairs( self.objects ) do
+			v:render()
+		end
+  end)
 end
 
 function GameScreen:update( dt )
@@ -70,7 +79,11 @@ function GameScreen:update( dt )
 	for k,v in ipairs( self.objects ) do
 		v:update()
 	end
+	
 	world:update( dt )
+	
+	camera:setPosition(self.whale:getX() - love.window.getWidth() / 2,
+    self.whale:getY() - love.window.getHeight() / 2)
 
 
 	local removals = {}
@@ -89,10 +102,8 @@ function GameScreen:update( dt )
 end
 
 function GameScreen:render()
-	self.whale:render()
-	for k,v in ipairs( self.objects ) do
-		v:render()
-	end
+	
+	camera:draw()
 end
 
 
@@ -110,5 +121,5 @@ function preSolve( a, b, coll )
 end
 
 function postSolve( a, b, coll )
-
+  
 end

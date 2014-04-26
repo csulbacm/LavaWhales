@@ -31,7 +31,7 @@ end
 local start_button = false
 
 function love.update( dt )
-	ActiveScreen:update( dt )
+    ActiveScreen:update( dt )
 end
 
 function love.draw()
