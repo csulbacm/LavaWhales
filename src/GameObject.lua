@@ -22,11 +22,11 @@ function GameObject:render()
 end
 
 function GameObject:getX()
-	return self.pos.x
+	return self.body:getX()
 end
 
 function GameObject:getY()
-	return self.pos.y
+	return self.body:getY()
 end
 
 function GameObject:getWidth()
@@ -58,7 +58,8 @@ function Whale:__init( x, y )
 	self.pos.w = self.image:getWidth()
 	self.pos.h = self.image:getHeight()
 
-	self.maxVel = 600
+	self.maxVel = 400
+	self.accel = 300
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
@@ -69,13 +70,13 @@ end
 function Whale:update()
 	local x, y = self.body:getLinearVelocity()
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
-		self.body:applyLinearImpulse( 0, -400 )
+		self.body:applyLinearImpulse( 0, -self.accel )
 	elseif love.keyboard.isDown('down') and y < self.maxVel then
-		self.body:applyLinearImpulse( 0, 400 )
+		self.body:applyLinearImpulse( 0, self.accel )
 	elseif love.keyboard.isDown('left') and x > -self.maxVel then
-		self.body:applyLinearImpulse( -400, 0 )
+		self.body:applyLinearImpulse( -self.accel, 0 )
 	elseif love.keyboard.isDown('right') and x < self.maxVel then
-		self.body:applyLinearImpulse( 400, 0 )
+		self.body:applyLinearImpulse( self.accel, 0 )
 	end
 end
 
@@ -83,14 +84,6 @@ function Whale:render()
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
-
-function Whale:getX()
-	return self.body:getX()
-end
-
-function Whale:getY()
-	return self.body:getY()
-end
 
 function Whale:getWidth()
 	return self.image:getWidth()
@@ -120,15 +113,6 @@ end
 
 function Dwarves:render()
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-end
-
-
-function Dwarves:getX()
-	return self.body:getX()
-end
-
-function Dwarves:getY()
-	return self.body:getY()
 end
 
 function Dwarves:getWidth()
