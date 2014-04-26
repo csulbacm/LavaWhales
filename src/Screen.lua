@@ -43,8 +43,10 @@ function  HelpScreen:__init()
 end
 
 function HelpScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}	}
-	gui.Label{text="These will be instructions on how to not play the game"}
+	gui.group.push{grow="down",pos={200,100}}
+	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.",
+		size={2}}
+	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
 		ActiveScreen = TitleScreen()
 	end
