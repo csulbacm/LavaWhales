@@ -1,9 +1,12 @@
-class = require 'external/30log/30log'
+class = require "external/30log/30log"
 
 GameObject = class()
 
-function GameObject:__init()
+function GameObject:__init( id )
+	self.id = id
 	self.dead = false
+	self.toKill = false
+
 	self.pos = {}
 	self.pos.x = 0
 	self.pos.y = 0
@@ -27,50 +30,71 @@ function GameObject:getY()
 	return self.pos.y
 end
 
-ActingObj = GameObject:extends()
+function GameObject:kill()
+	if self.dead == false then
+		self.fixture:destroy()
+		self.body:destroy()
+		dead = true
+	end
+end
 
-function ActingObj:__init( x, y, w, h, density )
-	ActingObj.super:__init()
 
-	self.pos.x, self.pos.y, self.pos.w, self.pos.h = x, y, w, h
+
+Whale = GameObject:extends()
+
+function Whale:__init( x, y )
+	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
+	--Whale.super:__init( x, y, self.image:getWidth(), self.image:getHeight(), 10 )
+	Whale.super:__init()
+	self.pos.x = x
+	self.pos.y = y
+
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
-	self.fixture = love.physics.newFixture( self.body, self.shape, density )
-end
-
-function ActingObj:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
-end
-
-function ActingObj:getX()
-	return self.body:getX()
-end
-
-function ActingObj:getY()
-	return self.body:getY()
-end
-
-
-Whale = ActingObj:extends()
-
-function Whale:__init( x, y )
-	Whale.super:__init( x, y, 64, 64, 10 )
-	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
+	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 end
 
 function Whale:render()
-	love.graphics.draw( self.image, self:getX(), self:getY() )
+	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
 end
 
 
-Dwarves = ActingObj:extends()
+function Whale:getX()
+	return self.body:getX()
+end
 
-function Dwarves:__init( x, y, w, h )
-	Dwarves.super:__init( x, y, w, h )
+function Whale:getY()
+	return self.body:getY()
+end
+
+Dwarves = GameObject:extends()
+
+function Dwarves:__init( x, y )
+	Dwarves.super:__init()
+	self.image = love.graphics.newImage("assets/sprites/test_dwarf.png")
+
+	self.pos.x = x
+	self.pos.y = y
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
+
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 end
 
 function Dwarves:render()
-	love.graphics.setColor( 255, 128, 0 )
-	Dwarves.super:render()
+	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
+end
+
+
+function Dwarves:getX()
+	return self.body:getX()
+end
+
+function Dwarves:getY()
+	return self.body:getY()
 end
