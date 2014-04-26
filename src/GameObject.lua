@@ -30,6 +30,14 @@ function GameObject:getY()
 	return self.pos.y
 end
 
+function GameObject:getWidth()
+	return self.pos.w
+end
+
+function GameObject:getHeight()
+	return self.pos.h
+end
+
 function GameObject:kill()
 	if self.dead == false then
 		self.fixture:destroy()
@@ -58,7 +66,7 @@ function Whale:__init( x, y )
 end
 
 function Whale:render()
-	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
 
@@ -69,6 +77,15 @@ end
 function Whale:getY()
 	return self.body:getY()
 end
+
+function Whale:getWidth()
+	return self.image:getWidth()
+end
+
+function Whale:getHeight()
+	return self.image:getHeight()
+end
+
 
 Dwarves = GameObject:extends()
 
@@ -87,7 +104,7 @@ function Dwarves:__init( x, y )
 end
 
 function Dwarves:render()
-	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
 
@@ -97,4 +114,12 @@ end
 
 function Dwarves:getY()
 	return self.body:getY()
+end
+
+function Dwarves:getWidth()
+	return self.image:getWidth()
+end
+
+function Dwarves:getHeight()
+	return self.image:getHeight()
 end
