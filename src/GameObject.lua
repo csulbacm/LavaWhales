@@ -77,6 +77,23 @@ function Whale:update()
 	elseif love.keyboard.isDown('right') and x < self.maxVel then
 		self.body:applyLinearImpulse( 400, 0 )
 	end
+
+	if(self:getX() < self:getWidth() / 2) then
+		self.body:setX(self:getWidth() / 2) 
+		self.body:applyLinearImpulse(-1 * x, 0)
+	end
+	if(self:getX() > love.window.getWidth() * 2 - self:getWidth() / 2) then
+		self.body:setX(love.window.getWidth() * 2 - self:getWidth() / 2) 
+		self.body:applyLinearImpulse(-1 * x, 0)
+	end
+	if(self:getY() < self:getHeight() / 2) then
+		self.body:setY(self:getHeight() / 2) 
+		self.body:applyLinearImpulse(0, -1 * y)
+	end
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
+		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
+		self.body:applyLinearImpulse(0, -1 * y)
+	end
 end
 
 function Whale:render()
