@@ -2,6 +2,7 @@ world=nil
 
 gui = require "external/Quickie"
 require 'src/GameObject'
+require('assets/camera/camera')
 require 'src/Screen'
 
 
