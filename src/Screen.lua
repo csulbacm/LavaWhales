@@ -60,17 +60,13 @@ function GameScreen:__init()
   camera:newLayer(1, function()
     self.whale:render()
     self.dwarf:render()
-   -- love.graphics.print(self.whale:getX(), camera.x, camera.y)
-   -- love.graphics.print(self.whale:getY(), camera.x + 50, camera.y)
-   love.graphics.print(camera.x, camera.x, camera.y)
-   love.graphics.print(camera.y, camera.x + 50, camera.y)
   end)
 end
 
 function GameScreen:update( dt )
 	world:update( dt )
-  camera:setPosition(self.whale:getX() - love.window.getWidth() / 2, self.whale:getY() - love.window.getHeight() / 2)
-  --camera:setPosition(love.mouse.getX() * 2, love.mouse.getY() * 2)
+  camera:setPosition(self.whale:getX() - love.window.getWidth() / 2,
+    self.whale:getY() - love.window.getHeight() / 2)
 end
 
 function GameScreen:render()
