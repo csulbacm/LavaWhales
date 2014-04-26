@@ -10,7 +10,7 @@ require 'external/AnAL'
 function love.load()
 	love.physics.setMeter( 64 )
 
-	world = love.physics.newWorld( 0, 9.81 * 64, true )
+	world = love.physics.newWorld( 0, 0, true )
 	love.window.setMode( 800, 600 )
 	love.graphics.setBackgroundColor( 0, 0, 255 )
 

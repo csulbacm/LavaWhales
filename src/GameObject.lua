@@ -58,6 +58,8 @@ function Whale:__init( x, y )
 	self.pos.w = self.image:getWidth()
 	self.pos.h = self.image:getHeight()
 
+	self.maxVel = 600
+
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
@@ -65,13 +67,14 @@ function Whale:__init( x, y )
 end
 
 function Whale:update()
-	if love.keyboard.isDown('up') then
+	local x, y = self.body:getLinearVelocity()
+	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -400 )
-	elseif love.keyboard.isDown('down') then
+	elseif love.keyboard.isDown('down') and y < self.maxVel then
 		self.body:applyLinearImpulse( 0, 400 )
-	elseif love.keyboard.isDown('left') then
+	elseif love.keyboard.isDown('left') and x > -self.maxVel then
 		self.body:applyLinearImpulse( -400, 0 )
-	elseif love.keyboard.isDown('right') then
+	elseif love.keyboard.isDown('right') and x < self.maxVel then
 		self.body:applyLinearImpulse( 400, 0 )
 	end
 end
