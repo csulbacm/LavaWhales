@@ -1,7 +1,7 @@
 class = require "external/30log/30log"
 
 Screen = class()
-
+require('assets/camera/camera')
 
 
 function Screen:__init( name )
@@ -33,16 +33,25 @@ end
 GameScreen = Screen:extends()
 
 function GameScreen:__init()
+  self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+  self.dwarf = Dwarves( 0, 0 )
 	GameScreen.super:__init( "GameScreen" )
-	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
-	self.dwarf = Dwarves( 0, 0 )
+  camera:newLayer(1, function()
+    self.whale:render()
+    self.dwarf:render()
+   -- love.graphics.print(self.whale:getX(), camera.x, camera.y)
+   -- love.graphics.print(self.whale:getY(), camera.x + 50, camera.y)
+   love.graphics.print(camera.x, camera.x, camera.y)
+   love.graphics.print(camera.y, camera.x + 50, camera.y)
+  end)
 end
 
 function GameScreen:update( dt )
 	world:update( dt )
+  camera:setPosition(self.whale:getX() - love.window.getWidth() / 2, self.whale:getY() - love.window.getHeight() / 2)
+  --camera:setPosition(love.mouse.getX() * 2, love.mouse.getY() * 2)
 end
 
 function GameScreen:render()
-	self.whale:render()
-	self.dwarf:render()
+  camera:draw()
 end
