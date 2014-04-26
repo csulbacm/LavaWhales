@@ -19,6 +19,14 @@ function GameObject:render()
 
 end
 
+function GameObject:getX()
+	return self.pos.x
+end
+
+function GameObject:getY()
+	return self.pos.y
+end
+
 ActingObj = GameObject:extends()
 
 function ActingObj:__init( x, y, w, h, density )
@@ -35,16 +43,24 @@ function ActingObj:render()
 	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
+function ActingObj:getX()
+	return self.body:getX()
+end
+
+function ActingObj:getY()
+	return self.body:getY()
+end
+
 
 Whale = ActingObj:extends()
 
 function Whale:__init( x, y )
 	Whale.super:__init( x, y, 64, 64, 10 )
+	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
 end
 
 function Whale:render()
-	love.graphics.setColor( 0, 255, 128 )
-	Whale.super:render()
+	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
 
 
