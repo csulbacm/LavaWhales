@@ -43,7 +43,7 @@ function Whale:__init( x, y )
 end
 
 function Whale:render()
-	love.graphics.setColor( 0, 0, 255 )
+	love.graphics.setColor( 0, 255, 128 )
 	Whale.super:render()
 end
 
