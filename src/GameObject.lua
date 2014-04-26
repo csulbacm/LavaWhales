@@ -1,9 +1,12 @@
-class = require 'external/30log/30log'
+class = require "external/30log/30log"
 
 GameObject = class()
 
-function GameObject:__init()
+function GameObject:__init( id )
+	self.id = id
 	self.dead = false
+	self.toKill = false
+
 	self.pos = {}
 	self.pos.x = 0
 	self.pos.y = 0
@@ -19,12 +22,12 @@ function GameObject:render()
 
 end
 
-function GameObject:getX()
-	return self.pos.x
-end
-
-function GameObject:getY()
-	return self.pos.y
+function GameObject:kill()
+	if self.dead == false then
+		self.fixture:destroy()
+		self.body:destroy()
+		dead = true
+	end
 end
 
 ActingObj = GameObject:extends()
@@ -32,11 +35,13 @@ ActingObj = GameObject:extends()
 function ActingObj:__init( x, y, w, h, density )
 	ActingObj.super:__init()
 
-	self.pos.x, self.pos.y, self.pos.w, self.pos.h = x, y, w, h
-
-	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
-	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.body = love.physics.newBody( world, x, y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, w, h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, density )
+end
+
+function ActingObj:update()
+
 end
 
 function ActingObj:render()
@@ -55,22 +60,22 @@ end
 Whale = ActingObj:extends()
 
 function Whale:__init( x, y )
-	Whale.super:__init( x, y, 64, 64, 10 )
 	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
+	Whale.super:__init( x, y, self.image:getWidth(), self.image:getHeight(), 10 )
 end
 
 function Whale:render()
-	love.graphics.draw( self.image, self:getX(), self:getY() )
+	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
 end
 
 
 Dwarves = ActingObj:extends()
 
-function Dwarves:__init( x, y, w, h )
-	Dwarves.super:__init( x, y, w, h )
+function Dwarves:__init( x, y )
+	self.image = love.graphics.newImage("assets/sprites/test_dwarf.png")
+	Dwarves.super:__init( x, y, self.image:getWidth(), self.image:getHeight(), 10 )
 end
 
 function Dwarves:render()
-	love.graphics.setColor( 255, 128, 0 )
-	Dwarves.super:render()
+	love.graphics.draw( self.image, self.body:getX(), self.body:getY() )
 end
