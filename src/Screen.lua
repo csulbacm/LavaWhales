@@ -57,13 +57,58 @@ function GameScreen:__init()
 	GameScreen.super:__init( "GameScreen" )
 	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 	self.dwarf = Dwarves( 0, 0 )
+	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
+
+	self.objects = {}
+	for i = 1, 10 do
+		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random(), love.graphics.getHeight() * math.random() ) )
+	end
 end
 
 function GameScreen:update( dt )
+	self.whale:update()
+	for k,v in ipairs( self.objects ) do
+		v:update()
+	end
 	world:update( dt )
+
+
+	local removals = {}
+	for i, obj in ipairs( self.objects ) do
+		if obj.toKill == true then
+			table.insert( removals, 1, i )
+			obj:kill()
+		end
+	end
+
+	for i, index in ipairs( removals ) do
+		table.remove( self.objects, index )
+	end
+
+	removals = nil
 end
 
 function GameScreen:render()
 	self.whale:render()
-	self.dwarf:render()
+	for k,v in ipairs( self.objects ) do
+		v:render()
+	end
+end
+
+
+function beginContact( a, b, coll )
+	--a:getUserData().toKill = true
+	--b:getUserData().toKill = true
+end
+
+function endContact( a, b, coll )
+
+end
+
+function preSolve( a, b, coll )
+	
+end
+
+function postSolve( a, b, coll )
+
 end

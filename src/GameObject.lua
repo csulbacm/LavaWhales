@@ -2,8 +2,7 @@ class = require "external/30log/30log"
 
 GameObject = class()
 
-function GameObject:__init( id )
-	self.id = id
+function GameObject:__init()
 	self.dead = false
 	self.toKill = false
 
@@ -63,6 +62,11 @@ function Whale:__init( x, y )
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture:setUserData( self )
+end
+
+function Whale:update()
+	
 end
 
 function Whale:render()
@@ -101,6 +105,7 @@ function Dwarves:__init( x, y )
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture:setUserData( self )
 end
 
 function Dwarves:render()

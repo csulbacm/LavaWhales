@@ -4,12 +4,13 @@ gui = require "external/Quickie"
 require 'src/GameObject'
 require('assets/camera/camera')
 require 'src/Screen'
+require 'external/AnAL'
 
 
 function love.load()
 	love.physics.setMeter( 64 )
 
-	world = love.physics.newWorld( 0, 0, true )
+	world = love.physics.newWorld( 0, 9.81 * 64, true )
 	love.window.setMode( 800, 600 )
 	love.graphics.setBackgroundColor( 0, 0, 255 )
 
@@ -24,8 +25,7 @@ function love.load()
 	gui.group.default.size[2] = 25
 	gui.group.default.spacing = 5
 
-	ActiveScreen = TitleScreen()
-	
+	ActiveScreen = TitleScreen()	
 end
 
 local start_button = false
@@ -38,4 +38,3 @@ function love.draw()
 	gui.core.draw()
 	ActiveScreen:render()
 end
-
