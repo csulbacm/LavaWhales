@@ -51,7 +51,6 @@ Whale = GameObject:extends()
 
 function Whale:__init( x, y )
 	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
-	--Whale.super:__init( x, y, self.image:getWidth(), self.image:getHeight(), 10 )
 	Whale.super:__init()
 	self.pos.x = x
 	self.pos.y = y
@@ -66,7 +65,15 @@ function Whale:__init( x, y )
 end
 
 function Whale:update()
-	
+	if love.keyboard.isDown('up') then
+		self.body:applyLinearImpulse( 0, -400 )
+	elseif love.keyboard.isDown('down') then
+		self.body:applyLinearImpulse( 0, 400 )
+	elseif love.keyboard.isDown('left') then
+		self.body:applyLinearImpulse( -400, 0 )
+	elseif love.keyboard.isDown('right') then
+		self.body:applyLinearImpulse( 400, 0 )
+	end
 end
 
 function Whale:render()

@@ -63,7 +63,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 	for i = 1, 10 do
-		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random(), love.graphics.getHeight() * math.random() ) )
+		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
 	end
 
   camera:newLayer(1, function()
@@ -108,8 +108,8 @@ end
 
 
 function beginContact( a, b, coll )
-	--a:getUserData().toKill = true
-	--b:getUserData().toKill = true
+	a:getUserData().toKill = true
+	b:getUserData().toKill = true
 end
 
 function endContact( a, b, coll )
