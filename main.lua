@@ -1,4 +1,5 @@
 require 'src/GameObject'
+require('assets/camera/camera')
 
 function love.load()
 	love.physics.setMeter( 64 )
