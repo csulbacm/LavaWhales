@@ -192,6 +192,34 @@ function Dwarves:__init( x, y )
 	self.fixture:setUserData( self )
 end
 
+function Dwarves:update( dt )
+	--unicorns will fall down
+	--at the bottom, they will bounce to random hights
+	x,y = self.body:getLinearVelocity()
+	if(y < 100) then
+		self.body:applyLinearImpulse(0,5000)
+	end
+
+
+	if(self:getY() < self:getHeight() / 2) then
+		self.body:setY(self:getHeight() / 2) 
+		self.body:applyLinearImpulse(0, -1.1 * y)
+	end
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
+		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
+		self.body:applyLinearImpulse(0, -1.1 * y)
+	end
+
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 100) then
+		--we are at the bottom
+		if love.math.random() > .7 then
+			self.body:applyLinearImpulse(-2000, -50000 * (love.math.random() + .5))
+		else
+			self.body:applyLinearImpulse(-5000, -5000 * (love.math.random() + .5))
+		end
+	end
+end
+
 function Dwarves:render()
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
