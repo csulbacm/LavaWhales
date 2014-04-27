@@ -187,3 +187,12 @@ end
 function Shots:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
+
+Wall = class()
+
+function Wall:__init( x, y, w, h )
+	self.body = love.physics.newBody( world, x, y, "static" )
+	self.shape = love.physics.newRectangleShape( 0, 0, w, h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1000000 )
+	self.fixture:setUserData( self )
+end
