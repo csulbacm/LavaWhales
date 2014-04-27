@@ -135,6 +135,7 @@ function GameScreen:__init()
   bg1 = love.graphics.newImage("assets/sprites/testBG.png")
   posX = 0 
   imageWidth = 1600
+  self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -175,7 +176,11 @@ function GameScreen:update( dt )
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
-	posX = posX - 1
+	if(self.whale:getX() >= imageWidth / 2) then
+		posX = posX - 5
+	else
+		posX = posX - 1
+	end
 	removals = nil
 end
 
@@ -265,7 +270,7 @@ function healthBar(whale)
 	local health = whale.health
 	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
 	love.graphics.setColor(0,0,0)
-	love.graphics.print("Health: " .. health, math.floor(x),  math.floor(y))
+	love.graphics.print("Health: " .. math.floor(health), math.floor(x),  math.floor(y))
 	if(health > 0) then
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("line", x + 80, camera._y + 10, whale.health * 2 + 2, 15)
@@ -304,7 +309,7 @@ function airBar(whale)
 	local air = whale.air
 	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
 	love.graphics.setColor(0,0,0)
-	love.graphics.print("Air: "..air, x, y)
+	love.graphics.print("Air: "..math.floor(air), x, y)
 	if(air > 0) then
 		love.graphics.setColor(0,204,204)
 		love.graphics.rectangle("line", x + 60, y, air * 2 + 2, 15)
