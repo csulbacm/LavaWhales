@@ -68,8 +68,8 @@ function Whale:__init( x, y )
 	self.pos.w = self.image:getWidth()
 	self.pos.h = self.image:getHeight()
 
-	self.maxVel = 400
-	self.accel = 300
+	self.maxVel = 500
+	self.accel = 500
 
 	self.dwarf_col = false
 	self.fish_col = false

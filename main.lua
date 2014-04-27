@@ -42,6 +42,6 @@ end
 function love.keypressed( key, isrepeat )
 	if key == ' ' and ActiveScreen:is( GameScreen ) then
 		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth(),
-		 ActiveScreen.whale:getY(), 100000 * 64 ) )
+		 ActiveScreen.whale:getY(), 500000 * 64 ) )
 	end
 end

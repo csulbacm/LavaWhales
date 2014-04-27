@@ -74,7 +74,7 @@ function GameScreen:__init()
 
 	--Game Loop Music
 	src1:pause()
-	src2 = love.audio.newSource("assets/sounds/game_loop.ogg", "static")
+	src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 	src2:play()
 	src2:setLooping( true )
 
@@ -106,6 +106,7 @@ function GameScreen:update( dt )
 
 	for i, index in ipairs( removals ) do
 		table.remove( self.objects, index )
+		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
@@ -127,6 +128,7 @@ end
 function beginContact( a, b, coll )
 	local tempA = a:getUserData()
 	local tempB = b:getUserData()
+
 	if tempA:is( Whale ) or tempB:is( Whale ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -136,7 +138,11 @@ function beginContact( a, b, coll )
 		if tempB:is( Whale ) then
 			tempB.dwarf_col = true
 		end
-	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
+	end
+	--elseif tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
+
+	if tempA:is( Whale ) or tempB:is( Whale ) or tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
+
 		tempA.toKill = true
 		tempB.toKill = true
 	end

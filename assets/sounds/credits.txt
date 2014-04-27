@@ -1,3 +1,8 @@
 menu_music provided as open source music by Eric Taylor
-avaliable at http://erictaylormusic.com/
+Avaliable at http://erictaylormusic.com/
 
+game_loop provided by MyCannonSing as open source music. 
+Avaliable at http://opengameart.org/content/shadow-of-the-clouds
+
+cave_theme provided by Brandon75689 as open source. Avaliable at
+http://opengameart.org/content/cave-theme
