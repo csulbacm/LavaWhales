@@ -93,7 +93,7 @@ function GameScreen:__init()
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
-	for i = 1, 1 do
+	for i = 1, 25 do
 		spwanDwarf( self.objects )
 	end
 
@@ -182,7 +182,7 @@ function beginContact( a, b, coll )
 		tempB.toKill = true
 		src_hurt:play()
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
-		tempB.dwarf_col = tempA.dwarf_col + 1
+		tempB.dwarf_col = tempB.dwarf_col + 1
 		tempA.toKill = true
 	elseif typesCollided( tempA, Shots, tempB, Dwarves ) then
 		tempA.toKill = true
