@@ -68,7 +68,7 @@ function GameScreen:__init()
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
-	for i = 1, 100 do
+	for i = 1, 50 do
 		spwanDwarf( self.objects )
 	end
 
@@ -172,8 +172,8 @@ function printBackground(posX, imageWidth)
 end
 
 function spwanDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
-	objects[ #objects ].body:applyForce( -20000 * 64 * math.random() -1000 * 64, 0 )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
 end
 
 function healthBar(whale) 
