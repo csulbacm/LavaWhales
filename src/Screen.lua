@@ -78,7 +78,7 @@ end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
+	gui.Label{text="You have failed whalekind.\n Whales are now extinct. \n Good going",
 		size={2}}
 	gui.Label{text=""}
 	src1:pause()
@@ -118,8 +118,12 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 1 do
+	for i = 1, 2 do
 		spawnShip( self.objects )
+	end
+
+	for i = 1, 1 do
+		spawnBoss( self.objects )
 	end
 
 	dims = {}
