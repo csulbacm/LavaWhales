@@ -154,6 +154,12 @@ function beginContact( a, b, coll )
 		tempB.toKill = true
 		src_explosion:play()
 	end
+
+	if tempA:is( Shots ) and tempB:is( Wall ) then
+		tempA.toKill = true
+	elseif tempA:is( Wall ) and tempB:is( Shots ) then
+		tempB.toKill = true
+	end
 end
 
 function endContact( a, b, coll )
