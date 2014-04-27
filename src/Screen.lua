@@ -144,7 +144,7 @@ function GameScreen:__init()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -213,8 +213,8 @@ function GameScreen:render()
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
-	love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
-	love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
+	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
+	--love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
    camera:unset()
 end
 

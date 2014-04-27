@@ -12,7 +12,8 @@ paused = false
 
 function love.load()
 	love.physics.setMeter( 64 )
-
+	love.window.setTitle("LavaWhales")
+	
 	--world = love.physics.newWorld( 0, 0, true )
 	love.window.setMode(1000, 600, { vsync = true } )
 	love.graphics.setBackgroundColor( 0, 0, 255 )
@@ -66,7 +67,7 @@ function love.keypressed( key, isrepeat )
 	if key == "escape" and ActiveScreen:is( GameScreen ) then
       ActiveScreen = TitleScreen()
    end
---Mute Button 
+	--Mute Button 
    if key == "m" and love.audio.getVolume( ) == 1.0  then
     	love.audio.setVolume( 0.0 )
    elseif key == "m" and love.audio.getVolume( ) == 0.0  then
