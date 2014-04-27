@@ -303,12 +303,12 @@ end
 
 function healthBar(whale) 
 	local health = whale.health
-	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 180, camera._y + love.window.getHeight() - 70
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. math.floor(health), math.floor(x),  math.floor(y))
 	if(health > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 80, camera._y + 10, whale.health * 2 + 2, 15)
+		love.graphics.rectangle("line", x + 80, y, whale.health * 2 + 2, 15)
 		if(health > 0 and health < 33) then
 			love.graphics.setColor(255,0,0)
 		elseif(health >= 33 and health < 66) then
@@ -316,22 +316,22 @@ function healthBar(whale)
 		elseif(health >= 66) then
 			love.graphics.setColor(0,255,0)
 		end
-		love.graphics.rectangle("fill", x + 81, camera._y + 10, whale.health * 2, 15)
+		love.graphics.rectangle("fill", x + 81, y, whale.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + love.window.getWidth() / 2 - 400, camera._y + 10
+	local x, y = camera._x + 10,  camera._y + love.window.getHeight() - 50
 
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
 	if(ammo > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 2, 15)
-		love.graphics.setColor(32,32,32)
-		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
+		love.graphics.rectangle("line", x + 20, y - (ammo * 5 + 2 )- 10, 15 , ammo * 5 + 2)
+		love.graphics.setColor(144,0,0)
+		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 10, 15, ammo * 5)
 	end
 
 	if(ammo == 0) then
@@ -342,7 +342,7 @@ end
 
 function airBar(whale)
 	local air = whale.air
-	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 200, camera._y + love.window.getHeight() - 50
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Air: "..math.floor(air), x, y)
 	if(air > 0) then
