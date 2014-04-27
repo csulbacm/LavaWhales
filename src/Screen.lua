@@ -101,7 +101,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 10 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
@@ -254,16 +254,16 @@ end
 
 function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
+	objects[ #objects ].body:applyForce(  -1000000, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8) )
 end
 
 function spawnFish( objects )
 	table.insert( objects, Fish( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -64000 * math.random() -64000, 0 )
+	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function healthBar(whale) 
