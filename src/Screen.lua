@@ -186,7 +186,7 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
-		elseif cur:is( Ship ) then
+		elseif cur:is( Ships ) then
 			spawnShip( ActiveScreen.objects )
 		end
 	end
@@ -289,8 +289,8 @@ function spawnDwarf( objects )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() / 2) )
-	objects[ #objects ].body:applyForce( 0, 0 )
+	table.insert( objects, Ships( love.graphics.getWidth()-10, love.graphics.getHeight() / 2) )
+	objects[ #objects ].body:applyForce( -1000, 0 )
 end
 
 function spawnLava( objects )
