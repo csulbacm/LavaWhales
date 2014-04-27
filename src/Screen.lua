@@ -5,6 +5,9 @@ require('assets/camera/camera')
 src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
 src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
+src_power = love.audio.newSource("assets/sounds/drain.ogg")
+src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 function Screen:__init( name )
 	self.name = name
 end
@@ -25,6 +28,7 @@ function TitleScreen:__init()
 
 	--Background Music Insert
 	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src2:pause()
 	src1:pause()
 	src1:play()
 	src1:setLooping( true )
@@ -68,13 +72,16 @@ FailScreen = Screen:extends()
 
 function  FailScreen:__init()
 	FailScreen.super:__init( "FailScreen" )
+	src_lose:play()
 end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\nWhales are now extinct.",
+	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
 		size={2}}
 	gui.Label{text=""}
+	src1:pause()
+	
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
@@ -114,7 +121,7 @@ function GameScreen:__init()
 
 	--Game Loop Music
 	src1:pause()
-	src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+
 	src2:play()
 	src2:setLooping( true )
 
@@ -195,6 +202,9 @@ function beginContact( a, b, coll )
 		tempA.toKill = true
 		tempB.toKill = true
 		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo + 5
+		if(ActiveScreen.whale.ammo >= 20) then
+			ActiveScreen.whale.ammo = 20
+		end
 	end
 end
 
@@ -225,33 +235,42 @@ function healthBar(whale)
 	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. health, math.floor(x),  math.floor(y))
-	if(health > 0 and health < 33) then
-		love.graphics.setColor(255,0,0)
-	elseif(health >= 33 and health < 66) then
-		love.graphics.setColor(255,102,0)
-	elseif(health >= 66) then
-		love.graphics.setColor(0,255,0)
-	end
 	if(health > 0) then
-		love.graphics.rectangle("fill", x + 80, camera._y + 10, whale.health * 2, 15)
+		love.graphics.setColor(255,255,255)
+		love.graphics.rectangle("line", x + 80, camera._y + 10, whale.health * 2 + 2, 15)
+		if(health > 0 and health < 33) then
+			love.graphics.setColor(255,0,0)
+		elseif(health >= 33 and health < 66) then
+			love.graphics.setColor(255,102,0)
+		elseif(health >= 66) then
+			love.graphics.setColor(0,255,0)
+		end
+		love.graphics.rectangle("fill", x + 81, camera._y + 10, whale.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + 5, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 - 400, camera._y + 10
 
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
 	if(ammo > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 1, 15)
+		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 2, 15)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
 	end
+--[[
+<<<<<<< HEAD
+
+	if(ammo == 0) then
+		src_power:play()
+	end
+=======]]
 	love.graphics.setColor(255,255,255)
-end
+--end
 
 function airBar(whale)
 	local air = whale.air
@@ -260,7 +279,7 @@ function airBar(whale)
 	love.graphics.print("Air: "..air, x, y)
 	if(air > 0) then
 		love.graphics.setColor(0,204,204)
-		love.graphics.rectangle("line", x + 60, y, air * 2 + 1, 15)
+		love.graphics.rectangle("line", x + 60, y, air * 2 + 2, 15)
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
 	end
@@ -269,4 +288,5 @@ end
 
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
+end
 end
