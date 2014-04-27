@@ -14,7 +14,7 @@ function love.load()
 	love.physics.setMeter( 64 )
 
 	--world = love.physics.newWorld( 0, 0, true )
-	love.window.setMode( 800, 600 )
+	love.window.setMode(1000, 600 )
 	love.graphics.setBackgroundColor( 0, 0, 255 )
 
 	--set up quickie
