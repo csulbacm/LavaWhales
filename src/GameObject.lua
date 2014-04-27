@@ -291,10 +291,15 @@ function Ships:update( dt )
 	if(self:getX() < self:getWidth() / 2 + 100) then
 		self.toKill = true
 	end
+	x,y = self.body:getLinearVelocity()
+	dx = 0
+	if(x > -10) then
+		dx = math.random()*-100-100
+	end
 	if self:getY()  < seaLevel then
-		self.body:applyLinearImpulse( math.random()*-100-100, 640 )
+		self.body:applyLinearImpulse( dx, 640 )
 	else 
-		self.body:applyLinearImpulse( math.random()*-100-100, -640 )
+		self.body:applyLinearImpulse( dx, -640 )
 	end
 end
 
