@@ -431,7 +431,7 @@ function Boss:__init( x, y )
 	Boss.super:__init()
 	self.image = love.graphics.newImage("assets/sprites/boss.png")
 
-	self.health = 1000
+	self.health = 420
 	self.pos.x = x
 	self.pos.y = y
 	self.pos.w = 100
@@ -446,7 +446,7 @@ function Boss:__init( x, y )
 end
 
 function Boss:update( dt )
-	self.body:applyLinearImpulse(math.random()*10, math.random*10)
+	self.body:applyLinearImpulse(math.random()*10, math.random()*10)
 	if self.hits >= 1 then
 		self.health = self.health - 5
 		self.hits = 0
