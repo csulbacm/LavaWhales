@@ -275,21 +275,21 @@ function printBackground(posX1, posX2, posX3, imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
+	table.insert( objects, Dwarves( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
+	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8) )
+	table.insert( objects, Ammo(love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
+	table.insert( objects, Fish( love.graphics.getWidth(), love.graphics.getHeight() * math.random() ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
