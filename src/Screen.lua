@@ -96,7 +96,7 @@ function FailScreen:render()
 end
 
 GameScreen = Screen:extends()
-
+dims = {}
 function GameScreen:__init()
 	world = love.physics.newWorld( 0, 0, true )
   	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
@@ -106,7 +106,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
@@ -122,7 +122,7 @@ function GameScreen:__init()
 		spawnShip( self.objects )
 	end
 
-	dims = {}
+	
 	dims.w = love.window.getWidth() 
 	dims.h = love.window.getHeight()
 

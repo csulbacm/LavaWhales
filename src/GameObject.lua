@@ -237,7 +237,7 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0, -1.1 * y)
 	end
 
-	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 20) then
+	if(self:getY() > love.window.getHeight() - self:getHeight() / 2 - 20) then
 		--we are at the bottom
 		if math.random() > .7 then
 			self.body:applyLinearImpulse(0, -50000)
