@@ -85,7 +85,7 @@ function Whale:__init( x, y )
 	self.air = 100
 	self.airTicks = 0
 
-	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic" )
 	self.shape = love.physics.newCircleShape( 100 )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 	self.fixture:setUserData( self )
@@ -129,27 +129,15 @@ function Whale:update( dt )
 	end
 
 	if(self:getY() > seaLevel) then
-		if(self.airTicks >= 20) then
-			self.airTicks = 0
-			self.air = self.air - 2
-			if(self.air <= 0) then
-				self.air = 0
-				self.health = self.health - 2
-			end
-		else
-		    self.airTicks = self.airTicks + 1
+		self.air = self.air - 6 * dt
+		if(self.air <= 0) then
+			self.air = 0
+			self.health = self.health - 8 * dt
 		end
 	elseif(self:getY() <= seaLevel) then
-		if(self.airTicks >= 20) then
-			self.airTicks = 0
-			if(self.air < 100) then
-				self.air = self.air + 4
-				if(self.air >= 100) then
-					self.air = 100
-				end
-			end
-		else
-		    self.airTicks = self.airTicks + 1
+		self.air = self.air + 16 * dt
+		if(self.air >= 100) then
+			self.air = 100
 		end
 	end
 
@@ -182,7 +170,6 @@ function Whale:update( dt )
 end
 
 function Whale:render()
-	--love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius() )
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
