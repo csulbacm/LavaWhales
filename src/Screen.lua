@@ -98,12 +98,12 @@ function GameScreen:__init()
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
-	for i = 1, 15 do
+	for i = 1, 1 do
 		spwanDwarf( self.objects )
 	end
 
 	for i = 1, 15 do
-		table.insert( self.objects, Ammo(500, 500) )
+		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
 	dims = {}
@@ -157,7 +157,7 @@ function GameScreen:update( dt )
 
 	for i, index in ipairs( removals ) do
 		table.remove( self.objects, index )
-		spwanDwarf( ActiveScreen.objects )
+		--spwanDwarf( ActiveScreen.objects )
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
