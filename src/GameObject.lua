@@ -302,16 +302,21 @@ end
 
 Shots = GameObject:extends()
 
-function Shots:__init( x, y, vx )
+function Shots:__init( x, y, vx, vy, type )
 	Shots.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/fireball.png")
+	self.type = type
+	if type == "fire" then
+		self.image = love.graphics.newImage("assets/sprites/fireball.png")
+	else
+		self.image = love.graphics.newImage("assets/sprites/air_bubble.png")
+	end
 
 	self.body = love.physics.newBody( world, x, y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1000 )
 	self.fixture:setUserData( self )
 
-	self.body:applyForce( vx, 0 )
+	self.body:applyForce( vx, vy )
 end
 
 function Shots:update( dt )
@@ -319,7 +324,7 @@ function Shots:update( dt )
 		self.toKill = true
 	end
 	x,y = self.body:getLinearVelocity()
-	if(x < 1000) then
+	if(x < 1000 and type == "fire") then
 		self.body:applyLinearImpulse(100,0)
 	end
 end
