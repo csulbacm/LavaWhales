@@ -55,6 +55,7 @@ function Whale:__init( x, y )
 	self.spriteset.up = love.graphics.newImage("assets/sprites/whale02.png")
 	self.spriteset.hungry = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
+	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.dead = love.graphics.newImage("assets/sprites/dead_whale.png")
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
 	self.norm_state = "down"
