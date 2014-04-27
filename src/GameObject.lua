@@ -142,11 +142,11 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 0
+		self.health = self.health - self.dwarf_col * 5
 		self.dwarf_col = 0
 		self.special_state = "hurt"
-		self.hurt_time = 0
-		self.state_time = 0
+		self.hurt_time = 1
+		self.state_time = 1
 	end
 
 	self.state_time = self.state_time + dt
@@ -170,7 +170,7 @@ function Whale:update( dt )
 end
 
 function Whale:render()
-	love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
+	--love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
@@ -245,7 +245,7 @@ function Dwarves:update( dt )
 end
 
 function Dwarves:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
@@ -284,7 +284,6 @@ function Shots:update( dt )
 end
 
 function Shots:render()
-	Shots.super:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
 
@@ -298,8 +297,7 @@ function Wall:__init( x, y, w, h )
 end
 
 function Wall:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
 
@@ -324,7 +322,7 @@ function Ammo:update( dt )
 end
 
 function Ammo:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.push()
 	love.graphics.translate( self.body:getX(), self.body:getY() )
 	love.graphics.rotate( self.body:getAngle() )
@@ -363,7 +361,7 @@ function Fish:update( dt )
 end
 
 function Fish:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.push()
 	love.graphics.translate( self.body:getX(), self.body:getY() )
 	love.graphics.rotate( self.body:getAngle() )
