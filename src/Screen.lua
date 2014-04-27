@@ -101,7 +101,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 25 do
+	for i = 1, 1 do
 		spawnDwarf( self.objects )
 	end
 
@@ -135,7 +135,7 @@ function GameScreen:__init()
   bg1 = love.graphics.newImage("assets/sprites/testBG.png")
   posX = 0 
   imageWidth = 1600
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )

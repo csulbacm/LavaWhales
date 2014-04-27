@@ -18,7 +18,7 @@ function GameObject:update( dt )
 end
 
 function GameObject:render()
-
+	
 end
 
 function GameObject:getX()
@@ -170,6 +170,7 @@ function Whale:update( dt )
 end
 
 function Whale:render()
+	love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
@@ -243,6 +244,7 @@ function Dwarves:update( dt )
 end
 
 function Dwarves:render()
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
@@ -271,6 +273,7 @@ function Shots:__init( x, y, vx )
 end
 
 function Shots:render()
+	Shots.super:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
 
@@ -284,6 +287,7 @@ function Wall:__init( x, y, w, h )
 end
 
 function Wall:render()
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
@@ -299,7 +303,12 @@ function Ammo:__init( x, y )
 end
 
 function Ammo:render()
-	love.graphics.draw( self.image, self:getX(), self:getY() )
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.push()
+	love.graphics.translate( self.body:getX(), self.body:getY() )
+	love.graphics.rotate( self.body:getAngle() )
+	love.graphics.draw( self.image, -self.image:getWidth()/2, -self.image:getHeight()/2 )
+	love.graphics.pop()
 end
 
 Fish = GameObject:extends()
@@ -318,8 +327,15 @@ function Fish:__init( x, y )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
 	self.fixture:setUserData( self )
+
+	self.body:setFixedRotation( true )
 end
 
 function Fish:render()
-	love.graphics.draw( self.image, self:getX(), self:getY() )
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.push()
+	love.graphics.translate( self.body:getX(), self.body:getY() )
+	love.graphics.rotate( self.body:getAngle() )
+	love.graphics.draw( self.image, -self.image:getWidth()/2, -self.image:getHeight()/2 )
+	love.graphics.pop()
 end
