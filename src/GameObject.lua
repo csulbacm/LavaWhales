@@ -212,10 +212,18 @@ function Whale:render()
 		   love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
 		end
 		if self.special_state == "hurt" then
-			if self.hurt_state == 1 then
-				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-			elseif self.hurt_state == 2 then
-				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+			if(self.direction == "right") then
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				end
+			else
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				end 
 			end
 		end
 	else
