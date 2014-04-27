@@ -5,6 +5,9 @@ require('assets/camera/camera')
 src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
 src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
+src_power = love.audio.newSource("assets/sounds/drain.ogg")
+src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 function Screen:__init( name )
 	self.name = name
 end
@@ -25,6 +28,7 @@ function TitleScreen:__init()
 
 	--Background Music Insert
 	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src2:pause()
 	src1:pause()
 	src1:play()
 	src1:setLooping( true )
@@ -68,13 +72,16 @@ FailScreen = Screen:extends()
 
 function  FailScreen:__init()
 	FailScreen.super:__init( "FailScreen" )
+	src_lose:play()
 end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\nWhales are now extinct.",
+	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
 		size={2}}
 	gui.Label{text=""}
+	src1:pause()
+	
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
@@ -114,7 +121,7 @@ function GameScreen:__init()
 
 	--Game Loop Music
 	src1:pause()
-	src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+
 	src2:play()
 	src2:setLooping( true )
 
@@ -255,8 +262,15 @@ function ammoBar(whale)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
 	end
+--[[
+<<<<<<< HEAD
+
+	if(ammo == 0) then
+		src_power:play()
+	end
+=======]]
 	love.graphics.setColor(255,255,255)
-end
+--end
 
 function airBar(whale)
 	local air = whale.air
@@ -274,4 +288,5 @@ end
 
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
+end
 end
