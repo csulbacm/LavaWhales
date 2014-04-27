@@ -113,6 +113,10 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
+	for i = 1, 10 do
+		spawnShip( self.objects )
+	end
+
 	dims = {}
 	dims.w = 1000 * 2
 	dims.h = 600 * 2
@@ -172,6 +176,8 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
+		elseif cur:is( Ship ) then
+			spawnShip( ActiveScreen.objects )
 		end
 	end
 	
@@ -255,6 +261,11 @@ end
 function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
 	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
+end
+
+function spawnShip( objects )
+	table.insert( objects, Ships( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
