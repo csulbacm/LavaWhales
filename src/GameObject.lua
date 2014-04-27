@@ -51,8 +51,10 @@ Whale = GameObject:extends()
 
 function Whale:__init( x, y )
 	self.spriteset = {}
-	self.spriteset.down = love.graphics.newImage("assets/sprites/whale01.png")
-	self.spriteset.up = love.graphics.newImage("assets/sprites/whale02.png")
+	self.spriteset.rightDown = love.graphics.newImage("assets/sprites/whale01.png")
+	self.spriteset.rightUp = love.graphics.newImage("assets/sprites/whale02.png")
+	self.spriteset.leftDown = love.graphics.newImage("assets/sprites/whale03.png")
+	self.spriteset.leftUp = love.graphics.newImage("assets/sprites/whale04.png")
 	self.spriteset.hungry = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
 	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
@@ -61,7 +63,8 @@ function Whale:__init( x, y )
 	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
 	
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
-	self.norm_state = "down"
+	self.norm_state = "rightDown"
+	self.direction = "right"
 	self.secial_state = nil
 	self.state_time = 0
 	self.hurt_time = 0
@@ -106,9 +109,11 @@ function Whale:update( dt )
 	end
 	if love.keyboard.isDown('left') and x > -self.maxVel then
 		self.body:applyLinearImpulse( -self.accel, 0 )
+		self.direction = "left"
 	end
 	if love.keyboard.isDown('right') and x < self.maxVel then
 		self.body:applyLinearImpulse( self.accel, 0 )
+		self.direction = "right"
 	end
 
 	if(self:getX() < self:getWidth() / 2) then
@@ -153,10 +158,18 @@ function Whale:update( dt )
 	if(self.state_time > .5) then
 		self.state_time = 0
 		self.special_state = nil
-		if self.norm_state == "up" then
-			self.norm_state = "down"
+		if(self.direction == "right") then
+			if self.norm_state == "rightUp" then
+				self.norm_state = "rightDown"
+			else
+				self.norm_state = "rightUp"
+			end
 		else
-			self.norm_state = "up"
+			if(self.norm_state == "leftUp") then
+				self.norm_state = "leftDown"
+			else
+		   	self.norm_state = "leftUp"
+		 	end
 		end
 	end
 
