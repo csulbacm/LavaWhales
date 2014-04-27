@@ -75,6 +75,7 @@ function Whale:__init( x, y )
 	
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
 	self.norm_state = "down"
+	self.direction = "right"
 	self.secial_state = nil
 	self.state_time = 0
 	self.hurt_time = 0
@@ -130,9 +131,11 @@ function Whale:update( dt )
 	end
 	if love.keyboard.isDown('left') and x > -self.maxVel then
 		self.body:applyLinearImpulse( -self.accel, 0 )
+		self.direction = "left"
 	end
 	if love.keyboard.isDown('right') and x < self.maxVel then
 		self.body:applyLinearImpulse( self.accel, 0 )
+		self.direction = "right"
 	end
 
 	if(self:getX() < self:getWidth() / 2) then
@@ -166,7 +169,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 0
+		self.health = self.health - self.dwarf_col * 5
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 1
@@ -180,7 +183,7 @@ function Whale:update( dt )
 		if self.norm_state == "up" then
 			self.norm_state = "down"
 		else
-			self.norm_state = "up"
+		    self.norm_state = "up"
 		end
 	end
 
@@ -209,7 +212,11 @@ function Whale:render()
 			end
 		end
 	else
-		love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		if(self.direction == "right") then
+			love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		else
+		   love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
+		end
 	end
 
 end

@@ -128,7 +128,7 @@ function GameScreen:__init()
 	end
 
 	dims = {}
-	dims.w = love.window.getWidth()
+	dims.w = love.window.getWidth() * 2
 	dims.h = love.window.getHeight() * 2
 
 	self.walls = {}
@@ -149,7 +149,7 @@ function GameScreen:__init()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
-  --self.whale:setGhost()
+  self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -185,7 +185,7 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
-		elseif cur:is( Ship ) then
+		elseif cur:is( Ships ) then
 			spawnShip( ActiveScreen.objects )
 		end
 	end
@@ -283,21 +283,21 @@ function printBackground(posX1, posX2, posx3, imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random()) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() / 2) )
-	objects[ #objects ].body:applyForce( 0, 0 )
+	table.insert( objects, Ships( love.graphics.getWidth() * 2-10, love.graphics.getHeight() / 2) )
+	objects[ #objects ].body:applyForce( -1000, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth(), love.graphics.getHeight() + love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random()) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
