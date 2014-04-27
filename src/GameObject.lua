@@ -71,8 +71,8 @@ function Whale:__init( x, y )
 	self.maxVel = 500
 	self.accel = 500
 
-	self.dwarf_col = false
-	self.fish_col = false
+	self.dwarf_col = 0
+	self.fish_col = 0
 
 	self.health = 100
 	self.amo = 20
@@ -114,6 +114,13 @@ function Whale:update( dt )
 	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
 		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
+	end
+
+	if self.dwarf_col >= 1 then
+		self.health = self.health - self.dwarf_col * 10
+		self.dwarf_col = 0
+		self.special_state = "hurt"
+		self.state_time = 0
 	end
 
 	self.state_time = self.state_time + dt

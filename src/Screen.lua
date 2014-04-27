@@ -2,7 +2,7 @@ class = require "external/30log/30log"
 
 Screen = class()
 require('assets/camera/camera')
-
+src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
 
 function Screen:__init( name )
 	self.name = name
@@ -54,6 +54,7 @@ function HelpScreen:update( dt )
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
+		src1:pause()
 		ActiveScreen = TitleScreen()
 	end
 	gui.group.pop{}
@@ -69,7 +70,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 	for i = 1, 100 do
-		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
+		spwanDwarf( self.objects )
 	end
 
 	--Game Loop Music
@@ -106,7 +107,7 @@ function GameScreen:update( dt )
 
 	for i, index in ipairs( removals ) do
 		table.remove( self.objects, index )
-		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
+		spwanDwarf( ActiveScreen.objects )
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
@@ -128,23 +129,17 @@ end
 function beginContact( a, b, coll )
 	local tempA = a:getUserData()
 	local tempB = b:getUserData()
-
-	if tempA:is( Whale ) or tempB:is( Whale ) then
+	if tempA:is( Whale ) and tempB:is( Dwarves ) then
+		tempA.dwarf_col = tempA.dwarf_col + 1
+		tempB.toKill = true
+	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
+		tempB.dwarf_col = tempA.dwarf_col + 1
+		tempA.toKill = true
+	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or
+		tempA:is( Dwarves ) and tempB:is( Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
-		if tempA:is( Whale ) then
-			tempA.dwarf_col = true
-		end
-		if tempB:is( Whale ) then
-			tempB.dwarf_col = true
-		end
-	end
-	--elseif tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
-
-	if tempA:is( Whale ) or tempB:is( Whale ) or tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
-
-		tempA.toKill = true
-		tempB.toKill = true
+		src_explosion:play()
 	end
 end
 
@@ -161,8 +156,12 @@ function postSolve( a, b, coll )
 end
 
 function printBackground(posX, imageWidth)
-	
    love.graphics.draw(bg1, posX, 0) -- this is the original image
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
    love.graphics.print(posX, 400,300)
+end
+
+function spwanDwarf( objects )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
+	objects[ #objects ].body:applyForce( -15000 * 64 * math.random() -15000 * 64, 0 )
 end

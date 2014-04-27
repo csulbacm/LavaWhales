@@ -5,6 +5,9 @@ require 'src/GameObject'
 require('assets/camera/camera')
 require 'src/Screen'
 require 'external/AnAL'
+--Declare shooting sound
+src_shoot = love.audio.newSource("assets/sounds/shoot.wav", "static")
+
 
 
 function love.load()
@@ -41,7 +44,8 @@ end
 
 function love.keypressed( key, isrepeat )
 	if key == ' ' and ActiveScreen:is( GameScreen ) then
-		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth(),
+		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
 		 ActiveScreen.whale:getY(), 500000 * 64 ) )
+		src_shoot:play()
 	end
 end
