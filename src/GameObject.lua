@@ -200,7 +200,7 @@ Dwarves = GameObject:extends()
 
 function Dwarves:__init( x, y )
 	Dwarves.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/unicorn02.png")
+	self.image = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 
 	self.pos.x = x
 	self.pos.y = y
@@ -217,7 +217,7 @@ function Dwarves:update( dt )
 	--unicorns will fall down
 	--at the bottom, they will bounce to random hights
 	x,y = self.body:getLinearVelocity()
-	if(y < 100) then
+	if(y < 1000) then
 		self.body:applyLinearImpulse(0,5000)
 	end
 
@@ -233,10 +233,10 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0, -1.1 * y)
 	end
 
-	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 100) then
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 10) then
 		--we are at the bottom
 		if love.math.random() > .7 then
-			self.body:applyLinearImpulse(-2000, -5000000 * (love.math.random() + .5))
+			self.body:applyLinearImpulse(-2000, -50000 * (love.math.random() + .5))
 		else
 			self.body:applyLinearImpulse(-5000, -5000 * (love.math.random() + .5))
 		end
@@ -272,6 +272,16 @@ function Shots:__init( x, y, vx )
 	self.body:applyForce( vx, 0 )
 end
 
+function Shots:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
+	x,y = self.body:getLinearVelocity()
+	if(x < 1000) then
+		self.body:applyLinearImpulse(100,0)
+	end
+end
+
 function Shots:render()
 	Shots.super:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
@@ -295,11 +305,21 @@ end
 Ammo = GameObject:extends()
 
 function Ammo:__init( x, y )
-	self.image = love.graphics.newImage("assets/sprites/lava_crystal.png")
+	self.image = love.graphics.newImage("assets/sprites/new_crystal.png")
 	self.body = love.physics.newBody( world, x, y, "dynamic" )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
 	self.fixture:setUserData( self )
+end
+
+function Ammo:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
+	x,y = self.body:getLinearVelocity()
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
+	end
 end
 
 function Ammo:render()
@@ -329,6 +349,16 @@ function Fish:__init( x, y )
 	self.fixture:setUserData( self )
 
 	self.body:setFixedRotation( true )
+end
+
+function Fish:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
+	x,y = self.body:getLinearVelocity()
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
+	end
 end
 
 function Fish:render()

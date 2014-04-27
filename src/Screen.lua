@@ -101,15 +101,15 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 1 do
+	for i = 1, 10 do
 		spawnDwarf( self.objects )
 	end
 
-	for i = 1, 15 do
+	for i = 1, 5 do
 		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
-	for i = 1, 15 do
+	for i = 1, 5 do
 		spawnFish( self.objects )
 	end
 
@@ -130,9 +130,9 @@ function GameScreen:__init()
 	src2:play()
 	src2:setLooping( true )
 
-  bg = love.graphics.newImage("assets/sprites/testBG.png")
+  bg = love.graphics.newImage("assets/sprites/backgroundtest.png")
   camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
-  bg1 = love.graphics.newImage("assets/sprites/testBG.png")
+  bg1 = love.graphics.newImage("assets/sprites/backgroundtest.png")
   posX = 0 
   imageWidth = 1600
   --self.whale:setGhost()
