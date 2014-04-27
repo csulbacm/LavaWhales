@@ -2,7 +2,7 @@ class = require "external/30log/30log"
 
 Screen = class()
 require('assets/camera/camera')
-
+src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
 
 function Screen:__init( name )
 	self.name = name
@@ -54,6 +54,7 @@ function HelpScreen:update( dt )
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
+		src1:pause()
 		ActiveScreen = TitleScreen()
 	end
 	gui.group.pop{}
@@ -131,6 +132,7 @@ function beginContact( a, b, coll )
 	if tempA:is( Whale ) or tempB:is( Whale ) or tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_explosion:play()
 	end
 end
 
