@@ -204,13 +204,14 @@ function Dwarves:__init( x, y )
 
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = self.image:getWidth()
-	self.pos.h = self.image:getHeight()
+	self.pos.w = 100
+	self.pos.h = 120
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 	self.fixture:setUserData( self )
+	self.body:setFixedRotation( true )
 end
 
 function Dwarves:update( dt )
