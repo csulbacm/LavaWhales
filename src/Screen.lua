@@ -3,7 +3,8 @@ class = require "external/30log/30log"
 Screen = class()
 require('assets/camera/camera')
 src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
-
+src_hurt = love.audio.newSource("assets/sounds/arr.wav")
+src_button = love.audio.newSource("assets/sounds/button_click.wav")
 function Screen:__init( name )
 	self.name = name
 end
@@ -34,10 +35,12 @@ function TitleScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}	}
 	if gui.Button{id = "start", text = "Start"} then
 		self.start_button = true
+				src_button:play()
 		ActiveScreen = GameScreen()
 	end
 	if gui.Button{id = "help", text = "Instructions" } then
 		ActiveScreen = HelpScreen()
+		src_button:play()
 	end
 	gui.group.pop{}
 end
@@ -54,6 +57,7 @@ function HelpScreen:update( dt )
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
+		src_button:play()
 		src1:pause()
 		ActiveScreen = TitleScreen()
 	end
@@ -74,6 +78,7 @@ function FailScreen:update( dt )
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
+		src_button:play()
 	end
 	gui.group.pop{}
 end
@@ -170,6 +175,7 @@ function beginContact( a, b, coll )
 	if tempA:is( Whale ) and tempB:is( Dwarves ) then
 		tempA.dwarf_col = tempA.dwarf_col + 1
 		tempB.toKill = true
+		src_hurt:play()
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempA.dwarf_col + 1
 		tempA.toKill = true
