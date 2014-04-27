@@ -154,7 +154,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 5
+		self.health = self.health - self.dwarf_col * 0
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 0
@@ -244,7 +244,7 @@ function Dwarves:update( dt )
 	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 100) then
 		--we are at the bottom
 		if love.math.random() > .7 then
-			self.body:applyLinearImpulse(-2000, -50000 * (love.math.random() + .5))
+			self.body:applyLinearImpulse(-2000, -5000000 * (love.math.random() + .5))
 		else
 			self.body:applyLinearImpulse(-5000, -5000 * (love.math.random() + .5))
 		end
