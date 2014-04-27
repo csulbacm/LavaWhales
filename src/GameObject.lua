@@ -83,6 +83,7 @@ function Whale:__init( x, y )
 	self.health = 100
 	self.amo = 20
 	self.air = 100
+	self.airTicks = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
@@ -92,6 +93,7 @@ end
 
 function Whale:update( dt )
 	local x, y = self.body:getLinearVelocity()
+	local seaLevel = self:getHeight()
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -self.accel )
 	end
@@ -122,8 +124,33 @@ function Whale:update( dt )
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
 
+	if(self:getY() > seaLevel) then
+		if(self.airTicks >= 20) then
+			self.airTicks = 0
+			self.air = self.air - 2
+			if(self.air <= 0) then
+				self.air = 0
+				self.health = self.health - 2
+			end
+		else
+		    self.airTicks = self.airTicks + 1
+		end
+	elseif(self:getY() <= seaLevel) then
+		if(self.airTicks >= 20) then
+			self.airTicks = 0
+			if(self.air < 100) then
+				self.air = self.air + 4
+				if(self.air >= 100) then
+					self.air = 100
+				end
+			end
+		else
+		    self.airTicks = self.airTicks + 1
+		end
+	end
+
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 10
+		self.health = self.health - self.dwarf_col * 5
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 0
