@@ -81,7 +81,7 @@ function Whale:__init( x, y )
 	self.fish_col = 0
 
 	self.health = 100
-	self.amo = 20
+	self.ammo = 20
 	self.air = 100
 	self.airTicks = 0
 
@@ -89,6 +89,10 @@ function Whale:__init( x, y )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 	self.fixture:setUserData( self )
+end
+
+function Whale:setGhost()
+	self.fixture:setMask(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
 end
 
 function Whale:update( dt )
@@ -287,3 +291,27 @@ function Wall:__init( x, y, w, h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1000000 )
 	self.fixture:setUserData( self )
 end
+
+
+
+Ammo = GameObject:extends()
+
+function Ammo:__init( x, y )
+	self.image = love.graphics.newImage("assets/sprites/lava_crystal.png")
+	self.body = love.physics.newBody( world, x, y, "dynamic" )
+	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
+	self.fixture:setUserData( self )
+end
+
+function Ammo:render()
+	love.graphics.draw( self.image, self:getX(), self:getY() )
+end
+
+--[[
+Fish = class()
+
+function Fish:__init( x, y )
+
+end
+]]
