@@ -69,7 +69,7 @@ function GameScreen:__init()
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
-	for i = 1, 50 do
+	for i = 1, 15 do
 		spwanDwarf( self.objects )
 	end
 
