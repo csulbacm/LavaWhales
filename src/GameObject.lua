@@ -55,11 +55,17 @@ function Whale:__init( x, y )
 	self.spriteset.up = love.graphics.newImage("assets/sprites/whale02.png")
 	self.spriteset.hungry = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
+	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.dead = love.graphics.newImage("assets/sprites/dead_whale.png")
+	self.spriteset.ouch1 = love.graphics.newImage("assets/sprites/ouch01.png")
+	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
+	
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
 	self.norm_state = "down"
 	self.secial_state = nil
 	self.state_time = 0
+	self.hurt_time = 0
+	self.hurt_state = false
 
 	Whale.super:__init()
 	self.pos.x = x
@@ -120,6 +126,7 @@ function Whale:update( dt )
 		self.health = self.health - self.dwarf_col * 10
 		self.dwarf_col = 0
 		self.special_state = "hurt"
+		self.hurt_time = 0
 		self.state_time = 0
 	end
 
@@ -133,11 +140,26 @@ function Whale:update( dt )
 			self.norm_state = "up"
 		end
 	end
+
+	if(self.special_state == "hurt") then
+		self.hurt_time = self.hurt_time + dt
+		if(self.hurt_time > .125) then
+			self.hurt_time = 0
+			self.hurt_state = not self.hurt_state
+		end
+	end
 end
 
 function Whale:render()
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		if self.special_state == "hurt" then
+			if self.hurt_state then
+				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+			else
+				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+			end
+		end
 	else
 		love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 	end

@@ -123,6 +123,7 @@ function GameScreen:render()
    for k,v in ipairs( self.objects ) do
      v:render()
 	 end
+	healthBar(self.whale)
    camera:unset()
 end
 
@@ -159,10 +160,26 @@ end
 function printBackground(posX, imageWidth)
    love.graphics.draw(bg1, posX, 0) -- this is the original image
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
-   love.graphics.print(posX, 400,300)
 end
 
 function spwanDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
 	objects[ #objects ].body:applyForce( -15000 * 64 * math.random() -15000 * 64, 0 )
+end
+
+function healthBar(whale) 
+	local health = whale.health
+	love.graphics.setColor(0,0,0)
+	love.graphics.print("Health: ", math.floor(camera._x + love.window.getWidth() / 2 - 150),  math.floor(camera._y + 10))
+	if(health > 0 and health < 33) then
+		love.graphics.setColor(255,0,0)
+	elseif(health >= 33 and health < 66) then
+		love.graphics.setColor(255,102,0)
+	elseif(health >= 66) then
+		love.graphics.setColor(0,255,0)
+	end
+	if(health > 0) then
+		love.graphics.rectangle("fill", camera._x + love.window.getWidth() / 2 - 100, camera._y + 10, whale.health * 2, 15)
+	end
+	love.graphics.setColor(255,255,255)
 end
