@@ -71,6 +71,13 @@ function Whale:__init( x, y )
 	self.maxVel = 400
 	self.accel = 300
 
+	self.dwarf_col = false
+	self.fish_col = false
+
+	self.health = 100
+	self.amo = 20
+	self.air = 100
+
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )

@@ -130,6 +130,12 @@ function beginContact( a, b, coll )
 	if tempA:is( Whale ) or tempB:is( Whale ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		if tempA:is( Whale ) then
+			tempA.dwarf_col = true
+		end
+		if tempB:is( Whale ) then
+			tempB.dwarf_col = true
+		end
 	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
