@@ -7,6 +7,7 @@ src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 function Screen:__init( name )
 	self.name = name
 end
@@ -71,6 +72,7 @@ FailScreen = Screen:extends()
 
 function  FailScreen:__init()
 	FailScreen.super:__init( "FailScreen" )
+	src_lose:play()
 end
 
 function FailScreen:update( dt )
@@ -79,7 +81,7 @@ function FailScreen:update( dt )
 		size={2}}
 	gui.Label{text=""}
 	src1:pause()
-	src_lose:play()
+	
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
@@ -119,7 +121,7 @@ function GameScreen:__init()
 
 	--Game Loop Music
 	src1:pause()
-	src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+
 	src2:play()
 	src2:setLooping( true )
 
