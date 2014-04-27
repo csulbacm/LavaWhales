@@ -347,8 +347,8 @@ function Shots:__init( x, y, vx, vy, type )
 	self.type = type
 	if type == "fire" then
 		self.image = SpriteSet.fireball
-	else
-		self.image = SpriteSet.airBubble
+	elseif type == "air" then
+		self.image = SpriteSet.airBubble		
 	end
 
 	self.body = love.physics.newBody( world, x, y, "dynamic")
