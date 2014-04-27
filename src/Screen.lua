@@ -195,6 +195,9 @@ function beginContact( a, b, coll )
 		tempA.toKill = true
 		tempB.toKill = true
 		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo + 5
+		if(ActiveScreen.whale.ammo >= 20) then
+			ActiveScreen.whale.ammo = 20
+		end
 	end
 end
 
