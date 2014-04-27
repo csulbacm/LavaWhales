@@ -260,6 +260,44 @@ function Dwarves:getHeight()
 	return self.image:getHeight()
 end
 
+--Ships
+Ships = GameObject:extends()
+
+function Ships:__init( x, y )
+	Ships.super:__init()
+	self.image = love.graphics.newImage("assets/sprites/boat.png")
+
+	self.pos.x = x
+	self.pos.y = y
+	self.pos.w = 100
+	self.pos.h = 120
+
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture:setUserData( self )
+	self.body:setFixedRotation( true )
+end
+
+function Ships:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 100) then
+		self.toKill = true
+	end
+	self.body:applyLinearImpulse( math.random()*100, -6400 )
+end
+
+function Ships:render()
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+end
+
+function Ships:getWidth()
+	return self.image:getWidth()
+end
+
+function Ships:getHeight()
+	return self.image:getHeight()
+end
 
 
 Shots = GameObject:extends()

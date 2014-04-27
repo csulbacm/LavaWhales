@@ -57,7 +57,7 @@ end
 
 function HelpScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.",
+	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.\n\nMove with the arrow keys\nSpace to shoot\nm to mute\tesc to return to the menu\np to pause the game.",
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
@@ -116,6 +116,10 @@ function GameScreen:__init()
 
 	for i = 1, 1 do
 		spawnFish( self.objects )
+	end
+
+	for i = 1, 10 do
+		spawnShip( self.objects )
 	end
 
 	dims = {}
@@ -178,6 +182,8 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
+		elseif cur:is( Ship ) then
+			spawnShip( ActiveScreen.objects )
 		end
 	end
 	if posX1 <= -1 * imageWidth then posX1 = posX3 + imageWidth end
@@ -267,6 +273,11 @@ end
 function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
+end
+
+function spawnShip( objects )
+	table.insert( objects, Ships( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
