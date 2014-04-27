@@ -13,7 +13,7 @@ function GameObject:__init()
 	self.pos.h = 0
 end
 
-function GameObject:update()
+function GameObject:update( dt )
 
 end
 
@@ -50,7 +50,17 @@ end
 Whale = GameObject:extends()
 
 function Whale:__init( x, y )
-	self.image = love.graphics.newImage("assets/sprites/test_whale.png")
+	self.spriteset = {}
+	self.spriteset.down = love.graphics.newImage("assets/sprites/whale01.png")
+	self.spriteset.up = love.graphics.newImage("assets/sprites/whale02.png")
+	self.spriteset.hungry = love.graphics.newImage("assets/sprites/hungry_whale.png")
+	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
+	self.spriteset.dead = love.graphics.newImage("assets/sprites/dead_whale.png")
+	self.image = love.graphics.newImage("assets/sprites/whale01.png")
+	self.norm_state = "down"
+	self.secial_state = nil
+	self.state_time = 0
+
 	Whale.super:__init()
 	self.pos.x = x
 	self.pos.y = y
@@ -67,12 +77,16 @@ function Whale:__init( x, y )
 	self.fixture:setUserData( self )
 end
 
-function Whale:update()
+function Whale:update( dt )
 	local x, y = self.body:getLinearVelocity()
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -self.accel )
+		--self.state = "up"
+		--self.state_time = 0
 	elseif love.keyboard.isDown('down') and y < self.maxVel then
 		self.body:applyLinearImpulse( 0, self.accel )
+		--self.state = "down"
+		--self.state_time = 0
 	elseif love.keyboard.isDown('left') and x > -self.maxVel then
 		self.body:applyLinearImpulse( -self.accel, 0 )
 	elseif love.keyboard.isDown('right') and x < self.maxVel then
@@ -95,10 +109,25 @@ function Whale:update()
 		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
+
+	self.state_time = self.state_time + dt
+	if(self.state_time > .5) then
+		self.state_time = 0
+		self.special_state = nil
+		if self.norm_state == "up" then
+			self.norm_state = "down"
+		else
+			self.norm_state = "up"
+		end
+	end
 end
 
 function Whale:render()
-	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+	if(self.special_state ~= nil) then
+		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+	else
+		love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+	end
 end
 
 

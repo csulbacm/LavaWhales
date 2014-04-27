@@ -71,9 +71,9 @@ function GameScreen:__init()
 end
 
 function GameScreen:update( dt )
-	self.whale:update()
+	self.whale:update(dt)
 	for k,v in ipairs( self.objects ) do
-		v:update()
+		v:update(dt)
 	end
 	
 	world:update( dt )
