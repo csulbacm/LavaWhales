@@ -106,7 +106,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
@@ -116,6 +116,10 @@ function GameScreen:__init()
 
 	for i = 1, 1 do
 		spawnFish( self.objects )
+	end
+
+	for i = 1, 10 do
+		spawnShip( self.objects )
 	end
 
 	dims = {}
@@ -138,8 +142,10 @@ function GameScreen:__init()
   bg = love.graphics.newImage("assets/sprites/backgroundtest.png")
   camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
   bg1 = love.graphics.newImage("assets/sprites/backgroundtest.png")
-  posX = 0 
   imageWidth = 1600
+  posX1 = 0
+  posX2 = imageWidth
+  posX3 = imageWidth * 2
   --self.whale:setGhost()
 end
 
@@ -177,21 +183,28 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
+		elseif cur:is( Ship ) then
+			spawnShip( ActiveScreen.objects )
 		end
 	end
-	
-	if posX <= -1 * imageWidth / 2 then posX = 0 end
-	if(self.whale:getX() >= imageWidth / 2) then
-		posX = posX - 5
+	if posX1 <= -1 * imageWidth then posX1 = posX3 + imageWidth end
+	if posX2 <= -1 * imageWidth then posX2 = posX1 + imageWidth end
+	if posX3 <= -1 * imageWidth then posX3 = posX2 + imageWidth end
+	if(self.whale:getX() >= imageWidth) then
+		posX1 = posX1 - 5
+		posX2 = posX2 - 5
+		posX3 = posX3 - 5
 	else
-		posX = posX - 1
+		posX1 = posX1 - 10
+		posX2 = posX2 - 10
+		posX3 = posX3 - 10
 	end
 	removals = nil
 end
 
 function GameScreen:render()
 	camera:set()
-   printBackground(posX, imageWidth)
+   printBackground(posX1, posX2, posX3, imageWidth)
    self.whale:render()
    for k,v in ipairs( self.objects ) do
      v:render()
@@ -202,6 +215,8 @@ function GameScreen:render()
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
+	love.graphics.print(posX1,camera._x,camera._y)
+	love.graphics.print(posX2,camera._x + 50,camera._y)
    camera:unset()
 end
 
@@ -252,23 +267,29 @@ function postSolve( a, b, coll )
   
 end
 
-function printBackground(posX, imageWidth)
-   love.graphics.draw(bg1, posX, 0) -- this is the original image
-   love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
+function printBackground(posX1, posX2, posX3, imageWidth)
+   love.graphics.draw(bg1, posX1, 0) 
+   love.graphics.draw(bg1, posX2, 0) 
+   love.graphics.draw(bg1, posX3, 0)
 end
 
 function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -10 * 64 * math.random() -10 * 64, 0 )
+	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
+end
+
+function spawnShip( objects )
+	table.insert( objects, Ships( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8) )
 end
 
 function spawnFish( objects )
 	table.insert( objects, Fish( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -10 * 64 * math.random() -10 * 64, 0 )
+	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function healthBar(whale) 

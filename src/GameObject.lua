@@ -218,8 +218,11 @@ function Dwarves:update( dt )
 	--unicorns will fall down
 	--at the bottom, they will bounce to random hights
 	x,y = self.body:getLinearVelocity()
-	if(y < 1000) then
-		self.body:applyLinearImpulse(0,5000)
+	if(y < 500) then
+		self.body:applyLinearImpulse(0,1000)
+	end
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
 	end
 
 	if(self:getX() < self:getWidth() / 2 + 100) then
@@ -236,10 +239,10 @@ function Dwarves:update( dt )
 
 	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 20) then
 		--we are at the bottom
-		if love.math.random() > .7 then
-			self.body:applyLinearImpulse(-2000, -100000 * (love.math.random() + .5))
+		if math.random() > .7 then
+			self.body:applyLinearImpulse(0, -50000)
 		else
-			self.body:applyLinearImpulse(-5000, -50000 * (love.math.random() + .5))
+			self.body:applyLinearImpulse(0, -5000)
 		end
 	end
 end
@@ -257,6 +260,44 @@ function Dwarves:getHeight()
 	return self.image:getHeight()
 end
 
+--Ships
+Ships = GameObject:extends()
+
+function Ships:__init( x, y )
+	Ships.super:__init()
+	self.image = love.graphics.newImage("assets/sprites/boat.png")
+
+	self.pos.x = x
+	self.pos.y = y
+	self.pos.w = 100
+	self.pos.h = 120
+
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture:setUserData( self )
+	self.body:setFixedRotation( true )
+end
+
+function Ships:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 100) then
+		self.toKill = true
+	end
+	self.body:applyLinearImpulse( math.random()*100, -6400 )
+end
+
+function Ships:render()
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+end
+
+function Ships:getWidth()
+	return self.image:getWidth()
+end
+
+function Ships:getHeight()
+	return self.image:getHeight()
+end
 
 
 Shots = GameObject:extends()
@@ -274,7 +315,7 @@ function Shots:__init( x, y, vx )
 end
 
 function Shots:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 20) then
 		self.toKill = true
 	end
 	x,y = self.body:getLinearVelocity()
@@ -312,7 +353,7 @@ function Ammo:__init( x, y )
 end
 
 function Ammo:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 20) then
 		self.toKill = true
 	end
 	x,y = self.body:getLinearVelocity()
@@ -351,10 +392,10 @@ function Fish:__init( x, y )
 end
 
 function Fish:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 30) then
 		self.toKill = true
 	end
-	x,y = self.body:getLinearVelocity()
+	local x,y = self.body:getLinearVelocity()
 	if(x > -10) then
 		self.body:applyLinearImpulse(-100,0)
 	end
