@@ -8,7 +8,10 @@ src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
-boss = nil
+
+score = 0
+
+>>>>>>> 41b533140209f7813e292373ae24db1090baa326
 function Screen:__init( name )
 	self.name = name
 end
@@ -79,7 +82,7 @@ end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\n Whales are now extinct. \n Good going",
+	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going\n Your score was: " .. score,
 		size={2}}
 	gui.Label{text=""}
 	src1:pause()
@@ -99,15 +102,17 @@ end
 GameScreen = Screen:extends()
 dims = {}
 function GameScreen:__init()
-	world = love.physics.newWorld( 0, 0, true )
+	world = love.physics.newWorld( -100, 0, true )
   	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 	GameScreen.super:__init( "GameScreen" )
 
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
+	self.gameOver = false
+	score = 0
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 3 do
 		spawnDwarf( self.objects )
 	end
 
@@ -128,7 +133,7 @@ function GameScreen:__init()
 	end
 
 	dims = {}
-	dims.w = love.window.getWidth()
+	dims.w = love.window.getWidth() * 2
 	dims.h = love.window.getHeight() * 2
 
 	self.walls = {}
@@ -154,8 +159,7 @@ end
 
 function GameScreen:update( dt )
 	self.whale:update(dt)
-
-	if self.whale.health <= 0 then
+	if not ActiveScreen:is( GameScreen ) or self.gameOver then
 		ActiveScreen = FailScreen()
 		return
 	end
@@ -186,7 +190,7 @@ function GameScreen:update( dt )
 			spawnFish( ActiveScreen.objects )
 		elseif cur:is( Ammo ) then
 			spawnLava( ActiveScreen.objects )
-		elseif cur:is( Ship ) then
+		elseif cur:is( Ships ) then
 			spawnShip( ActiveScreen.objects )
 		end
 	end
@@ -239,6 +243,7 @@ function beginContact( a, b, coll )
 		tempA.toKill = true
 		tempB.toKill = true
 		src_explosion:play()
+		score = score + 10
 	elseif typesCollided( tempA, Wall, tempB, Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -259,6 +264,8 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Shots, tempB, Ships ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_explosion:play()
+		score = score + 10
 	end
 
 end
@@ -282,21 +289,21 @@ function printBackground(posX1, posX2, posx3, imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random()) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
-	objects[ #objects ].body:applyForce( 0, 0 )
+	table.insert( objects, Ships( love.graphics.getWidth() * 2-10, love.graphics.getHeight() / 2) )
+	objects[ #objects ].body:applyForce( -1000, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random()) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth(), love.graphics.getHeight() * math.random() ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
@@ -321,12 +328,12 @@ end
 
 function healthBar(whale) 
 	local health = whale.health
-	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 180, camera._y + love.window.getHeight() - 70
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. math.floor(health), math.floor(x),  math.floor(y))
 	if(health > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 80, camera._y + 10, whale.health * 2 + 2, 15)
+		love.graphics.rectangle("line", x + 80, y, whale.health * 2 + 2, 15)
 		if(health > 0 and health < 33) then
 			love.graphics.setColor(255,0,0)
 		elseif(health >= 33 and health < 66) then
@@ -334,22 +341,22 @@ function healthBar(whale)
 		elseif(health >= 66) then
 			love.graphics.setColor(0,255,0)
 		end
-		love.graphics.rectangle("fill", x + 81, camera._y + 10, whale.health * 2, 15)
+		love.graphics.rectangle("fill", x + 81, y, whale.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + love.window.getWidth() / 2 - 400, camera._y + 10
+	local x, y = camera._x + 10,  camera._y + love.window.getHeight() - 50
 
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
 	if(ammo > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 2, 15)
-		love.graphics.setColor(32,32,32)
-		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
+		love.graphics.rectangle("line", x + 20, y - (ammo * 5 + 2 )- 10, 15 , ammo * 5 + 2)
+		love.graphics.setColor(144,0,0)
+		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 10, 15, ammo * 5)
 	end
 
 	if(ammo == 0) then
@@ -360,7 +367,7 @@ end
 
 function airBar(whale)
 	local air = whale.air
-	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 200, camera._y + love.window.getHeight() - 50
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Air: "..math.floor(air), x, y)
 	if(air > 0) then
