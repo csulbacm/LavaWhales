@@ -139,7 +139,7 @@ function GameScreen:__init()
 	src2:play()
 	src2:setLooping( true )
 
-  bg = love.graphics.newImage("assets/sprites/background.png")
+  bg = love.graphics.newImage("assets/sprites/new_background.png")
   camera:setBounds(0, 0, 0, 0)
   imageWidth = bg:getWidth()
   posX1 = 0
