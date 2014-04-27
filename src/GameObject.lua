@@ -65,7 +65,7 @@ function Whale:__init( x, y )
 	self.secial_state = nil
 	self.state_time = 0
 	self.hurt_time = 0
-	self.hurt_state = false
+	self.hurt_state = 0
 
 	Whale.super:__init()
 	self.pos.x = x
@@ -96,6 +96,17 @@ function Whale:setGhost()
 end
 
 function Whale:update( dt )
+	if self.special_state ~= nil and self.special_state == "dead" then
+		if self:getY() >= dims.h then
+			ActiveScreen.gameOver = true
+		end
+		return
+	elseif self.health <= 0 then
+		self.special_state = "dead"
+		self.body:applyLinearImpulse( 0, 500 * 64 )
+		self:setGhost()
+	end
+
 	local x, y = self.body:getLinearVelocity()
 	local seaLevel = love.window.getHeight() / 2	
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
@@ -150,7 +161,7 @@ function Whale:update( dt )
 	end
 
 	self.state_time = self.state_time + dt
-	if(self.state_time > .5) then
+	if(self.state_time > .5 and self.special_state ~= "hurt") then
 		self.state_time = 0
 		self.special_state = nil
 		if self.norm_state == "up" then
@@ -162,9 +173,13 @@ function Whale:update( dt )
 
 	if(self.special_state == "hurt") then
 		self.hurt_time = self.hurt_time + dt
-		if(self.hurt_time > .125) then
+		if(self.hurt_time > .25) then
 			self.hurt_time = 0
-			self.hurt_state = not self.hurt_state
+			self.hurt_state = self.hurt_state + 1
+			if self.hurt_state >= 3 then
+				self.special_state = nil
+				self.hurt_state = 0
+			end
 		end
 	end
 end
@@ -174,9 +189,9 @@ function Whale:render()
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
-			if self.hurt_state then
+			if self.hurt_state == 1 then
 				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-			else
+			elseif self.hurt_state == 2 then
 				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 			end
 		end
