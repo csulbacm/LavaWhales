@@ -3,7 +3,8 @@ class = require "external/30log/30log"
 Screen = class()
 require('assets/camera/camera')
 src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
-
+src_hurt = love.audio.newSource("assets/sounds/arr.wav")
+src_button = love.audio.newSource("assets/sounds/button_click.wav")
 function Screen:__init( name )
 	self.name = name
 end
@@ -34,10 +35,12 @@ function TitleScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}	}
 	if gui.Button{id = "start", text = "Start"} then
 		self.start_button = true
+				src_button:play()
 		ActiveScreen = GameScreen()
 	end
 	if gui.Button{id = "help", text = "Instructions" } then
 		ActiveScreen = HelpScreen()
+		src_button:play()
 	end
 	gui.group.pop{}
 end
@@ -54,6 +57,7 @@ function HelpScreen:update( dt )
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
+		src_button:play()
 		src1:pause()
 		ActiveScreen = TitleScreen()
 	end
@@ -74,6 +78,7 @@ function FailScreen:update( dt )
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
+		src_button:play()
 	end
 	gui.group.pop{}
 end
@@ -164,6 +169,7 @@ function GameScreen:render()
 	 end
 	healthBar(self.whale)
 	ammoBar(self.whale)
+	airBar(self.whale)
    camera:unset()
 end
 
@@ -174,6 +180,7 @@ function beginContact( a, b, coll )
 	if tempA:is( Whale ) and tempB:is( Dwarves ) then
 		tempA.dwarf_col = tempA.dwarf_col + 1
 		tempB.toKill = true
+		src_hurt:play()
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempA.dwarf_col + 1
 		tempA.toKill = true
@@ -215,7 +222,7 @@ end
 
 function healthBar(whale) 
 	local health = whale.health
-	local x, y = camera._x + love.window.getWidth() / 2 - 250, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. health, math.floor(x),  math.floor(y))
 	if(health > 0 and health < 33) then
@@ -233,16 +240,31 @@ end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + love.window.getWidth() / 2 + 50, camera._y + 10
+	local x, y = camera._x + 5, camera._y + 10
+
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
-	love.graphics.setColor(255,255,255)
 	if(ammo > 0) then
-		love.graphics.rectangle("line", x + 70, y, ammo * 10 + 1, 15)
-		love.graphics.setColor(32,32,32)
-		love.graphics.rectangle("fill", x + 71, y, ammo * 10, 15)
 		love.graphics.setColor(255,255,255)
+		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 1, 15)
+		love.graphics.setColor(32,32,32)
+		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
 	end
+	love.graphics.setColor(255,255,255)
+end
+
+function airBar(whale)
+	local air = whale.air
+	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
+	love.graphics.setColor(0,0,0)
+	love.graphics.print("Air: "..air, x, y)
+	if(air > 0) then
+		love.graphics.setColor(0,204,204)
+		love.graphics.rectangle("line", x + 60, y, air * 2 + 1, 15)
+		love.graphics.setColor(255,255,255)
+		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
+	end
+	love.graphics.setColor(255,255,255)
 end
 
 function typesCollided( a, ta, b, tb )
