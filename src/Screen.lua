@@ -69,7 +69,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 	for i = 1, 100 do
-		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
+		spwanDwarf( self.objects )
 	end
 
 	--Game Loop Music
@@ -106,7 +106,7 @@ function GameScreen:update( dt )
 
 	for i, index in ipairs( removals ) do
 		table.remove( self.objects, index )
-		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
+		spwanDwarf( ActiveScreen.objects )
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
@@ -153,4 +153,9 @@ function printBackground(posX, imageWidth)
    love.graphics.draw(bg1, posX, 0) -- this is the original image
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
    love.graphics.print(posX, 400,300)
+end
+
+function spwanDwarf( objects )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
+	objects[ #objects ].body:applyForce( -15000 * 64 * math.random() -15000 * 64, 0 )
 end
