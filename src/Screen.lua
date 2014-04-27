@@ -74,7 +74,7 @@ function GameScreen:__init()
 
 	--Game Loop Music
 	src1:pause()
-	src2 = love.audio.newSource("assets/sounds/game_loop.ogg", "static")
+	src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 	src2:play()
 	src2:setLooping( true )
 
