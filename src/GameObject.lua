@@ -7,6 +7,7 @@ SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
 SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
 SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
+SpriteSet.boss = love.graphics.newImage("assets/sprites/boss.png")
 
 SpriteSet.fishes = {}
 	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
@@ -48,6 +49,10 @@ end
 
 function GameObject:getHeight()
 	return self.pos.h
+end
+
+function GameObject:getDirection()
+	return self.direction
 end
 
 function GameObject:kill()
@@ -105,7 +110,6 @@ function Whale:__init( x, y )
 	self.health = 100
 	self.ammo = 20
 	self.air = 100
-	self.airTicks = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic" )
 	self.shape = love.physics.newCircleShape( 100 )
@@ -211,12 +215,24 @@ end
 function Whale:render()
 	--love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
 	if(self.special_state ~= nil) then
-		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		if (self.direction == "right") then
+			love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		else
+		   love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+		end
 		if self.special_state == "hurt" then
-			if self.hurt_state == 1 then
-				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-			elseif self.hurt_state == 2 then
-				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+			if(self.direction == "right") then
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				end
+			else
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				end 
 			end
 		end
 	else
@@ -474,18 +490,18 @@ Boss = GameObject:extends()
 
 function Boss:__init( x, y )
 	Boss.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boss.png")
+	self.image = SpriteSet.boss
 
 	self.health = 420
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = 100
-	self.pos.h = 120
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
 	self.hits = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
-	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
 end
@@ -503,7 +519,7 @@ function Boss:update( dt )
 end
 
 function Boss:render()
-	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
