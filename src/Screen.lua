@@ -11,7 +11,6 @@ src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 score = 0
 
->>>>>>> 41b533140209f7813e292373ae24db1090baa326
 function Screen:__init( name )
 	self.name = name
 end

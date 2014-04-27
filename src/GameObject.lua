@@ -308,7 +308,7 @@ Ships = GameObject:extends()
 
 function Ships:__init( x, y )
 	Ships.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boat.png")
+	self.image = love.graphics.newImage("assets/sprites/wtfduckboat.png")
 
 	self.pos.x = x
 	self.pos.y = y
