@@ -54,10 +54,9 @@ function love.keypressed( key, isrepeat )
 		ActiveScreen.whale.state_time = 0
 		src_shoot:play()
 	end
-	if key == 'b' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.ammo > 0 then
+	if key == 'b' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.air > 0 then
 		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
 		ActiveScreen.whale:getY(), 0, -50000 * 64, "air" ) )
-		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo - 1
 		ActiveScreen.whale.air = ActiveScreen.whale.air - 10
 		ActiveScreen.whale.special_state = "shoot"
 		ActiveScreen.whale.state_time = 0
@@ -76,5 +75,16 @@ function love.keypressed( key, isrepeat )
 
    	if key == 'p' then
    		paused = not paused
+   	elseif key == 's' then
+   		-- Spread Shot
+   		if ActiveScreen.whale.ammo >= 3 then
+			table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2, ActiveScreen.whale:getY(), 500000 * 64, -15000 * 64, "fire" ) )
+	   		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,ActiveScreen.whale:getY(), 500000 * 64, 0, "fire" ) )
+			table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2, ActiveScreen.whale:getY(), 500000 * 64, 15000 * 64, "fire" ) )
+			ActiveScreen.whale.ammo = ActiveScreen.whale.ammo - 3
+			ActiveScreen.whale.special_state = "shoot"
+			ActiveScreen.whale.state_time = 0
+			src_shoot:play()
+		end
    	end
 end

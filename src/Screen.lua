@@ -11,6 +11,7 @@ src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 score = 0
 
+>>>>>>> 41b533140209f7813e292373ae24db1090baa326
 function Screen:__init( name )
 	self.name = name
 end
@@ -123,8 +124,12 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 1 do
+	for i = 1, 2 do
 		spawnShip( self.objects )
+	end
+
+	for i = 1, 1 do
+		spawnBoss( self.objects )
 	end
 
 	dims = {}
@@ -149,7 +154,7 @@ function GameScreen:__init()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -215,6 +220,7 @@ function GameScreen:render()
 	 	v:render()
 	 end
 	healthBar(self.whale)
+	bossHealth(boss)
 	ammoBar(self.whale)
 	airBar(self.whale)
 	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
@@ -301,14 +307,33 @@ function spawnFish( objects )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
+function spawnBoss( objects )
+	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
+	table.insert( objects, boss )
+	objects[ #objects ].body:applyForce( 0, 0 )
+end
+
+function bossHealth( boss ) 
+	local bhealth = boss.health
+	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
+	love.graphics.setColor(191,0,0)
+	love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
+	if(boss.health > 0) then
+		love.graphics.setColor(191,0,0)
+		love.graphics.rectangle("line", x - 250 , camera._y + 40, boss.health * 2 + 2, 15)
+		love.graphics.rectangle("fill", x - 249, camera._y + 40, boss.health * 2, 15)
+	end
+	love.graphics.setColor(255,255,255)
+end
+
 function healthBar(whale) 
 	local health = whale.health
-	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 180, camera._y + love.window.getHeight() - 70
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. math.floor(health), math.floor(x),  math.floor(y))
 	if(health > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 80, camera._y + 10, whale.health * 2 + 2, 15)
+		love.graphics.rectangle("line", x + 80, y, whale.health * 2 + 2, 15)
 		if(health > 0 and health < 33) then
 			love.graphics.setColor(255,0,0)
 		elseif(health >= 33 and health < 66) then
@@ -316,22 +341,22 @@ function healthBar(whale)
 		elseif(health >= 66) then
 			love.graphics.setColor(0,255,0)
 		end
-		love.graphics.rectangle("fill", x + 81, camera._y + 10, whale.health * 2, 15)
+		love.graphics.rectangle("fill", x + 81, y, whale.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + love.window.getWidth() / 2 - 400, camera._y + 10
+	local x, y = camera._x + 10,  camera._y + love.window.getHeight() - 50
 
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
 	if(ammo > 0) then
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 2, 15)
-		love.graphics.setColor(32,32,32)
-		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
+		love.graphics.rectangle("line", x + 20, y - (ammo * 5 + 2 )- 10, 15 , ammo * 5 + 2)
+		love.graphics.setColor(144,0,0)
+		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 10, 15, ammo * 5)
 	end
 
 	if(ammo == 0) then
@@ -342,7 +367,7 @@ end
 
 function airBar(whale)
 	local air = whale.air
-	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 + 200, camera._y + love.window.getHeight() - 50
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Air: "..math.floor(air), x, y)
 	if(air > 0) then
