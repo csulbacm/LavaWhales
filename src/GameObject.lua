@@ -145,8 +145,8 @@ function Whale:update( dt )
 		self.health = self.health - self.dwarf_col * 5
 		self.dwarf_col = 0
 		self.special_state = "hurt"
-		self.hurt_time = 0
-		self.state_time = 0
+		self.hurt_time = 1
+		self.state_time = 1
 	end
 
 	self.state_time = self.state_time + dt
@@ -170,7 +170,7 @@ function Whale:update( dt )
 end
 
 function Whale:render()
-	love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
+	--love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
@@ -218,8 +218,11 @@ function Dwarves:update( dt )
 	--unicorns will fall down
 	--at the bottom, they will bounce to random hights
 	x,y = self.body:getLinearVelocity()
-	if(y < 1000) then
-		self.body:applyLinearImpulse(0,5000)
+	if(y < 500) then
+		self.body:applyLinearImpulse(0,1000)
+	end
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
 	end
 
 	if(self:getX() < self:getWidth() / 2 + 100) then
@@ -236,16 +239,16 @@ function Dwarves:update( dt )
 
 	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 20) then
 		--we are at the bottom
-		if love.math.random() > .7 then
-			self.body:applyLinearImpulse(-2000, -100000 * (love.math.random() + .5))
+		if math.random() > .7 then
+			self.body:applyLinearImpulse(0, -50000)
 		else
-			self.body:applyLinearImpulse(-5000, -50000 * (love.math.random() + .5))
+			self.body:applyLinearImpulse(0, -5000)
 		end
 	end
 end
 
 function Dwarves:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
@@ -274,7 +277,7 @@ function Shots:__init( x, y, vx )
 end
 
 function Shots:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 20) then
 		self.toKill = true
 	end
 	x,y = self.body:getLinearVelocity()
@@ -284,7 +287,6 @@ function Shots:update( dt )
 end
 
 function Shots:render()
-	Shots.super:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
 
@@ -298,8 +300,7 @@ function Wall:__init( x, y, w, h )
 end
 
 function Wall:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
 
@@ -314,7 +315,7 @@ function Ammo:__init( x, y )
 end
 
 function Ammo:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 20) then
 		self.toKill = true
 	end
 	x,y = self.body:getLinearVelocity()
@@ -324,7 +325,7 @@ function Ammo:update( dt )
 end
 
 function Ammo:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.push()
 	love.graphics.translate( self.body:getX(), self.body:getY() )
 	love.graphics.rotate( self.body:getAngle() )
@@ -353,17 +354,17 @@ function Fish:__init( x, y )
 end
 
 function Fish:update( dt )
-	if(self:getX() < self:getWidth() / 2 + 10) then
+	if(self:getX() < self:getWidth() / 2 + 30) then
 		self.toKill = true
 	end
-	x,y = self.body:getLinearVelocity()
+	local x,y = self.body:getLinearVelocity()
 	if(x > -10) then
 		self.body:applyLinearImpulse(-100,0)
 	end
 end
 
 function Fish:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.push()
 	love.graphics.translate( self.body:getX(), self.body:getY() )
 	love.graphics.rotate( self.body:getAngle() )

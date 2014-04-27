@@ -73,6 +73,7 @@ FailScreen = Screen:extends()
 function  FailScreen:__init()
 	FailScreen.super:__init( "FailScreen" )
 	src_lose:play()
+	self.image = love.graphics.newImage("assets/sprites/dead_whale.png")
 end
 
 function FailScreen:update( dt )
@@ -90,6 +91,10 @@ function FailScreen:update( dt )
 	gui.group.pop{}
 end
 
+function FailScreen:render()
+	love.graphics.draw( self.image, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+end
+
 GameScreen = Screen:extends()
 
 function GameScreen:__init()
@@ -101,15 +106,15 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 10 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
-	for i = 1, 5 do
+	for i = 1, 1 do
 		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
-	for i = 1, 5 do
+	for i = 1, 1 do
 		spawnFish( self.objects )
 	end
 
@@ -264,16 +269,16 @@ end
 
 function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
+	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8) )
 end
 
 function spawnFish( objects )
 	table.insert( objects, Fish( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
-	objects[ #objects ].body:applyForce( -64000 * math.random() -64000, 0 )
+	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function healthBar(whale) 
