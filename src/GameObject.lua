@@ -62,6 +62,14 @@ function GameObject:kill()
 	end
 end
 
+function GameObject:damage()
+	if self.dead == false then
+		self.fixture:destroy()
+		self.body:destroy()
+		dead = true
+	end
+end
+
 
 
 Whale = GameObject:extends()
@@ -473,4 +481,51 @@ function Fish:render()
 	love.graphics.rotate( self.body:getAngle() )
 	love.graphics.draw( self.image, -self.image:getWidth()/2, -self.image:getHeight()/2 )
 	love.graphics.pop()
+end
+
+
+--Boss
+Boss = GameObject:extends()
+
+function Boss:__init( x, y )
+	Boss.super:__init()
+	self.image = love.graphics.newImage("assets/sprites/boss.png")
+
+	self.health = 420
+	self.pos.x = x
+	self.pos.y = y
+	self.pos.w = 100
+	self.pos.h = 120
+	self.hits = 0
+
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture:setUserData( self )
+	self.body:setFixedRotation( true )
+end
+
+function Boss:update( dt )
+	self.body:applyLinearImpulse(math.random()*10, math.random()*10)
+	if self.hits >= 1 then
+		self.health = self.health - 5
+		self.hits = 0
+		--self.special_state = "hurt"
+		--self.hurt_time = 1
+		--self.state_time = 1
+	end
+
+end
+
+function Boss:render()
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+end
+
+function Boss:getWidth()
+	return self.image:getWidth()
+end
+
+function Boss:getHeight()
+	return self.image:getHeight()
 end

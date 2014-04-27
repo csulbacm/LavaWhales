@@ -123,8 +123,12 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 1 do
+	for i = 1, 2 do
 		spawnShip( self.objects )
+	end
+
+	for i = 1, 1 do
+		spawnBoss( self.objects )
 	end
 
 	dims = {}
@@ -215,6 +219,7 @@ function GameScreen:render()
 	 	v:render()
 	 end
 	healthBar(self.whale)
+	bossHealth(boss)
 	ammoBar(self.whale)
 	airBar(self.whale)
 	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
@@ -299,6 +304,25 @@ end
 function spawnFish( objects )
 	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
+end
+
+function spawnBoss( objects )
+	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
+	table.insert( objects, boss )
+	objects[ #objects ].body:applyForce( 0, 0 )
+end
+
+function bossHealth( boss ) 
+	local bhealth = boss.health
+	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
+	love.graphics.setColor(191,0,0)
+	love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
+	if(boss.health > 0) then
+		love.graphics.setColor(191,0,0)
+		love.graphics.rectangle("line", x - 250 , camera._y + 40, boss.health * 2 + 2, 15)
+		love.graphics.rectangle("fill", x - 249, camera._y + 40, boss.health * 2, 15)
+	end
+	love.graphics.setColor(255,255,255)
 end
 
 function healthBar(whale) 
