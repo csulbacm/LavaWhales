@@ -27,6 +27,7 @@ function TitleScreen:__init()
 
 	--Background Music Insert
 	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src2:pause()
 	src1:pause()
 	src1:play()
 	src1:setLooping( true )
@@ -77,6 +78,7 @@ function FailScreen:update( dt )
 	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
 		size={2}}
 	gui.Label{text=""}
+	src1:pause()
 	src_lose:play()
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
