@@ -265,6 +265,12 @@ function beginContact( a, b, coll )
 		tempB.toKill = true
 		src_explosion:play()
 		score = score + 10
+	elseif typesCollided( tempA, Shots, tempB, Boss ) then
+		tempA.toKill = true
+		boss.hits = 1
+		if boss.health == 0 then
+			tempB.toKill = true
+		end
 	end
 
 end
