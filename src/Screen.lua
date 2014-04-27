@@ -8,6 +8,9 @@ src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+
+score = 0
+
 function Screen:__init( name )
 	self.name = name
 end
@@ -78,7 +81,7 @@ end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
+	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going\n Your score was: " .. score,
 		size={2}}
 	gui.Label{text=""}
 	src1:pause()
@@ -103,6 +106,8 @@ function GameScreen:__init()
 	GameScreen.super:__init( "GameScreen" )
 
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
+
+	score = 0
 
 	self.objects = {}
 
@@ -144,7 +149,7 @@ function GameScreen:__init()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -213,8 +218,8 @@ function GameScreen:render()
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
-	love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
-	love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
+	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
+	--love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
    camera:unset()
 end
 
@@ -233,6 +238,7 @@ function beginContact( a, b, coll )
 		tempA.toKill = true
 		tempB.toKill = true
 		src_explosion:play()
+		score = score + 10
 	elseif typesCollided( tempA, Wall, tempB, Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -253,6 +259,8 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Shots, tempB, Ships ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_explosion:play()
+		score = score + 10
 	end
 
 end
@@ -276,21 +284,21 @@ function printBackground(posX1, posX2, posx3, imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Dwarves( love.graphics.getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random()) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Ships( love.graphics.getWidth(), love.graphics.getHeight() / 2) )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth(), love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth(), love.graphics.getHeight() + love.graphics.getHeight() * math.random()) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth(), love.graphics.getHeight() * math.random() ) )
+	table.insert( objects, Fish( love.graphics.getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 

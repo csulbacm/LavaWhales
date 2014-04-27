@@ -145,7 +145,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 5
+		self.health = self.health - self.dwarf_col * 0
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 1
@@ -244,7 +244,7 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0, -1.1 * y)
 	end
 
-	if(self:getY() > love.window.getHeight() - self:getHeight() / 2 - 20) then
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 20) then
 		--we are at the bottom
 		if math.random() > .7 then
 			self.body:applyLinearImpulse(0, -50000)
@@ -287,10 +287,15 @@ function Ships:__init( x, y )
 end
 
 function Ships:update( dt )
+	local seaLevel = love.window.getHeight() / 2
 	if(self:getX() < self:getWidth() / 2 + 100) then
 		self.toKill = true
 	end
-	self.body:applyLinearImpulse( math.random()*100, -6400 )
+	if self:getY()  < seaLevel then
+		self.body:applyLinearImpulse( math.random()*-100-100, 640 )
+	else 
+		self.body:applyLinearImpulse( math.random()*-100-100, -640 )
+	end
 end
 
 function Ships:render()
