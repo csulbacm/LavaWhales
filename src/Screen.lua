@@ -141,10 +141,9 @@ function GameScreen:__init()
 
   bg = love.graphics.newImage("assets/sprites/background.png")
   camera:setBounds(0, 0, 0, 0)
-  imageWidth = love.window.getWidth()
+  imageWidth = bg:getWidth()
   posX1 = 0
   posX2 = imageWidth
-  posX3 = imageWidth * 2
   --self.whale:setGhost()
 end
 
@@ -186,17 +185,14 @@ function GameScreen:update( dt )
 			spawnShip( ActiveScreen.objects )
 		end
 	end
-	if posX1 <= -1 * imageWidth then posX1 = posX3 + imageWidth end
-	if posX2 <= -1 * imageWidth then posX2 = posX1 + imageWidth end
-	if posX3 <= -1 * imageWidth then posX3 = posX2 + imageWidth end
-	if(self.whale:getX() >= imageWidth - self.whale:getWidth()) then
+	if posX1 <= -imageWidth then posX1 = posX2 + imageWidth end
+	if posX2 <= -imageWidth then posX2 = posX1 + imageWidth end
+	if(self.whale:getX() >= love.window.getWidth() - self.whale:getWidth()) then
 		posX1 = posX1 - 10
 		posX2 = posX2 - 10
-		posX3 = posX3 - 10
 	else
 		posX1 = posX1 - 5
 		posX2 = posX2 - 5
-		posX3 = posX3 - 5
 	end
 	removals = nil
 end
@@ -214,6 +210,8 @@ function GameScreen:render()
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
+	love.graphics.print(posX1,camera._x,camera._y)
+	love.graphics.print(posX2,camera._x + 50,camera._y)
    camera:unset()
 end
 
@@ -264,10 +262,9 @@ function postSolve( a, b, coll )
   
 end
 
-function printBackground(posX1, posX2, posX3, imageWidth)
+function printBackground(posX1, posX2,imageWidth)
    love.graphics.draw(bg, posX1, 0) 
    love.graphics.draw(bg, posX2, 0) 
-   love.graphics.draw(bg, posX3, 0)
 end
 
 function spawnDwarf( objects )
