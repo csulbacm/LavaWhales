@@ -109,7 +109,7 @@ function GameScreen:__init()
 	end	
 
 	dims = {}
-	dims.w = 800 * 2
+	dims.w = 1000 * 2
 	dims.h = 600 * 2
 
 
