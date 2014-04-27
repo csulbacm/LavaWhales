@@ -106,7 +106,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 3 do
 		spawnDwarf( self.objects )
 	end
 
@@ -118,7 +118,7 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 2 do
+	for i = 1, 1 do
 		spawnShip( self.objects )
 	end
 
@@ -247,7 +247,11 @@ function beginContact( a, b, coll )
 		if ActiveScreen.whale.health > 100 then
 			ActiveScreen.whale.health = 100
 		end
+	elseif typesCollided( tempA, Shots, tempB, Ships ) then
+		tempA.toKill = true
+		tempB.toKill = true
 	end
+
 end
 
 function endContact( a, b, coll )
@@ -268,21 +272,21 @@ function printBackground(posX1, posX2,imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
-	table.insert( objects, Ships( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	table.insert( objects, Ships( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 0.75, love.graphics.getHeight() * math.random() * 0.8 ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
