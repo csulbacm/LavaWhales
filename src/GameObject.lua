@@ -212,7 +212,7 @@ Dwarves = GameObject:extends()
 
 function Dwarves:__init( x, y )
 	Dwarves.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/unicorn02.png")
+	self.image = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 
 	self.pos.x = x
 	self.pos.y = y
@@ -304,7 +304,7 @@ end
 Ammo = GameObject:extends()
 
 function Ammo:__init( x, y )
-	self.image = love.graphics.newImage("assets/sprites/lava_crystal.png")
+	self.image = love.graphics.newImage("assets/sprites/new_crystal.png")
 	self.body = love.physics.newBody( world, x, y, "dynamic" )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
