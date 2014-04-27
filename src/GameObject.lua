@@ -132,10 +132,10 @@ function Whale:update( dt )
 		self.air = self.air - 6 * dt
 		if(self.air <= 0) then
 			self.air = 0
-			self.health = self.health - 8 * dt
+			self.health = self.health - 15 * dt
 		end
 	elseif(self:getY() <= seaLevel) then
-		self.air = self.air + 16 * dt
+		self.air = self.air + 5 * dt
 		if(self.air >= 100) then
 			self.air = 100
 		end
