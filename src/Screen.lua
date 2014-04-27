@@ -123,8 +123,8 @@ function GameScreen:__init()
 	end
 
 	dims = {}
-	dims.w = 800 * 2
-	dims.h = 600 * 2
+	dims.w = love.window.getWidth() 
+	dims.h = love.window.getHeight()
 
 
 	self.walls = {}
@@ -140,8 +140,8 @@ function GameScreen:__init()
 	src2:setLooping( true )
 
   bg = love.graphics.newImage("assets/sprites/background.png")
-  camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
-  imageWidth = 1600
+  camera:setBounds(0, 0, 0, 0)
+  imageWidth = love.window.getWidth()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
@@ -194,9 +194,9 @@ function GameScreen:update( dt )
 		posX2 = posX2 - 10
 		posX3 = posX3 - 10
 	else
-		posX1 = posX1 - 1
-		posX2 = posX2 - 1
-		posX3 = posX3 - 1
+		posX1 = posX1 - 5
+		posX2 = posX2 - 5
+		posX3 = posX3 - 5
 	end
 	removals = nil
 end

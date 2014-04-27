@@ -115,16 +115,16 @@ function Whale:update( dt )
 		self.body:setX(self:getWidth() / 2) 
 		self.body:applyLinearImpulse(-1 * x, 0)
 	end
-	if(self:getX() > love.window.getWidth() * 2 - self:getWidth() / 2) then
-		self.body:setX(love.window.getWidth() * 2 - self:getWidth() / 2) 
+	if(self:getX() > love.window.getWidth() - self:getWidth() / 2) then
+		self.body:setX(love.window.getWidth() - self:getWidth() / 2) 
 		self.body:applyLinearImpulse(-1 * x, 0)
 	end
 	if(self:getY() < self:getHeight() / 2) then
 		self.body:setY(self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
-	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
-		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
+	if(self:getY() > love.window.getHeight() - self:getHeight() / 2) then
+		self.body:setY(love.window.getHeight() - self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
 
@@ -269,8 +269,8 @@ function Ships:__init( x, y )
 
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = 100
-	self.pos.h = 120
+	self.pos.w = 70
+	self.pos.h = 50
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
