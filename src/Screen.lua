@@ -21,6 +21,11 @@ TitleScreen = Screen:extends()
 function TitleScreen:__init()
 	TitleScreen.super:__init( "TitleScreen" )
 	self.start_button = false
+
+	--Background Music Insert
+	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src1:play()
+
 	
 end
 
@@ -65,7 +70,7 @@ function GameScreen:__init()
 	for i = 1, 10 do
 		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
 	end
- 
+
   bg = love.graphics.newImage("assets/sprites/testBG.png")
   camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
 end
