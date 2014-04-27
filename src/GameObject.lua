@@ -51,6 +51,10 @@ function GameObject:getHeight()
 	return self.pos.h
 end
 
+function GameObject:getDirection()
+	return self.direction
+end
+
 function GameObject:kill()
 	if self.dead == false then
 		self.fixture:destroy()
@@ -106,7 +110,6 @@ function Whale:__init( x, y )
 	self.health = 100
 	self.ammo = 20
 	self.air = 100
-	self.airTicks = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic" )
 	self.shape = love.physics.newCircleShape( 100 )
@@ -212,12 +215,24 @@ end
 function Whale:render()
 	--love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
 	if(self.special_state ~= nil) then
-		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		if (self.direction == "right") then
+			love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		else
+		   love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+		end
 		if self.special_state == "hurt" then
-			if self.hurt_state == 1 then
-				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-			elseif self.hurt_state == 2 then
-				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+			if(self.direction == "right") then
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+				end
+			else
+				if self.hurt_state == 1 then
+					love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				elseif self.hurt_state == 2 then
+					love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2, 0, -1, 1, self:getWidth(), 0)
+				end 
 			end
 		end
 	else
