@@ -51,10 +51,8 @@ Whale = GameObject:extends()
 
 function Whale:__init( x, y )
 	self.spriteset = {}
-	self.spriteset.rightDown = love.graphics.newImage("assets/sprites/whale01.png")
-	self.spriteset.rightUp = love.graphics.newImage("assets/sprites/whale02.png")
-	self.spriteset.leftDown = love.graphics.newImage("assets/sprites/whale03.png")
-	self.spriteset.leftUp = love.graphics.newImage("assets/sprites/whale04.png")
+	self.spriteset.down = love.graphics.newImage("assets/sprites/whale01.png")
+	self.spriteset.up = love.graphics.newImage("assets/sprites/whale02.png")
 	self.spriteset.hungry = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
 	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
@@ -63,7 +61,7 @@ function Whale:__init( x, y )
 	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
 	
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
-	self.norm_state = "rightDown"
+	self.norm_state = "down"
 	self.direction = "right"
 	self.secial_state = nil
 	self.state_time = 0
@@ -158,18 +156,10 @@ function Whale:update( dt )
 	if(self.state_time > .5) then
 		self.state_time = 0
 		self.special_state = nil
-		if(self.direction == "right") then
-			if self.norm_state == "rightUp" then
-				self.norm_state = "rightDown"
-			else
-				self.norm_state = "rightUp"
-			end
+		if self.norm_state == "up" then
+			self.norm_state = "down"
 		else
-			if(self.norm_state == "leftUp") then
-				self.norm_state = "leftDown"
-			else
-		   	self.norm_state = "leftUp"
-		 	end
+		    self.norm_state = "up"
 		end
 	end
 
@@ -194,7 +184,11 @@ function Whale:render()
 			end
 		end
 	else
-		love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		if(self.direction == "right") then
+			love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+		else
+		   love.graphics.draw( self.spriteset[self.norm_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
+		end
 	end
 
 end
