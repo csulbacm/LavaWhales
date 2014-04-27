@@ -139,7 +139,7 @@ function GameScreen:__init()
 	src2:play()
 	src2:setLooping( true )
 
-  bg = love.graphics.newImage("assets/sprites/background.png")
+  bg = love.graphics.newImage("assets/sprites/new_background.png")
   camera:setBounds(0, 0, 0, 0)
   imageWidth = bg:getWidth()
   posX1 = 0
@@ -188,11 +188,11 @@ function GameScreen:update( dt )
 	if posX1 <= -imageWidth then posX1 = posX2 + imageWidth end
 	if posX2 <= -imageWidth then posX2 = posX1 + imageWidth end
 	if(self.whale:getX() >= love.window.getWidth() - self.whale:getWidth()) then
-		posX1 = posX1 - 10
-		posX2 = posX2 - 10
+		posX1 = posX1 - 500 * dt
+		posX2 = posX2 - 500 * dt
 	else
-		posX1 = posX1 - 5
-		posX2 = posX2 - 5
+		posX1 = posX1 - 250 * dt
+		posX2 = posX2 - 250 * dt
 	end
 	removals = nil
 end
