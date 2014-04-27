@@ -81,8 +81,9 @@ function Whale:__init( x, y )
 	self.fish_col = 0
 
 	self.health = 100
-	self.amo = 20
+	self.ammo = 20
 	self.air = 100
+	self.airTicks = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
@@ -90,8 +91,13 @@ function Whale:__init( x, y )
 	self.fixture:setUserData( self )
 end
 
+function Whale:setGhost()
+	self.fixture:setMask(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
+end
+
 function Whale:update( dt )
 	local x, y = self.body:getLinearVelocity()
+	local seaLevel = self:getHeight()
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -self.accel )
 	end
@@ -120,6 +126,31 @@ function Whale:update( dt )
 	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
 		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
+	end
+
+	if(self:getY() > seaLevel) then
+		if(self.airTicks >= 20) then
+			self.airTicks = 0
+			self.air = self.air - 2
+			if(self.air <= 0) then
+				self.air = 0
+				self.health = self.health - 2
+			end
+		else
+		    self.airTicks = self.airTicks + 1
+		end
+	elseif(self:getY() <= seaLevel) then
+		if(self.airTicks >= 20) then
+			self.airTicks = 0
+			if(self.air < 100) then
+				self.air = self.air + 4
+				if(self.air >= 100) then
+					self.air = 100
+				end
+			end
+		else
+		    self.airTicks = self.airTicks + 1
+		end
 	end
 
 	if self.dwarf_col >= 1 then
@@ -232,3 +263,27 @@ function Wall:__init( x, y, w, h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1000000 )
 	self.fixture:setUserData( self )
 end
+
+
+
+Ammo = GameObject:extends()
+
+function Ammo:__init( x, y )
+	self.image = love.graphics.newImage("assets/sprites/lava_crystal.png")
+	self.body = love.physics.newBody( world, x, y, "dynamic" )
+	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
+	self.fixture:setUserData( self )
+end
+
+function Ammo:render()
+	love.graphics.draw( self.image, self:getX(), self:getY() )
+end
+
+--[[
+Fish = class()
+
+function Fish:__init( x, y )
+
+end
+]]

@@ -100,6 +100,10 @@ function GameScreen:__init()
 		spwanDwarf( self.objects )
 	end
 
+	for i = 1, 15 do
+		table.insert( self.objects, Ammo(500, 500) )
+	end	
+
 	dims = {}
 	dims.w = 800 * 2
 	dims.h = 600 * 2
@@ -183,17 +187,17 @@ function beginContact( a, b, coll )
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempA.dwarf_col + 1
 		tempA.toKill = true
-	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or
-		tempA:is( Dwarves ) and tempB:is( Shots ) then
+	elseif typesCollided( tempA, Shots, tempB, Dwarves ) then
 		tempA.toKill = true
 		tempB.toKill = true
 		src_explosion:play()
-	end
-
-	if tempA:is( Shots ) and tempB:is( Wall ) then
+	elseif typesCollided( tempA, Wall, tempB, Shots ) then
 		tempA.toKill = true
-	elseif tempA:is( Wall ) and tempB:is( Shots ) then
 		tempB.toKill = true
+	elseif typesCollided( tempA, Whale, tempB, Ammo ) then
+		tempA.toKill = true
+		tempB.toKill = true
+		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo + 5
 	end
 end
 
@@ -238,8 +242,9 @@ function healthBar(whale)
 end
 
 function ammoBar(whale)
-	local ammo = whale.amo
+	local ammo = whale.ammo
 	local x, y = camera._x + 5, camera._y + 10
+
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
 	if(ammo > 0) then
@@ -247,13 +252,16 @@ function ammoBar(whale)
 		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 1, 15)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
-		love.graphics.setColor(255,255,255)
 	end
+--[[
+<<<<<<< HEAD
 
 	if(ammo == 0) then
 		src_power:play()
 	end
-end
+=======]]
+	love.graphics.setColor(255,255,255)
+--end
 
 function airBar(whale)
 	local air = whale.air
@@ -265,7 +273,11 @@ function airBar(whale)
 		love.graphics.rectangle("line", x + 60, y, air * 2 + 1, 15)
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
-		love.graphics.setColor(255,255,255)
 	end
+	love.graphics.setColor(255,255,255)
 end
 
+function typesCollided( a, ta, b, tb )
+	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
+end
+end
