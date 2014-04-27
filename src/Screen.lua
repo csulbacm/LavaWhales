@@ -165,6 +165,7 @@ function GameScreen:render()
 	 end
 	healthBar(self.whale)
 	ammoBar(self.whale)
+	airBar(self.whale)
    camera:unset()
 end
 
@@ -184,6 +185,12 @@ function beginContact( a, b, coll )
 		tempA.toKill = true
 		tempB.toKill = true
 		src_explosion:play()
+	end
+
+	if tempA:is( Shots ) and tempB:is( Wall ) then
+		tempA.toKill = true
+	elseif tempA:is( Wall ) and tempB:is( Shots ) then
+		tempB.toKill = true
 	end
 end
 
@@ -211,7 +218,7 @@ end
 
 function healthBar(whale) 
 	local health = whale.health
-	local x, y = camera._x + love.window.getWidth() / 2 - 250, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 - 200, camera._y + 10
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Health: " .. health, math.floor(x),  math.floor(y))
 	if(health > 0 and health < 33) then
@@ -229,14 +236,28 @@ end
 
 function ammoBar(whale)
 	local ammo = whale.amo
-	local x, y = camera._x + love.window.getWidth() / 2 + 50, camera._y + 10
+	local x, y = camera._x + 5, camera._y + 10
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
-	love.graphics.setColor(255,255,255)
 	if(ammo > 0) then
-		love.graphics.rectangle("line", x + 70, y, ammo * 10 + 1, 15)
+		love.graphics.setColor(255,255,255)
+		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 1, 15)
 		love.graphics.setColor(32,32,32)
-		love.graphics.rectangle("fill", x + 71, y, ammo * 10, 15)
+		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
+		love.graphics.setColor(255,255,255)
+	end
+end
+
+function airBar(whale)
+	local air = whale.air
+	local x, y = camera._x + love.window.getWidth() / 2 + 100, camera._y + 10
+	love.graphics.setColor(0,0,0)
+	love.graphics.print("Air: "..air, x, y)
+	if(air > 0) then
+		love.graphics.setColor(0,204,204)
+		love.graphics.rectangle("line", x + 60, y, air * 2 + 1, 15)
+		love.graphics.setColor(255,255,255)
+		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
 		love.graphics.setColor(255,255,255)
 	end
 end
