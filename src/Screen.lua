@@ -118,7 +118,7 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 10 do
+	for i = 1, 2 do
 		spawnShip( self.objects )
 	end
 

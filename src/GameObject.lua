@@ -269,8 +269,8 @@ function Ships:__init( x, y )
 
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = 100
-	self.pos.h = 120
+	self.pos.w = 70
+	self.pos.h = 50
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
