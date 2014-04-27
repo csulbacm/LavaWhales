@@ -238,8 +238,8 @@ function ammoBar(whale)
 		love.graphics.rectangle("line", x + 70, y, ammo * 5 + 1, 15)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
-		love.graphics.setColor(255,255,255)
 	end
+	love.graphics.setColor(255,255,255)
 end
 
 function airBar(whale)
@@ -252,7 +252,7 @@ function airBar(whale)
 		love.graphics.rectangle("line", x + 60, y, air * 2 + 1, 15)
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
-		love.graphics.setColor(255,255,255)
 	end
+	love.graphics.setColor(255,255,255)
 end
 
