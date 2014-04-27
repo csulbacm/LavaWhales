@@ -231,7 +231,9 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0,5000)
 	end
 
-
+	if(self:getX() < self:getWidth() / 2 + 100) then
+		self.toKill = true
+	end
 	if(self:getY() < self:getHeight() / 2) then
 		self.body:setY(self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1.1 * y)
