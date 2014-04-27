@@ -43,9 +43,12 @@ function love.draw()
 end
 
 function love.keypressed( key, isrepeat )
-	if key == ' ' and ActiveScreen:is( GameScreen ) then
+	if key == ' ' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.amo > 0 then
 		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
-		 ActiveScreen.whale:getY(), 500000 * 64 ) )
+		ActiveScreen.whale:getY(), 500000 * 64 ) )
+		ActiveScreen.whale.amo = ActiveScreen.whale.amo - 1
+		ActiveScreen.whale.special_state = "shoot"
+		ActiveScreen.whale.state_time = 0
 		src_shoot:play()
 	end
 end

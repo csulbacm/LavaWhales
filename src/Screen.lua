@@ -132,6 +132,7 @@ function GameScreen:render()
    for k,v in ipairs( self.objects ) do
      v:render()
 	 end
+	healthBar(self.whale)
    camera:unset()
 end
 
@@ -139,9 +140,13 @@ end
 function beginContact( a, b, coll )
 	local tempA = a:getUserData()
 	local tempB = b:getUserData()
-	if tempA:is( Whale ) and tempB:is( Dwarves ) or
-		tempA:is( Dwarves ) and tempB:is( Whale ) or
-		tempA:is( Shots ) and tempB:is( Dwarves ) or
+	if tempA:is( Whale ) and tempB:is( Dwarves ) then
+		tempA.dwarf_col = tempA.dwarf_col + 1
+		tempB.toKill = true
+	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
+		tempB.dwarf_col = tempA.dwarf_col + 1
+		tempA.toKill = true
+	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or
 		tempA:is( Dwarves ) and tempB:is( Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -164,10 +169,26 @@ end
 function printBackground(posX, imageWidth)
    love.graphics.draw(bg1, posX, 0) -- this is the original image
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
-   love.graphics.print(posX, 400,300)
 end
 
 function spwanDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
 	objects[ #objects ].body:applyForce( -20000 * 64 * math.random() -1000 * 64, 0 )
+end
+
+function healthBar(whale) 
+	local health = whale.health
+	love.graphics.setColor(0,0,0)
+	love.graphics.print("Health: ", math.floor(camera._x + love.window.getWidth() / 2 - 150),  math.floor(camera._y + 10))
+	if(health > 0 and health < 33) then
+		love.graphics.setColor(255,0,0)
+	elseif(health >= 33 and health < 66) then
+		love.graphics.setColor(255,102,0)
+	elseif(health >= 66) then
+		love.graphics.setColor(0,255,0)
+	end
+	if(health > 0) then
+		love.graphics.rectangle("fill", camera._x + love.window.getWidth() / 2 - 100, camera._y + 10, whale.health * 2, 15)
+	end
+	love.graphics.setColor(255,255,255)
 end
