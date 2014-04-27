@@ -60,10 +60,29 @@ function HelpScreen:update( dt )
 	gui.group.pop{}
 end
 
+FailScreen = Screen:extends()
+
+function  FailScreen:__init()
+	FailScreen.super:__init( "FailScreen" )
+end
+
+function FailScreen:update( dt )
+	gui.group.push{grow="down",pos={200,100}}
+	gui.Label{text="You have failed whalekind.\nWhales are now extinct.",
+		size={2}}
+	gui.Label{text=""}
+	if gui.Button{id = "return", text = "Return"} then
+		src1:pause()
+		ActiveScreen = TitleScreen()
+	end
+	gui.group.pop{}
+end
+
 GameScreen = Screen:extends()
 
 function GameScreen:__init()
-  self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+	world = love.physics.newWorld( 0, 0, true )
+  	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 	GameScreen.super:__init( "GameScreen" )
 
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
@@ -99,6 +118,12 @@ end
 
 function GameScreen:update( dt )
 	self.whale:update(dt)
+
+	if self.whale.health <= 0 then
+		ActiveScreen = FailScreen()
+		return
+	end
+
 	for k,v in ipairs( self.objects ) do
 		v:update(dt)
 	end

@@ -179,7 +179,7 @@ Dwarves = GameObject:extends()
 
 function Dwarves:__init( x, y )
 	Dwarves.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/test_dwarf.png")
+	self.image = love.graphics.newImage("assets/sprites/unicorn02.png")
 
 	self.pos.x = x
 	self.pos.y = y
