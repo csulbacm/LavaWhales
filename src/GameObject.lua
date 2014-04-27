@@ -68,8 +68,8 @@ function Whale:__init( x, y )
 	self.pos.w = self.image:getWidth()
 	self.pos.h = self.image:getHeight()
 
-	self.maxVel = 400
-	self.accel = 300
+	self.maxVel = 500
+	self.accel = 500
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
