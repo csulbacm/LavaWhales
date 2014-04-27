@@ -216,7 +216,7 @@ function Dwarves:update( dt )
 	--unicorns will fall down
 	--at the bottom, they will bounce to random hights
 	x,y = self.body:getLinearVelocity()
-	if(y < 100) then
+	if(y < 1000) then
 		self.body:applyLinearImpulse(0,5000)
 	end
 
@@ -232,10 +232,10 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0, -1.1 * y)
 	end
 
-	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 100) then
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 10) then
 		--we are at the bottom
 		if love.math.random() > .7 then
-			self.body:applyLinearImpulse(-2000, -5000000 * (love.math.random() + .5))
+			self.body:applyLinearImpulse(-2000, -50000 * (love.math.random() + .5))
 		else
 			self.body:applyLinearImpulse(-5000, -5000 * (love.math.random() + .5))
 		end
@@ -274,6 +274,10 @@ function Shots:update( dt )
 	if(self:getX() < self:getWidth() / 2 + 10) then
 		self.toKill = true
 	end
+	x,y = self.body:getLinearVelocity()
+	if(x < 1000) then
+		self.body:applyLinearImpulse(100,0)
+	end
 end
 
 function Shots:render()
@@ -308,6 +312,10 @@ function Ammo:update( dt )
 	if(self:getX() < self:getWidth() / 2 + 10) then
 		self.toKill = true
 	end
+	x,y = self.body:getLinearVelocity()
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
+	end
 end
 
 function Ammo:render()
@@ -335,6 +343,10 @@ end
 function Fish:update( dt )
 	if(self:getX() < self:getWidth() / 2 + 10) then
 		self.toKill = true
+	end
+	x,y = self.body:getLinearVelocity()
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
 	end
 end
 

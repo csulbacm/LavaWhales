@@ -135,7 +135,7 @@ function GameScreen:__init()
   bg1 = love.graphics.newImage("assets/sprites/backgroundtest.png")
   posX = 0 
   imageWidth = 1600
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
