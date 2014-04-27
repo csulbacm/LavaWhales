@@ -71,11 +71,14 @@ function Whale:update()
 	local x, y = self.body:getLinearVelocity()
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -self.accel )
-	elseif love.keyboard.isDown('down') and y < self.maxVel then
+	end
+	if love.keyboard.isDown('down') and y < self.maxVel then
 		self.body:applyLinearImpulse( 0, self.accel )
-	elseif love.keyboard.isDown('left') and x > -self.maxVel then
+	end
+	if love.keyboard.isDown('left') and x > -self.maxVel then
 		self.body:applyLinearImpulse( -self.accel, 0 )
-	elseif love.keyboard.isDown('right') and x < self.maxVel then
+	end
+	if love.keyboard.isDown('right') and x < self.maxVel then
 		self.body:applyLinearImpulse( self.accel, 0 )
 	end
 
@@ -138,4 +141,24 @@ end
 
 function Dwarves:getHeight()
 	return self.image:getHeight()
+end
+
+
+
+Shots = GameObject:extends()
+
+function Shots:__init( x, y, vx )
+	Shots.super:__init()
+	self.image = love.graphics.newImage("assets/sprites/test_lavaball.png")
+
+	self.body = love.physics.newBody( world, x, y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1000 )
+	self.fixture:setUserData( self )
+
+	self.body:applyForce( vx, 0 )
+end
+
+function Shots:render()
+	love.graphics.draw( self.image, self:getX(), self:getY() )
 end

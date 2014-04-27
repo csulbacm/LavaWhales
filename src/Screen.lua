@@ -62,7 +62,7 @@ function GameScreen:__init()
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
 	self.objects = {}
-	for i = 1, 10 do
+	for i = 1, 100 do
 		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
 	end
  
@@ -108,8 +108,15 @@ end
 
 
 function beginContact( a, b, coll )
-	a:getUserData().toKill = true
-	b:getUserData().toKill = true
+	local tempA = a:getUserData()
+	local tempB = b:getUserData()
+	if tempA:is( Whale ) or tempB:is( Whale ) then
+		tempA.toKill = true
+		tempB.toKill = true
+	elseif tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
+		tempA.toKill = true
+		tempB.toKill = true
+	end
 end
 
 function endContact( a, b, coll )
