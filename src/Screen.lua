@@ -94,12 +94,16 @@ function GameScreen:__init()
 
 	self.objects = {}
 	for i = 1, 1 do
-		spwanDwarf( self.objects )
+		spawnDwarf( self.objects )
 	end
 
 	for i = 1, 15 do
 		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
+
+	for i = 1, 15 do
+		spawnFish( self.objects )
+	end
 
 	dims = {}
 	dims.w = 800 * 2
@@ -151,8 +155,15 @@ function GameScreen:update( dt )
 	end
 
 	for i, index in ipairs( removals ) do
+		local cur = self.objects[index]
 		table.remove( self.objects, index )
-		--spwanDwarf( ActiveScreen.objects )
+		if cur:is( Dwarves ) then
+			spawnDwarf( ActiveScreen.objects )
+		elseif cur:is( Fish ) then
+			spawnFish( ActiveScreen.objects )
+		elseif cur:is( Ammo ) then
+			spawnLava( ActiveScreen.objects )
+		end
 	end
 	
 	if posX <= -1 * imageWidth / 2 then posX = 0 end
@@ -198,6 +209,13 @@ function beginContact( a, b, coll )
 		if(ActiveScreen.whale.ammo >= 20) then
 			ActiveScreen.whale.ammo = 20
 		end
+	elseif typesCollided( tempA, Whale, tempB, Fish ) then
+		tempA.toKill = true
+		tempB.toKill = true
+		ActiveScreen.whale.health = ActiveScreen.whale.health + 5
+		if ActiveScreen.whale.health > 100 then
+			ActiveScreen.whale.health = 100
+		end
 	end
 end
 
@@ -218,8 +236,17 @@ function printBackground(posX, imageWidth)
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
 end
 
-function spwanDwarf( objects )
+function spawnDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
+	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
+end
+
+function spawnLava( objects )
+	table.insert( objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+end
+
+function spawnFish( objects )
+	table.insert( objects, Fish( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * math.random() * 1.8 ) )
 	objects[ #objects ].body:applyForce( -100000 * 64 * math.random() -1000 * 64, 0 )
 end
 

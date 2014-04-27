@@ -310,10 +310,24 @@ function Ammo:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
 
---[[
-Fish = class()
+Fish = GameObject:extends()
 
 function Fish:__init( x, y )
+	self.imageset = {}
+	self.imageset[1] = love.graphics.newImage("assets/sprites/fish01l.png")
+	self.imageset[2] = love.graphics.newImage("assets/sprites/fish02l.png")
+	self.imageset[3] = love.graphics.newImage("assets/sprites/fish03l.png")
+	self.imageset[4] = love.graphics.newImage("assets/sprites/fish04l.png")
+	local num = math.floor( math.random(1,5))
+	if(num == 5) then num = 4 end
 
+	self.image = self.imageset[num]
+	self.body = love.physics.newBody( world, x, y, "dynamic" )
+	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
+	self.fixture:setUserData( self )
 end
-]]
+
+function Fish:render()
+	love.graphics.draw( self.image, self:getX(), self:getY() )
+end
