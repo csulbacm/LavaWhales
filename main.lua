@@ -47,8 +47,13 @@ end
 
 function love.keypressed( key, isrepeat )
 	if key == ' ' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.ammo > 0 then
-		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
-		ActiveScreen.whale:getY(), 500000 * 64, 0, "fire" ) )
+		if (ActiveScreen.whale:getDirection() == "right") then
+			table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
+			 ActiveScreen.whale:getY(), 500000 * 64, 0, "fire" ) )
+		else
+			table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() - ActiveScreen.whale:getWidth() / 2,
+			 ActiveScreen.whale:getY(), -500000 * 64, 0, "fire" ) )
+		end
 		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo - 1
 		ActiveScreen.whale.special_state = "shoot"
 		ActiveScreen.whale.state_time = 0

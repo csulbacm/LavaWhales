@@ -331,7 +331,7 @@ function ammoBar(whale)
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("line", x + 20, y - (ammo * 5 + 2 )- 10, 15 , ammo * 5 + 2)
 		love.graphics.setColor(144,0,0)
-		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 10, 15, ammo * 5)
+		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 11, 15, ammo * 5)
 	end
 
 	if(ammo == 0) then
