@@ -5,6 +5,8 @@ require('assets/camera/camera')
 src_explosion = love.audio.newSource("assets/sounds/explosion.wav")
 src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
+src_power = love.audio.newSource("assets/sounds/drain.ogg")
+src_lose = love.audio.newSource("assets/sounds/lose.wav")
 function Screen:__init( name )
 	self.name = name
 end
@@ -72,9 +74,10 @@ end
 
 function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="You have failed whalekind.\nWhales are now extinct.",
+	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going",
 		size={2}}
 	gui.Label{text=""}
+	src_lose:play()
 	if gui.Button{id = "return", text = "Return"} then
 		src1:pause()
 		ActiveScreen = TitleScreen()
@@ -245,6 +248,10 @@ function ammoBar(whale)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
 		love.graphics.setColor(255,255,255)
+	end
+
+	if(ammo == 0) then
+		src_power:play()
 	end
 end
 
