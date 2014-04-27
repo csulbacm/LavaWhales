@@ -2,6 +2,19 @@ class = require "external/30log/30log"
 
 GameObject = class()
 
+SpriteSet = {}
+SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
+SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
+SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
+SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
+
+SpriteSet.fishes = {}
+	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
+	SpriteSet.fishes[2] = love.graphics.newImage("assets/sprites/fish02l.png")
+	SpriteSet.fishes[3] = love.graphics.newImage("assets/sprites/fish03l.png")
+	SpriteSet.fishes[4] = love.graphics.newImage("assets/sprites/fish04l.png")
+
+
 function GameObject:__init()
 	self.dead = false
 	self.toKill = false
@@ -97,13 +110,13 @@ end
 
 function Whale:update( dt )
 	if self.special_state ~= nil and self.special_state == "dead" then
+		self.body:applyLinearImpulse( 0, 10 * 64 )
 		if self:getY() >= dims.h then
 			ActiveScreen.gameOver = true
 		end
 		return
 	elseif self.health <= 0 then
 		self.special_state = "dead"
-		self.body:applyLinearImpulse( 0, 500 * 64 )
 		self:setGhost()
 	end
 
@@ -153,7 +166,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 5
+		self.health = self.health - self.dwarf_col * 0
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 1
@@ -215,7 +228,7 @@ Dwarves = GameObject:extends()
 
 function Dwarves:__init( x, y )
 	Dwarves.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/new_unicorn2.png")
+	self.image = SpriteSet.dwarf
 
 	self.pos.x = x
 	self.pos.y = y
@@ -252,7 +265,7 @@ function Dwarves:update( dt )
 		self.body:applyLinearImpulse(0, -1.1 * y)
 	end
 
-	if(self:getY() > love.window.getHeight() - self:getHeight() / 2 - 20) then
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2 - 20) then
 		--we are at the bottom
 		if math.random() > .7 then
 			self.body:applyLinearImpulse(0, -50000)
@@ -295,10 +308,15 @@ function Ships:__init( x, y )
 end
 
 function Ships:update( dt )
+	local seaLevel = love.window.getHeight() / 2
 	if(self:getX() < self:getWidth() / 2 + 100) then
 		self.toKill = true
 	end
-	self.body:applyLinearImpulse( math.random()*100, -6400 )
+	if self:getY()  < seaLevel then
+		self.body:applyLinearImpulse( math.random()*-100-100, 640 )
+	else 
+		self.body:applyLinearImpulse( math.random()*-100-100, -640 )
+	end
 end
 
 function Ships:render()
@@ -321,9 +339,9 @@ function Shots:__init( x, y, vx, vy, type )
 	Shots.super:__init()
 	self.type = type
 	if type == "fire" then
-		self.image = love.graphics.newImage("assets/sprites/fireball.png")
+		self.image = SpriteSet.fireball
 	else
-		self.image = love.graphics.newImage("assets/sprites/air_bubble.png")
+		self.image = SpriteSet.airBubble
 	end
 
 	self.body = love.physics.newBody( world, x, y, "dynamic")
@@ -365,7 +383,7 @@ end
 Ammo = GameObject:extends()
 
 function Ammo:__init( x, y )
-	self.image = love.graphics.newImage("assets/sprites/new_crystal.png")
+	self.image = SpriteSet.ammo
 	self.body = love.physics.newBody( world, x, y, "dynamic" )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
@@ -395,10 +413,10 @@ Fish = GameObject:extends()
 
 function Fish:__init( x, y )
 	self.imageset = {}
-	self.imageset[1] = love.graphics.newImage("assets/sprites/fish01l.png")
-	self.imageset[2] = love.graphics.newImage("assets/sprites/fish02l.png")
-	self.imageset[3] = love.graphics.newImage("assets/sprites/fish03l.png")
-	self.imageset[4] = love.graphics.newImage("assets/sprites/fish04l.png")
+	self.imageset[1] =  SpriteSet.fishes[1]
+	self.imageset[2] = 	SpriteSet.fishes[2]
+	self.imageset[3] = 	SpriteSet.fishes[3]
+	self.imageset[4] = 	SpriteSet.fishes[4]
 	local num = math.floor( math.random(1,5))
 	if(num == 5) then num = 4 end
 
