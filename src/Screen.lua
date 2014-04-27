@@ -174,6 +174,9 @@ function GameScreen:render()
    for k,v in ipairs( self.objects ) do
      v:render()
 	 end
+	 for k,v in ipairs( self.walls ) do
+	 	v:render()
+	 end
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
@@ -262,15 +265,12 @@ function ammoBar(whale)
 		love.graphics.setColor(32,32,32)
 		love.graphics.rectangle("fill", x + 71, y, ammo * 5, 15)
 	end
---[[
-<<<<<<< HEAD
 
 	if(ammo == 0) then
 		src_power:play()
 	end
-=======]]
 	love.graphics.setColor(255,255,255)
---end
+end
 
 function airBar(whale)
 	local air = whale.air
@@ -288,5 +288,4 @@ end
 
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
-end
 end

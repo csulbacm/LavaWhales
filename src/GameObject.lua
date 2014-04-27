@@ -294,6 +294,9 @@ function Wall:__init( x, y, w, h )
 	self.fixture:setUserData( self )
 end
 
+function Wall:render()
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+end
 
 
 Ammo = GameObject:extends()
