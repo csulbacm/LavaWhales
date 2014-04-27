@@ -123,8 +123,8 @@ function GameScreen:__init()
 	end
 
 	dims = {}
-	dims.w = love.window.getWidth() 
-	dims.h = love.window.getHeight()
+	dims.w = love.window.getWidth()
+	dims.h = love.window.getHeight() * 2
 
 
 	self.walls = {}
@@ -140,11 +140,12 @@ function GameScreen:__init()
 	src2:setLooping( true )
 
   bg = love.graphics.newImage("assets/sprites/new_background.png")
-  camera:setBounds(0, 0, 0, 0)
+  camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
   imageWidth = bg:getWidth()
   posX1 = 0
   posX2 = imageWidth
-  --self.whale:setGhost()
+  posX3 = imageWidth * 2
+  self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -185,14 +186,17 @@ function GameScreen:update( dt )
 			spawnShip( ActiveScreen.objects )
 		end
 	end
-	if posX1 <= -imageWidth then posX1 = posX2 + imageWidth end
+	if posX1 <= -imageWidth then posX1 = posX3 + imageWidth end
 	if posX2 <= -imageWidth then posX2 = posX1 + imageWidth end
-	if(self.whale:getX() >= love.window.getWidth() - self.whale:getWidth()) then
+	if posX3 <= -imageWidth then posX3 = posX2 + imageWidth end
+	if(self.whale:getX() >= love.window.getWidth() * 2 - self.whale:getWidth()) then
 		posX1 = posX1 - 500 * dt
 		posX2 = posX2 - 500 * dt
+		posX3 = posX3 - 500 * dt
 	else
 		posX1 = posX1 - 250 * dt
 		posX2 = posX2 - 250 * dt
+		posX3 = posX3 - 250 * dt
 	end
 	removals = nil
 end
@@ -210,8 +214,8 @@ function GameScreen:render()
 	healthBar(self.whale)
 	ammoBar(self.whale)
 	airBar(self.whale)
-	love.graphics.print(posX1,camera._x,camera._y)
-	love.graphics.print(posX2,camera._x + 50,camera._y)
+	love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
+	love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
    camera:unset()
 end
 
@@ -266,9 +270,10 @@ function postSolve( a, b, coll )
   
 end
 
-function printBackground(posX1, posX2,imageWidth)
+function printBackground(posX1, posX2, posx3, imageWidth)
    love.graphics.draw(bg, posX1, 0) 
    love.graphics.draw(bg, posX2, 0) 
+   love.graphics.draw(bg, posx3, 0)
 end
 
 function spawnDwarf( objects )

@@ -97,7 +97,7 @@ end
 
 function Whale:update( dt )
 	local x, y = self.body:getLinearVelocity()
-	local seaLevel = self:getHeight()
+	local seaLevel = love.window.getHeight() / 2	
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
 		self.body:applyLinearImpulse( 0, -self.accel )
 	end
@@ -115,16 +115,16 @@ function Whale:update( dt )
 		self.body:setX(self:getWidth() / 2) 
 		self.body:applyLinearImpulse(-1 * x, 0)
 	end
-	if(self:getX() > love.window.getWidth() - self:getWidth() / 2) then
-		self.body:setX(love.window.getWidth() - self:getWidth() / 2) 
+	if(self:getX() > love.window.getWidth() * 2 - self:getWidth() / 2) then
+		self.body:setX(love.window.getWidth() * 2- self:getWidth() / 2) 
 		self.body:applyLinearImpulse(-1 * x, 0)
 	end
-	if(self:getY() < self:getHeight() / 2) then
-		self.body:setY(self:getHeight() / 2) 
+	if(self:getY() < love.window.getHeight() / 2) then
+		self.body:setY(love.window.getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
-	if(self:getY() > love.window.getHeight() - self:getHeight() / 2) then
-		self.body:setY(love.window.getHeight() - self:getHeight() / 2) 
+	if(self:getY() > love.window.getHeight() * 2 - self:getHeight() / 2) then
+		self.body:setY(love.window.getHeight() * 2 - self:getHeight() / 2) 
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
 
