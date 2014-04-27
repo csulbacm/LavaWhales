@@ -243,7 +243,7 @@ end
 
 function ammoBar(whale)
 	local ammo = whale.ammo
-	local x, y = camera._x + 5, camera._y + 10
+	local x, y = camera._x + love.window.getWidth() / 2 - 400, camera._y + 10
 
 	love.graphics.setColor(0,0,0)
 	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
