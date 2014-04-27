@@ -101,17 +101,17 @@ end
 GameScreen = Screen:extends()
 dims = {}
 function GameScreen:__init()
-	world = love.physics.newWorld( 0, 0, true )
+	world = love.physics.newWorld( -100, 0, true )
   	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 	GameScreen.super:__init( "GameScreen" )
 
 	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
 
+	self.gameOver = false
 	score = 0
-
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 3 do
 		spawnDwarf( self.objects )
 	end
 
@@ -154,8 +154,7 @@ end
 
 function GameScreen:update( dt )
 	self.whale:update(dt)
-
-	if self.whale.health <= 0 then
+	if not ActiveScreen:is( GameScreen ) or self.gameOver then
 		ActiveScreen = FailScreen()
 		return
 	end

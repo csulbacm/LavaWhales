@@ -2,6 +2,19 @@ class = require "external/30log/30log"
 
 GameObject = class()
 
+SpriteSet = {}
+SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
+SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
+SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
+SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
+
+SpriteSet.fishes = {}
+	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
+	SpriteSet.fishes[2] = love.graphics.newImage("assets/sprites/fish02l.png")
+	SpriteSet.fishes[3] = love.graphics.newImage("assets/sprites/fish03l.png")
+	SpriteSet.fishes[4] = love.graphics.newImage("assets/sprites/fish04l.png")
+
+
 function GameObject:__init()
 	self.dead = false
 	self.toKill = false
@@ -66,7 +79,7 @@ function Whale:__init( x, y )
 	self.secial_state = nil
 	self.state_time = 0
 	self.hurt_time = 0
-	self.hurt_state = false
+	self.hurt_state = 0
 
 	Whale.super:__init()
 	self.pos.x = x
@@ -97,6 +110,17 @@ function Whale:setGhost()
 end
 
 function Whale:update( dt )
+	if self.special_state ~= nil and self.special_state == "dead" then
+		self.body:applyLinearImpulse( 0, 10 * 64 )
+		if self:getY() >= dims.h then
+			ActiveScreen.gameOver = true
+		end
+		return
+	elseif self.health <= 0 then
+		self.special_state = "dead"
+		self:setGhost()
+	end
+
 	local x, y = self.body:getLinearVelocity()
 	local seaLevel = love.window.getHeight() / 2	
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
@@ -153,7 +177,7 @@ function Whale:update( dt )
 	end
 
 	self.state_time = self.state_time + dt
-	if(self.state_time > .5) then
+	if(self.state_time > .5 and self.special_state ~= "hurt") then
 		self.state_time = 0
 		self.special_state = nil
 		if self.norm_state == "up" then
@@ -165,9 +189,13 @@ function Whale:update( dt )
 
 	if(self.special_state == "hurt") then
 		self.hurt_time = self.hurt_time + dt
-		if(self.hurt_time > .125) then
+		if(self.hurt_time > .25) then
 			self.hurt_time = 0
-			self.hurt_state = not self.hurt_state
+			self.hurt_state = self.hurt_state + 1
+			if self.hurt_state >= 3 then
+				self.special_state = nil
+				self.hurt_state = 0
+			end
 		end
 	end
 end
@@ -177,9 +205,9 @@ function Whale:render()
 	if(self.special_state ~= nil) then
 		love.graphics.draw( self.spriteset[self.special_state], self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 		if self.special_state == "hurt" then
-			if self.hurt_state then
+			if self.hurt_state == 1 then
 				love.graphics.draw( self.spriteset.ouch1, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
-			else
+			elseif self.hurt_state == 2 then
 				love.graphics.draw( self.spriteset.ouch2, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 			end
 		end
@@ -207,7 +235,7 @@ Dwarves = GameObject:extends()
 
 function Dwarves:__init( x, y )
 	Dwarves.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/new_unicorn2.png")
+	self.image = SpriteSet.dwarf
 
 	self.pos.x = x
 	self.pos.y = y
@@ -323,9 +351,9 @@ function Shots:__init( x, y, vx, vy, type )
 	Shots.super:__init()
 	self.type = type
 	if type == "fire" then
-		self.image = love.graphics.newImage("assets/sprites/fireball.png")
+		self.image = SpriteSet.fireball
 	else
-		self.image = love.graphics.newImage("assets/sprites/air_bubble.png")
+		self.image = SpriteSet.airBubble
 	end
 
 	self.body = love.physics.newBody( world, x, y, "dynamic")
@@ -367,7 +395,7 @@ end
 Ammo = GameObject:extends()
 
 function Ammo:__init( x, y )
-	self.image = love.graphics.newImage("assets/sprites/new_crystal.png")
+	self.image = SpriteSet.ammo
 	self.body = love.physics.newBody( world, x, y, "dynamic" )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
@@ -397,10 +425,10 @@ Fish = GameObject:extends()
 
 function Fish:__init( x, y )
 	self.imageset = {}
-	self.imageset[1] = love.graphics.newImage("assets/sprites/fish01l.png")
-	self.imageset[2] = love.graphics.newImage("assets/sprites/fish02l.png")
-	self.imageset[3] = love.graphics.newImage("assets/sprites/fish03l.png")
-	self.imageset[4] = love.graphics.newImage("assets/sprites/fish04l.png")
+	self.imageset[1] =  SpriteSet.fishes[1]
+	self.imageset[2] = 	SpriteSet.fishes[2]
+	self.imageset[3] = 	SpriteSet.fishes[3]
+	self.imageset[4] = 	SpriteSet.fishes[4]
 	local num = math.floor( math.random(1,5))
 	if(num == 5) then num = 4 end
 
