@@ -8,7 +8,7 @@ require 'external/AnAL'
 --Declare shooting sound
 src_shoot = love.audio.newSource("assets/sounds/shoot.wav", "static")
 
-
+paused = false
 
 function love.load()
 	love.physics.setMeter( 64 )
@@ -34,7 +34,9 @@ end
 local start_button = false
 
 function love.update( dt )
-    ActiveScreen:update( dt )
+	if not paused then
+    	ActiveScreen:update( dt )
+	end
 end
 
 function love.draw()
@@ -51,15 +53,18 @@ function love.keypressed( key, isrepeat )
 		ActiveScreen.whale.state_time = 0
 		src_shoot:play()
 	end
---Returns you to menu
+	--Returns you to menu
 	if key == "escape" and ActiveScreen:is( GameScreen ) then
       ActiveScreen = TitleScreen()
    end
 --Mute Button 
    if key == "m" and love.audio.getVolume( ) == 1.0  then
     	love.audio.setVolume( 0.0 )
-   else if key == "m" and love.audio.getVolume( ) == 0.0  then
+   elseif key == "m" and love.audio.getVolume( ) == 0.0  then
    		love.audio.setVolume( 1.0 )
    end
-end
+
+   	if key == 'p' then
+   		paused = not paused
+   	end
 end

@@ -57,7 +57,7 @@ end
 
 function HelpScreen:update( dt )
 	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.",
+	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.\n\nMove with the arrow keys\nSpace to shoot\nm to mute\tesc to return to the menu\np to pause the game.",
 		size={2}}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
