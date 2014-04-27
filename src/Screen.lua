@@ -123,7 +123,7 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 2 do
+	for i = 1, 1 do
 		spawnShip( self.objects )
 	end
 
@@ -313,7 +313,7 @@ function spawnFish( objects )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
+	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random())
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
@@ -361,7 +361,7 @@ function ammoBar(whale)
 		love.graphics.setColor(255,255,255)
 		love.graphics.rectangle("line", x + 20, y - (ammo * 5 + 2 )- 10, 15 , ammo * 5 + 2)
 		love.graphics.setColor(144,0,0)
-		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 10, 15, ammo * 5)
+		love.graphics.rectangle("fill", x + 20, y - (ammo * 5) - 11, 15, ammo * 5)
 	end
 
 	if(ammo == 0) then
