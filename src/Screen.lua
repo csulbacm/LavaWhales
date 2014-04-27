@@ -134,6 +134,7 @@ function GameScreen:render()
      v:render()
 	 end
 	healthBar(self.whale)
+	ammoBar(self.whale)
    camera:unset()
 end
 
@@ -179,8 +180,9 @@ end
 
 function healthBar(whale) 
 	local health = whale.health
+	local x, y = camera._x + love.window.getWidth() / 2 - 250, camera._y + 10
 	love.graphics.setColor(0,0,0)
-	love.graphics.print("Health: ", math.floor(camera._x + love.window.getWidth() / 2 - 150),  math.floor(camera._y + 10))
+	love.graphics.print("Health: " .. health, math.floor(x),  math.floor(y))
 	if(health > 0 and health < 33) then
 		love.graphics.setColor(255,0,0)
 	elseif(health >= 33 and health < 66) then
@@ -189,7 +191,22 @@ function healthBar(whale)
 		love.graphics.setColor(0,255,0)
 	end
 	if(health > 0) then
-		love.graphics.rectangle("fill", camera._x + love.window.getWidth() / 2 - 100, camera._y + 10, whale.health * 2, 15)
+		love.graphics.rectangle("fill", x + 80, camera._y + 10, whale.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
+
+function ammoBar(whale)
+	local ammo = whale.amo
+	local x, y = camera._x + love.window.getWidth() / 2 + 50, camera._y + 10
+	love.graphics.setColor(0,0,0)
+	love.graphics.print("Ammo: " .. ammo, math.floor(x),  math.floor(y))
+	love.graphics.setColor(255,255,255)
+	if(ammo > 0) then
+		love.graphics.rectangle("line", x + 70, y, ammo * 10 + 1, 15)
+		love.graphics.setColor(32,32,32)
+		love.graphics.rectangle("fill", x + 71, y, ammo * 10, 15)
+		love.graphics.setColor(255,255,255)
+	end
+end
+
