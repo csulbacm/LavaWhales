@@ -21,6 +21,12 @@ TitleScreen = Screen:extends()
 function TitleScreen:__init()
 	TitleScreen.super:__init( "TitleScreen" )
 	self.start_button = false
+
+	--Background Music Insert
+	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src1:play()
+	src1:setLooping( true )
+
 	
 end
 
@@ -65,9 +71,18 @@ function GameScreen:__init()
 	for i = 1, 100 do
 		table.insert( self.objects, Dwarves( love.graphics.getWidth() * math.random() * 3, love.graphics.getHeight() * math.random() * 3 ) )
 	end
- 
+
+	--Game Loop Music
+	src1:pause()
+	src2 = love.audio.newSource("assets/sounds/game_loop.ogg", "static")
+	src2:play()
+	src2:setLooping( true )
+
   bg = love.graphics.newImage("assets/sprites/testBG.png")
   camera:setBounds(0, 0, love.window.getWidth(), love.window.getHeight())
+  bg1 = love.graphics.newImage("assets/sprites/testBG.png")
+  posX = 0 
+  imageWidth = 1600
 end
 
 function GameScreen:update( dt )
@@ -92,13 +107,15 @@ function GameScreen:update( dt )
 	for i, index in ipairs( removals ) do
 		table.remove( self.objects, index )
 	end
-
+	
+	if posX <= -1 * imageWidth / 2 then posX = 0 end
+	posX = posX - 1
 	removals = nil
 end
 
 function GameScreen:render()
 	camera:set()
-	love.graphics.draw(bg)
+   printBackground(posX, imageWidth)
    self.whale:render()
    for k,v in ipairs( self.objects ) do
      v:render()
@@ -129,4 +146,11 @@ end
 
 function postSolve( a, b, coll )
   
+end
+
+function printBackground(posX, imageWidth)
+	
+   love.graphics.draw(bg1, posX, 0) -- this is the original image
+   love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
+   love.graphics.print(posX, 400,300)
 end
