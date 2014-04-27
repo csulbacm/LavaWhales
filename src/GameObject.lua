@@ -270,6 +270,12 @@ function Shots:__init( x, y, vx )
 	self.body:applyForce( vx, 0 )
 end
 
+function Shots:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
+end
+
 function Shots:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
@@ -298,6 +304,12 @@ function Ammo:__init( x, y )
 	self.fixture:setUserData( self )
 end
 
+function Ammo:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
+end
+
 function Ammo:render()
 	love.graphics.draw( self.image, self:getX(), self:getY() )
 end
@@ -318,6 +330,12 @@ function Fish:__init( x, y )
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
 	self.fixture:setUserData( self )
+end
+
+function Fish:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 10) then
+		self.toKill = true
+	end
 end
 
 function Fish:render()
