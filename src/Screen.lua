@@ -96,7 +96,7 @@ function FailScreen:render()
 end
 
 GameScreen = Screen:extends()
-
+dims = {}
 function GameScreen:__init()
 	world = love.physics.newWorld( 0, 0, true )
   	self.whale = Whale( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
@@ -106,7 +106,7 @@ function GameScreen:__init()
 
 	self.objects = {}
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
@@ -125,7 +125,6 @@ function GameScreen:__init()
 	dims = {}
 	dims.w = love.window.getWidth()
 	dims.h = love.window.getHeight() * 2
-
 
 	self.walls = {}
 	table.insert( self.walls, Wall( dims.w / 2, 0, dims.w, 1 ) )
