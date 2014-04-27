@@ -27,7 +27,6 @@ function TitleScreen:__init()
 	src1:pause()
 	src1:play()
 	src1:setLooping( true )
-
 	
 end
 
@@ -73,6 +72,17 @@ function GameScreen:__init()
 	for i = 1, 100 do
 		spwanDwarf( self.objects )
 	end
+
+	dims = {}
+	dims.w = 800 * 2
+	dims.h = 600 * 2
+
+
+	self.walls = {}
+	table.insert( self.walls, Wall( dims.w / 2, 0, dims.w, 1 ) )
+	table.insert( self.walls, Wall( dims.w, dims.h/2, 1, dims.h ) )
+	table.insert( self.walls, Wall( dims.w/2, dims.h, dims.w, 1 ) )
+	table.insert( self.walls, Wall( 0, dims.h/2, 1, dims.h ) )
 
 	--Game Loop Music
 	src1:pause()
@@ -164,7 +174,7 @@ end
 
 function spwanDwarf( objects )
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight() * math.random() * 3 ) )
-	objects[ #objects ].body:applyForce( -15000 * 64 * math.random() -15000 * 64, 0 )
+	objects[ #objects ].body:applyForce( -20000 * 64 * math.random() -1000 * 64, 0 )
 end
 
 function healthBar(whale) 
