@@ -307,7 +307,7 @@ function spawnFish( objects )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
+	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random())
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end

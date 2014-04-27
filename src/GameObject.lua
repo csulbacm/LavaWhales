@@ -7,6 +7,7 @@ SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
 SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
 SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
+SpriteSet.boss = love.graphics.newImage("assets/sprites/boss.png")
 
 SpriteSet.fishes = {}
 	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
@@ -474,18 +475,18 @@ Boss = GameObject:extends()
 
 function Boss:__init( x, y )
 	Boss.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boss.png")
+	self.image = SpriteSet.boss
 
 	self.health = 420
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = 100
-	self.pos.h = 120
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
 	self.hits = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
-	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
 end
@@ -503,7 +504,7 @@ function Boss:update( dt )
 end
 
 function Boss:render()
-	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
