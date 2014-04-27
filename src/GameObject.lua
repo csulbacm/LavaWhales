@@ -273,7 +273,7 @@ Shots = GameObject:extends()
 
 function Shots:__init( x, y, vx )
 	Shots.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/test_lavaball.png")
+	self.image = love.graphics.newImage("assets/sprites/fireball.png")
 
 	self.body = love.physics.newBody( world, x, y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
