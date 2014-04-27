@@ -123,7 +123,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 10
+		self.health = self.health - self.dwarf_col * 5
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 0
