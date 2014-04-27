@@ -128,7 +128,10 @@ end
 function beginContact( a, b, coll )
 	local tempA = a:getUserData()
 	local tempB = b:getUserData()
-	if tempA:is( Whale ) or tempB:is( Whale ) or tempA:is( Shots ) and tempB:is( Dwarves ) or tempA:is( Dwarves ) and tempB:is( Shots ) then
+	if tempA:is( Whale ) and tempB:is( Dwarves ) or
+		tempA:is( Dwarves ) and tempB:is( Whale ) or
+		tempA:is( Shots ) and tempB:is( Dwarves ) or
+		tempA:is( Dwarves ) and tempB:is( Shots ) then
 		tempA.toKill = true
 		tempB.toKill = true
 	end
@@ -147,7 +150,6 @@ function postSolve( a, b, coll )
 end
 
 function printBackground(posX, imageWidth)
-	
    love.graphics.draw(bg1, posX, 0) -- this is the original image
    love.graphics.draw(bg1, posX + imageWidth, 0) -- this is the copy that we draw to the original's right
    love.graphics.print(posX, 400,300)
