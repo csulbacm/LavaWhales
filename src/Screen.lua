@@ -24,6 +24,7 @@ function TitleScreen:__init()
 
 	--Background Music Insert
 	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
+	src1:pause()
 	src1:play()
 	src1:setLooping( true )
 

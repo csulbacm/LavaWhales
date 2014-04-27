@@ -43,9 +43,21 @@ function love.draw()
 end
 
 function love.keypressed( key, isrepeat )
+--Shoots lava ball	
 	if key == ' ' and ActiveScreen:is( GameScreen ) then
 		table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
 		 ActiveScreen.whale:getY(), 500000 * 64 ) )
 		src_shoot:play()
 	end
+--Returns you to menu
+	if key == "escape" and ActiveScreen:is( GameScreen ) then
+      ActiveScreen = TitleScreen()
+   end
+--Mute Button 
+   if key == "m" and love.audio.getVolume( ) == 1.0  then
+    	love.audio.setVolume( 0.0 )
+   else if key == "m" and love.audio.getVolume( ) == 0.0  then
+   		love.audio.setVolume( 1.0 )
+   end
+end
 end
