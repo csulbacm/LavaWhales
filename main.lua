@@ -29,7 +29,7 @@ function love.load()
 	gui.group.default.size[2] = 25
 	gui.group.default.spacing = 5
 
-	ActiveScreen = TitleScreen()	
+	ActiveScreen = TitleScreen()
 end
 
 local start_button = false
