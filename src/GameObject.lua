@@ -492,7 +492,7 @@ function Boss:__init( x, y )
 	Boss.super:__init()
 	self.image = SpriteSet.boss
 
-	self.health = 420
+	self.health = 240
 	self.pos.x = x
 	self.pos.y = y
 	self.pos.w = self.image:getWidth()
@@ -507,10 +507,20 @@ function Boss:__init( x, y )
 end
 
 function Boss:update( dt )
+	self.count = 0
 	self.body:applyLinearImpulse(math.random()*10, math.random()*10)
 	if self.hits >= 1 then
+		self.health = self.health -5
+		src_explosion:play()
+		self.count = self.count + 1
+		self.hits = 0
+	end
+
+	if self.count >= 5 then
 		self.health = self.health - 5
 		self.hits = 0
+		spawnDwarf( ActiveScreen.objects )
+		self.count = 0
 		--self.special_state = "hurt"
 		--self.hurt_time = 1
 		--self.state_time = 1
