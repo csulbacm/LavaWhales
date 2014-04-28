@@ -156,21 +156,21 @@ function GameScreen:__init()
 	self.gameOver = false
 	score = 0
 	dwarf_count = 0
-	dwarf_quota = 5
+	dwarf_quota = 5000
 	dwarf_probb = 1
 	ammo_count = 0
-	ammo_quota = 3
-	ammo_probb = .1
+	ammo_quota = 3000
+	ammo_probb = 1
 	fish_count = 0
-	fish_quota = 3
-	fish_probb = .1
+	fish_quota = 3000
+	fish_probb = 1
 	ship_count = 0
-	ship_quota = 2
+	ship_quota = 2000
 	ship_probb = .1
 
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 1 do
 		spawnDwarf( self.objects )
 	end
 
@@ -178,7 +178,7 @@ function GameScreen:__init()
 		spawnLava( self.objects )
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end
-	
+
 	for i = 1, 3 do
 		table.insert( self.objects, AirBubble(1000 * math.random(), 1000 * math.random()) )
 	end	
@@ -280,20 +280,22 @@ function GameScreen:update( dt )
 
 
 	--respawn objects
-	if dwarf_count < dwarf_quota and math.random() <= dwarf_probb then
-		spawnDwarf( self.objects )
-	end
+	for i=1,10 do
+		if dwarf_count < dwarf_quota and math.random() <= dwarf_probb * dt then
+			spawnDwarf( self.objects )
+		end
 
-	if ammo_count < ammo_quota and math.random() <= ammo_probb then
-		spawnLava( self.objects )
-	end
+		if ammo_count < ammo_quota and math.random() <= ammo_probb * dt then
+			spawnLava( self.objects )
+		end
 
-	if fish_count < fish_quota and math.random() <= fish_probb then
-		spawnFish( self.objects )
-	end
+		if fish_count < fish_quota and math.random() <= fish_probb * dt then
+			spawnFish( self.objects )
+		end
 
-	if ship_count < ship_quota and math.random() <= ship_probb then
-		spawnShip( self.objects )
+		if ship_count < ship_quota and math.random() <= ship_probb * dt then
+			spawnShip( self.objects )
+		end
 	end
 end
 
