@@ -457,6 +457,10 @@ function spawnBoss( objects )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
+function spawnBossAttack (objects)
+	table.insert( objects, 	Boss_attack(boss:getX() + boss:getWidth() / 2, boss:getY()))
+end
+
 function bossHealth( boss ) 
 	local bhealth = boss.health
 	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
