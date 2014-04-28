@@ -562,7 +562,7 @@ end
 
 function Boss:update( dt )
 	if self.hits >= 1 then
-		self.health = self.health -5
+		self.health = self.health - 5 * self.hits
 		src_explosion:play()
 		self.hits = 0
 	end
@@ -722,11 +722,12 @@ function Squid:__init( x, y )
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
-	self.fixture = love.physics.newFixture( self.body, self.shape, 9001 )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 0 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
 
-	self.accel = 100
+	self.accel = 500
+	self.movement = 1
 end
 
 function Squid:update( dt )
@@ -741,10 +742,12 @@ function Squid:update( dt )
 
 	end
 
-	if self:getX() < 0 or self:getX() + self:getWidth() > dims.w then
-		self.accel = self.accel * -1
+	if self:getX() < self:getWidth() then
+		self.movement = 1
+	elseif self:getX() + self:getWidth() > love.graphics.getWidth() * 2 then
+		self.movement = -1
 	end
-	self.body:applyLinearImpulse( self.accel, 0 )
+	self.body:setLinearVelocity( self.movement * self.accel, 0 )
 end
 
 function Squid:render()

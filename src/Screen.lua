@@ -32,11 +32,11 @@ GameOver.first = love.graphics.newImage("assets/sprites/loser_screen.png")
 GameOver.second = love.graphics.newImage("assets/sprites/loser_screen_ver2.png")
 
 dwarf_count = 0
-dwarf_quota = 5
-dwarf_probb = .2
+dwarf_quota = 4
+dwarf_probb = .1
 ammo_count = 0
-ammo_quota = 3
-ammo_probb = .1
+ammo_quota = 10
+ammo_probb = .3
 airBubble_count = 0
 airBubble_quota = 3
 airBubble_probb = .1
@@ -208,6 +208,7 @@ function GameScreen:__init()
 	ship_probb = .1
 
 	self.objects = {}
+	spawnBoss( self.objects )
 
 	for i = 1, 1 do
 		spawnDwarf( self.objects )
@@ -230,11 +231,7 @@ function GameScreen:__init()
 		spawnShip( self.objects )
 	end
 
-	for i = 1, 1 do
-		spawnBoss( self.objects )
-	end
-
-	table.insert( self.objects, Squid( 1000, 900 ) )
+	table.insert( self.objects, Squid( 1000, 0 ) )
 
 	dims = {}
 	dims.w = love.window.getWidth() * 2
@@ -325,7 +322,7 @@ function GameScreen:update( dt )
 
 
 	--respawn objects
-	for i=1,1 do
+	for i=1,3 do
 		if dwarf_count < dwarf_quota and math.random() <= dwarf_probb * dt then
 			spawnDwarf( self.objects )
 		end
@@ -334,16 +331,16 @@ function GameScreen:update( dt )
 			spawnLava( self.objects )
 		end
 
-	if airBubble_count < airBubble_quota and math.random() <= airBubble_probb then
-		spawnAirBubbles( self.objects )
-	end
+		if airBubble_count < airBubble_quota and math.random() <= airBubble_probb then
+			spawnAirBubbles( self.objects )
+		end
 
-	if fish_count < fish_quota and math.random() <= fish_probb then
-		spawnFish( self.objects )
-	end
+		if fish_count < fish_quota and math.random() <= fish_probb then
+			spawnFish( self.objects )
+		end
 
-	if ship_count < ship_quota and math.random() <= ship_probb * dt then
-			spawnShip( self.objects )
+		if ship_count < ship_quota and math.random() <= ship_probb * dt then
+				spawnShip( self.objects )
 		end
 	end
 end
@@ -405,9 +402,9 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, Ammo ) then
 		tempA.toKill = true
 		tempB.toKill = true
-		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo + 5
-		if(ActiveScreen.whale.ammo >= 20) then
-			ActiveScreen.whale.ammo = 20
+		ActiveScreen.whale.ammo = ActiveScreen.whale.ammo + 10
+		if(ActiveScreen.whale.ammo >= 50) then
+			ActiveScreen.whale.ammo = 50
 		end
 	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
 		tempA.toKill = true
@@ -433,8 +430,8 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Shots, tempB, Boss ) then
 		local shot, boss = getCollided( tempA, Shots, tempB, Boss )
 		shot.toKill = true
-		boss.hits = 1
-		if boss.health == 0 then
+		boss.hits = boss.hits + 1
+		if boss.health <= 0 then
 			src_victory:play()
 			boss.toKill = true
 		end
@@ -483,30 +480,30 @@ end
 
 function spawnDwarf( objects )
 	dwarf_count = dwarf_count + 1
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 2-30, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
 	ship_count = ship_count + 1
-	table.insert( objects, Ships( love.graphics.getWidth() * 2-10, love.graphics.getHeight() / 2) )
+	table.insert( objects, Ships( love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight() / 2) )
 	objects[ #objects ].body:applyForce( -1000, 0 )
 end
 
 function spawnLava( objects )
 	ammo_count = ammo_count + 1
-	table.insert( objects, Ammo(love.graphics.getWidth() * 2-10, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 end
 
 function spawnFish( objects )
 	fish_count = fish_count + 1
-	table.insert( objects, Fish( love.graphics.getWidth() * 2-10, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function spawnAirBubbles( objects )
 	airBubble_count = airBubble_count + 1
-	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() * 2 * math.random() + love.graphics.getHeight() / 2) )
+	table.insert( objects, AirBubble(love.graphics.getWidth() * 2 - boss:getWidth(), love.graphics.getHeight() * 2 * math.random() + love.graphics.getHeight() / 2) )
 end
 
 function spawnBoss( objects )

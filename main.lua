@@ -4,7 +4,6 @@ gui = require "external/Quickie"
 require 'src/GameObject'
 require('assets/camera/camera')
 require 'src/Screen'
-require 'external/AnAL'
 --Declare shooting sound
 src_shoot = love.audio.newSource("assets/sounds/shoot.wav", "static")
 
