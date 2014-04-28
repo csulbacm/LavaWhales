@@ -18,6 +18,12 @@ SpriteSet.fishes = {}
 	SpriteSet.fishes[3] = love.graphics.newImage("assets/sprites/fish03l.png")
 	SpriteSet.fishes[4] = love.graphics.newImage("assets/sprites/fish04l.png")
 
+SpriteSet.squid = {}
+	SpriteSet.squid[1] = love.graphics.newImage("assets/sprites/squid01.png")
+	SpriteSet.squid[2] = love.graphics.newImage("assets/sprites/squid02.png")
+	SpriteSet.squid[3] = love.graphics.newImage("assets/sprites/squid03.png")
+	SpriteSet.squid[4] = love.graphics.newImage("assets/sprites/squid04.png")
+	SpriteSet.squid[5] = love.graphics.newImage("assets/sprites/squid05.png")
 
 function GameObject:__init()
 	self.dead = false
@@ -673,4 +679,57 @@ end
 
 function FallingTitle:render()
 	love.graphics.draw( self.image, self.pos.x, self.pos.y )
+end
+
+
+
+Squid = GameObject:extends()
+
+function Squid:__init( x, y )
+	Squid.super:__init()
+	self.imageIndex = 1
+	self.switchTime = 0
+
+	self.pos.x = x
+	self.pos.y = y
+	self.pos.w = SpriteSet.squid[1]:getWidth()
+	self.pos.h = SpriteSet.squid[1]:getHeight()
+
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 9001 )
+	self.fixture:setUserData( self )
+	self.body:setFixedRotation( true )
+
+	self.accel = 100
+end
+
+function Squid:update( dt )
+	self.switchTime = self.switchTime + dt 
+	if self.switchTime > 0.05 then
+		
+		self.switchTime = 0
+		self.imageIndex = self.imageIndex + 1
+		if self.imageIndex >= 5 then
+			self.imageIndex = 1
+		end
+
+	end
+
+	if self:getX() < 0 or self:getX() + self:getWidth() > dims.w then
+		self.accel = self.accel * -1
+	end
+	self.body:applyLinearImpulse( self.accel, 0 )
+end
+
+function Squid:render()
+	love.graphics.draw( SpriteSet.squid[ self.imageIndex ], self:getX() - SpriteSet.squid[ self.imageIndex ]:getWidth()/2, self:getY() - SpriteSet.squid[ self.imageIndex ]:getHeight()/2 )
+end
+
+function Squid:getWidth()
+	return SpriteSet.squid[ self.imageIndex ]:getWidth()
+end
+
+function Squid:getHeight()
+	return SpriteSet.squid[ self.imageIndex ]:getHeight()
 end

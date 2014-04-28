@@ -229,6 +229,8 @@ function GameScreen:__init()
 		spawnBoss( self.objects )
 	end
 
+	table.insert( self.objects, Squid( 1000, 900 ) )
+
 	dims = {}
 	dims.w = love.window.getWidth() * 2
 	dims.h = love.window.getHeight() * 2
@@ -418,6 +420,23 @@ function beginContact( a, b, coll )
 		local shot, ship = getCollided( tempA, Shots, tempB, Ships )
 		shot.toKill = true
 		ship.toKill = true
+	elseif tempA:is( Squid ) or tempB:is( Squid ) then
+		local squid = {}
+		local other = {}
+		if tempA:is( Squid ) then
+			squid = tempA
+			other = tempB
+		elseif tempB:is( Squid ) then
+			squid = tempB
+			other = tempA
+		end
+
+		if other:is( Whale ) then
+			other.dwarf_col = other.dwarf_col + 1
+			src_hurt:play()
+		elseif not other:is( Boss ) then
+			other.toKill = true
+		end
 	end
 
 end
