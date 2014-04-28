@@ -41,8 +41,8 @@ function love.update( dt )
 end
 
 function love.draw()
-	gui.core.draw()
 	ActiveScreen:render()
+	gui.core.draw()
 end
 
 function love.keypressed( key, isrepeat )

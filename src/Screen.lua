@@ -9,6 +9,12 @@ src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
+img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
+img_title_weed = {}
+img_title_weed[1] = love.graphics.newImage("assets/sprites/left_seaweed03.png")
+img_title_weed[2] = love.graphics.newImage("assets/sprites/left_seaweed01.png")
+img_title_weed[3] = love.graphics.newImage("assets/sprites/left_seaweed02.png")
+img_title_weed[4] = img_title_weed[2]
 score = 0
 
 function Screen:__init( name )
@@ -28,6 +34,8 @@ TitleScreen = Screen:extends()
 function TitleScreen:__init()
 	TitleScreen.super:__init( "TitleScreen" )
 	self.start_button = false
+	self.weed = 1
+	self.weed_time = 0
 
 	--Background Music Insert
 	src1 = love.audio.newSource("assets/sounds/menu_music.mp3", "static")
@@ -49,7 +57,22 @@ function TitleScreen:update( dt )
 		ActiveScreen = HelpScreen()
 		src_button:play()
 	end
+
+	self.weed_time = self.weed_time + dt
+	if(self.weed_time > .5) then
+		self.weed_time = 0
+		self.weed = self.weed + 1
+		if self.weed == 5 then
+			self.weed = 1
+		end
+	end
 	gui.group.pop{}
+end
+
+function TitleScreen:render()
+	love.graphics.draw(img_title_back)
+	
+	love.graphics.draw(img_title_weed[self.weed],100,0)
 end
 
 HelpScreen = Screen:extends()
