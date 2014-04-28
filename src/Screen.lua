@@ -146,34 +146,34 @@ function GameScreen:__init()
 	self.gameOver = false
 	score = 0
 	dwarf_count = 0
-	dwarf_quota = 5000
+	dwarf_quota = 5
 	dwarf_probb = 1
 	ammo_count = 0
-	ammo_quota = 30000
+	ammo_quota = 3
 	ammo_probb = .1
 	fish_count = 0
-	fish_quota = 30000
+	fish_quota = 3
 	fish_probb = .1
 	ship_count = 0
-	ship_quota = 20000
+	ship_quota = 2
 	ship_probb = .1
 
 	self.objects = {}
 
-	for i = 1, 500 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
-	for i = 1, 100 do
+	for i = 1, 1 do
 		spawnLava( self.objects )
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
-	for i = 1, 100 do
+	for i = 1, 1 do
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 100 do
+	for i = 1, 1 do
 		spawnShip( self.objects )
 	end
 
