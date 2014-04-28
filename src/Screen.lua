@@ -320,11 +320,7 @@ function spawnFish( objects )
 end
 
 function spawnBoss( objects )
-<<<<<<< HEAD
-	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
-=======
 	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
->>>>>>> b73f90000a1423ed842873899c22522b97fba6aa
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
@@ -404,8 +400,6 @@ end
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
 end
-<<<<<<< HEAD
-=======
 
 function getCollided( a, ta, b, tb )
 	local temp = {}
@@ -422,4 +416,3 @@ function getCollided( a, ta, b, tb )
 	end
 	return temp.a, temp.b
 end
->>>>>>> b73f90000a1423ed842873899c22522b97fba6aa
