@@ -167,13 +167,13 @@ function Whale:update( dt )
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
 
-	if(self:getY() > seaLevel) then
+	if(self:getY() > seaLevel + 50) then
 		self.air = self.air - 6 * dt
 		if(self.air <= 0) then
 			self.air = 0
 			self.health = self.health - 5 * dt
 		end
-	elseif(self:getY() <= seaLevel) then
+	elseif(self:getY() <= seaLevel + 50) then
 		self.air = self.air + 5 * dt
 		if(self.air >= 100) then
 			self.air = 100
@@ -324,7 +324,7 @@ Ships = GameObject:extends()
 
 function Ships:__init( x, y )
 	Ships.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boat.png")
+	self.image = love.graphics.newImage("assets/sprites/wtfduckboat.png")
 
 	self.pos.x = x
 	self.pos.y = y
@@ -339,7 +339,7 @@ function Ships:__init( x, y )
 end
 
 function Ships:update( dt )
-	local seaLevel = love.window.getHeight() / 2
+	local seaLevel = love.window.getHeight() / 2 - 50
 	if(self:getX() < self:getWidth() / 2 + 100) then
 		self.toKill = true
 	end
