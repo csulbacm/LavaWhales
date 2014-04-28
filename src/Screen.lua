@@ -156,16 +156,16 @@ function GameScreen:__init()
 	self.gameOver = false
 	score = 0
 	dwarf_count = 0
-	dwarf_quota = 5000
-	dwarf_probb = 1
+	dwarf_quota = 5
+	dwarf_probb = 10
 	ammo_count = 0
-	ammo_quota = 3000
-	ammo_probb = 1
+	ammo_quota = 30
+	ammo_probb = 10
 	fish_count = 0
-	fish_quota = 3000
-	fish_probb = 1
+	fish_quota = 30
+	fish_probb = 10
 	ship_count = 0
-	ship_quota = 2000
+	ship_quota = 20
 	ship_probb = .1
 
 	self.objects = {}
@@ -179,7 +179,7 @@ function GameScreen:__init()
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end
 
-	for i = 1, 3 do
+	for i = 1, 30 do
 		table.insert( self.objects, AirBubble(1000 * math.random(), 1000 * math.random()) )
 	end	
 
@@ -262,6 +262,9 @@ function GameScreen:update( dt )
 		elseif cur:is( Ships ) then
 			--spawnShip( self.objects )
 			ship_count = ship_count - 1
+		elseif cur:is( Boss ) then 
+			spawnBoss( ActiveScreen.objects )
+			score = score + 1000
 		end
 	end
 	if posX1 <= -imageWidth then posX1 = posX3 + imageWidth end
@@ -399,7 +402,7 @@ end
 
 function spawnDwarf( objects )
 	dwarf_count = dwarf_count + 1
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2-30, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
@@ -411,17 +414,17 @@ end
 
 function spawnLava( objects )
 	ammo_count = ammo_count + 1
-	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2-10, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 end
 
 function spawnFish( objects )
 	fish_count = fish_count + 1
-	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 2-10, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function spawnAirBubbles( objects )
-	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, AirBubble(love.graphics.getWidth() * 2-10, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 end
 
 function spawnBoss( objects )
