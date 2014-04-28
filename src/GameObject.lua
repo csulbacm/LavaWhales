@@ -108,7 +108,7 @@ function Whale:__init( x, y )
 	self.fish_col = 0
 
 	self.health = 100
-	self.ammo = 20
+	self.ammo = 200000
 	self.air = 100
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic" )
@@ -168,7 +168,7 @@ function Whale:update( dt )
 	end
 
 	if(self:getY() > seaLevel + 50) then
-		self.air = self.air - 6 * dt
+		self.air = self.air - 6 * dt * 0
 		if(self.air <= 0) then
 			self.air = 0
 			self.health = self.health - 5 * dt
@@ -181,7 +181,7 @@ function Whale:update( dt )
 	end
 
 	if self.dwarf_col >= 1 then
-		self.health = self.health - self.dwarf_col * 5
+		self.health = self.health - self.dwarf_col * 0
 		self.dwarf_col = 0
 		self.special_state = "hurt"
 		self.hurt_time = 1

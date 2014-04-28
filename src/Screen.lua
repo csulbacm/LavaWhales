@@ -17,6 +17,19 @@ img_title_weed[3] = love.graphics.newImage("assets/sprites/left_seaweed02.png")
 img_title_weed[4] = img_title_weed[2]
 score = 0
 
+dwarf_count = 0
+dwarf_quota = 5
+dwarf_probb = .2
+ammo_count = 0
+ammo_quota = 3
+ammo_probb = .1
+fish_count = 0
+fish_quota = 3
+fish_probb = .1
+ship_count = 0
+ship_quota = 2
+ship_probb = .1
+
 function Screen:__init( name )
 	self.name = name
 end
@@ -132,21 +145,35 @@ function GameScreen:__init()
 
 	self.gameOver = false
 	score = 0
+	dwarf_count = 0
+	dwarf_quota = 5000
+	dwarf_probb = 1
+	ammo_count = 0
+	ammo_quota = 30000
+	ammo_probb = .1
+	fish_count = 0
+	fish_quota = 30000
+	fish_probb = .1
+	ship_count = 0
+	ship_quota = 20000
+	ship_probb = .1
+
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 500 do
 		spawnDwarf( self.objects )
 	end
 
-	for i = 1, 3 do
-		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+	for i = 1, 100 do
+		spawnLava( self.objects )
+		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
-	for i = 1, 3 do
+	for i = 1, 100 do
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 2 do
+	for i = 1, 100 do
 		spawnShip( self.objects )
 	end
 
@@ -208,13 +235,17 @@ function GameScreen:update( dt )
 		local cur = self.objects[index]
 		table.remove( self.objects, index )
 		if cur:is( Dwarves ) then
-			spawnDwarf( ActiveScreen.objects )
+			--spawnDwarf( ActiveScreen.objects )
+			dwarf_count = dwarf_count - 1
 		elseif cur:is( Fish ) then
-			spawnFish( ActiveScreen.objects )
+			--spawnFish( self.objects )
+			fish_count = fish_count - 1
 		elseif cur:is( Ammo ) then
-			spawnLava( ActiveScreen.objects )
+			--spawnLava( self.objects )
+			ammo_count = ammo_count - 1
 		elseif cur:is( Ships ) then
-			spawnShip( ActiveScreen.objects )
+			--spawnShip( self.objects )
+			ship_count = ship_count - 1
 		end
 	end
 	if posX1 <= -imageWidth then posX1 = posX3 + imageWidth end
@@ -230,6 +261,24 @@ function GameScreen:update( dt )
 		posX3 = posX3 - 250 * dt
 	end
 	removals = nil
+
+
+	--respawn objects
+	if dwarf_count < dwarf_quota and math.random() <= dwarf_probb then
+		spawnDwarf( self.objects )
+	end
+
+	if ammo_count < ammo_quota and math.random() <= ammo_probb then
+		spawnLava( self.objects )
+	end
+
+	if fish_count < fish_quota and math.random() <= fish_probb then
+		spawnFish( self.objects )
+	end
+
+	if ship_count < ship_quota and math.random() <= ship_probb then
+		spawnShip( self.objects )
+	end
 end
 
 function GameScreen:render()
@@ -324,23 +373,28 @@ function printBackground(posX1, posX2, posx3, imageWidth)
 end
 
 function spawnDwarf( objects )
+	dwarf_count = dwarf_count + 1
 	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
 function spawnShip( objects )
+	ship_count = ship_count + 1
 	table.insert( objects, Ships( love.graphics.getWidth() * 2-10, love.graphics.getHeight() / 2) )
 	objects[ #objects ].body:applyForce( -1000, 0 )
 end
 
 function spawnLava( objects )
+	ammo_count = ammo_count + 1
 	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 end
 
 function spawnFish( objects )
+	fish_count = fish_count + 1
 	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
+
 
 function spawnBoss( objects )
 	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
