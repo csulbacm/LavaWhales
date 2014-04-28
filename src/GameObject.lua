@@ -92,9 +92,12 @@ function Whale:__init( x, y )
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
 	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.dead = love.graphics.newImage("assets/sprites/dead_whale.png")
+	self.spriteset.drowning = love.graphics.newImage("assets/sprites/choking_whale01.png")
 	self.spriteset.ouch1 = love.graphics.newImage("assets/sprites/ouch01.png")
 	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
-	
+	self.spriteset.choke1 = love.graphics.newImage("assets/sprites/choking_whale01.png")
+	self.spriteset.choke2 = love.graphics.newImage("assets/sprites/choking_whale02.png")
+
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
 	self.norm_state = "down"
 	self.direction = "right"
@@ -201,10 +204,18 @@ function Whale:update( dt )
 	if(self.state_time > .5 and self.special_state ~= "hurt") then
 		self.state_time = 0
 		self.special_state = nil
-		if self.norm_state == "up" then
-			self.norm_state = "down"
+		if self.air > 0 then
+			if self.norm_state == "up" then
+				self.norm_state = "down"
+			else
+			    self.norm_state = "up"
+			end
 		else
-		    self.norm_state = "up"
+			if self.norm_state == "choke1" then
+				self.norm_state = "choke2"
+			else
+				self.norm_state = "choke1"
+			end
 		end
 	end
 
@@ -530,7 +541,7 @@ function Boss:__init( x, y )
 	Boss.super:__init()
 	self.image = SpriteSet.boss_1
 
-	self.health = 240
+	self.health = 200
 	self.pos.x = x
 	self.pos.y = y
 	self.pos.w = self.image:getWidth()
@@ -539,10 +550,11 @@ function Boss:__init( x, y )
 
 	self.state = true
 	self.state_time = 0
+	self.attack_time = 0
 	self.maxVel = 300
 
-	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
-	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "static")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w / 2, self.pos.h * .75)
 	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
@@ -564,6 +576,11 @@ function Boss:update( dt )
 		   self.image = SpriteSet.boss_1
 		end
 		self.state = not self.state
+	end
+
+	self.attack_time = self.attack_time + dt
+	if(self.attack_time > 1.5) then
+		self.attack_time = 0
 		self:attack()
 	end
 end
@@ -608,6 +625,8 @@ function Boss_attack:__init( x, y )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
+
+	self.fx, self.fy = ActiveScreen.whale:getX() - x, ActiveScreen.whale:getY() - y
 end
 
 function Boss_attack:update( dt )
@@ -627,7 +646,13 @@ function Boss_attack:update( dt )
 		end
 		self.state = not self.state
 	end
-	self.body:applyLinearImpulse(50,0)
+	
+	self.body:applyLinearImpulse(self.fx,self.fy)
+
+	if(self.body:getX() <= self:getWidth() or 
+		self.body:getY() <= love.window.getWidth() / 2 - 200) then
+		self.toKill = true
+	end
 end
 
 function Boss_attack:render()

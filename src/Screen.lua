@@ -10,6 +10,10 @@ src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
+boss_img = love.graphics.newImage("assets/sprites/gnome01_3.png")
+src_pop = love.audio.newSource("assets/sounds/pop.ogg")
+--src_eat = love.audio.newSource("assets/sounds/eat.wav")
+
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
 img_instruction_back = love.graphics.newImage("assets/sprites/instruction_screen.png")
 img_title_weed = {}
@@ -149,6 +153,7 @@ function FailScreen:update( dt )
 	gui.group.push{grow="down",pos={400,350}}
 	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going\n Your score was: " .. score,
 		size={2}}
+	gui.Label{text=""}
 	gui.Label{text=""}
 	src1:pause()
 	
@@ -374,6 +379,21 @@ function beginContact( a, b, coll )
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempB.dwarf_col + 1
 		tempA.toKill = true
+		src_hurt:play()
+	elseif tempA:is( Whale ) and tempB:is( Boss_attack ) then
+		tempA.dwarf_col = tempA.dwarf_col + 1
+		tempB.toKill = true
+		src_hurt:play()
+	elseif tempA:is( Boss_attack ) and tempB:is( Whale ) then
+		tempB.dwarf_col = tempB.dwarf_col + 1
+		tempA.toKill = true
+		src_hurt:play()
+	elseif tempA:is ( Boss_attack ) or tempB:is( Boss_attack ) then
+		if(tempA:is ( Boss_attack )) then
+			tempA.toKill = true
+		else
+		    tempB.toKill = true
+		end
 	elseif typesCollided( tempA, Shots, tempB, Dwarves ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -392,6 +412,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_pop:play()
 		ActiveScreen.whale.air = ActiveScreen.whale.air + 10
 		if(ActiveScreen.whale.air >= 100) then
 			ActiveScreen.whale.air = 100
@@ -399,6 +420,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, Fish ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		--src_eat:play()
 		ActiveScreen.whale.health = ActiveScreen.whale.health + 5
 		if ActiveScreen.whale.health > 100 then
 			ActiveScreen.whale.health = 100
@@ -488,24 +510,24 @@ function spawnAirBubbles( objects )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
+	boss = Boss( love.graphics.getWidth() * 2 - boss_img:getWidth(), love.graphics.getHeight() * 2 - boss_img:getHeight() * 2)
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
 
 function spawnBossAttack (objects)
-	table.insert( objects, 	Boss_attack(boss:getX() + boss:getWidth() / 2, boss:getY()))
+	table.insert( objects, 	Boss_attack(boss:getX() - boss:getWidth() / 2, boss:getY()))
 end
 
 function bossHealth( boss ) 
 	local bhealth = boss.health
 	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
 	love.graphics.setColor(191,0,0)
-	--love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
+	love.graphics.print("Boss Health: " .. math.floor(bhealth), x - 300 , camera._y + 40)
 	if(boss.health > 0) then
 		love.graphics.setColor(191,0,0)
-		love.graphics.rectangle("line", x - 250 , camera._y + 40, boss.health * 2 + 2, 15)
-		love.graphics.rectangle("fill", x - 249, camera._y + 40, boss.health * 2, 15)
+		love.graphics.rectangle("line", x - 170 , camera._y + 40, boss.health * 2 + 2, 15)
+		love.graphics.rectangle("fill", x - 169, camera._y + 40, boss.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
