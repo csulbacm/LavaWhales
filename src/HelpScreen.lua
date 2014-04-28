@@ -26,4 +26,7 @@ end
 
 function HelpScreen:render()
 	love.graphics.draw(img_instruction_back)
+	love.graphics.setColor( 0, 0, 0 )
+	love.graphics.rectangle("fill", 275,175,480,300)
+	love.graphics.setColor( 255, 255, 255 )
 end
