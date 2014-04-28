@@ -161,7 +161,7 @@ function GameScreen:__init()
 	score = 0
 	dwarf_count = 0
 	dwarf_quota = 5
-	dwarf_probb = 10
+	dwarf_probb = 1
 	ammo_count = 0
 	ammo_quota = 3
 	ammo_probb = .1
@@ -169,10 +169,10 @@ function GameScreen:__init()
 	airBubble_quota = 3
 	airBubble_probb = .1
 	fish_count = 0
-	fish_quota = 30
-	fish_probb = 10
+	fish_quota = 10
+	fish_probb = .01
 	ship_count = 0
-	ship_quota = 20
+	ship_quota = 3
 	ship_probb = .1
 
 	self.objects = {}
