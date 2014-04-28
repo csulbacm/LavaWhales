@@ -639,11 +639,11 @@ function Boss_attack:update( dt )
 	end
 	
 	local x,y = self.body:getLinearVelocity()
-	if(x > 10) then
-		self.body:applyLinearImpulse(100,0)
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
 	end
 
-	if(self.body:getX() >= love.window.getWidth() * 2 - 200 or 
+	if(self.body:getX() <= self:getWidth() or 
 		self.body:getY() <= love.window.getWidth() / 2 - 200) then
 		self.toKill = true
 	end

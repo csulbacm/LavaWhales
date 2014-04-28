@@ -9,12 +9,10 @@ src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
-<<<<<<< HEAD
+
 boss_img = love.graphics.newImage("assets/sprites/gnome01_3.png")
-=======
 src_pop = love.audio.newSource("assets/sounds/pop.ogg")
-src_eat = love.audio.newSource("assets/sounds/eat.wav")
->>>>>>> acd3189a52d35ee1f372a21468c204aa1f15d6e3
+--src_eat = love.audio.newSource("assets/sounds/eat.wav")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
 img_instruction_back = love.graphics.newImage("assets/sprites/instruction_screen.png")
@@ -410,7 +408,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, Fish ) then
 		tempA.toKill = true
 		tempB.toKill = true
-		src_eat:play()
+		--src_eat:play()
 		ActiveScreen.whale.health = ActiveScreen.whale.health + 5
 		if ActiveScreen.whale.health > 100 then
 			ActiveScreen.whale.health = 100
@@ -489,7 +487,7 @@ function spawnBoss( objects )
 end
 
 function spawnBossAttack (objects)
-	table.insert( objects, 	Boss_attack(boss:getX() + boss:getWidth() / 2, boss:getY()))
+	table.insert( objects, 	Boss_attack(boss:getX() - boss:getWidth() / 2, boss:getY()))
 end
 
 function bossHealth( boss ) 
