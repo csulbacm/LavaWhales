@@ -17,6 +17,10 @@ img_title_weed[3] = love.graphics.newImage("assets/sprites/left_seaweed02.png")
 img_title_weed[4] = img_title_weed[2]
 score = 0
 
+title = {}
+title.falling = love.graphics.newImage("assets/sprites/lavawhale_title01.png")
+title.squash = love.graphics.newImage("assets/sprites/lavawhale_titlesquash.png")
+
 function Screen:__init( name )
 	self.name = name
 end
@@ -44,6 +48,7 @@ function TitleScreen:__init()
 	src1:play()
 	src1:setLooping( true )
 	
+	titleText = FallingTitle()
 end
 
 function TitleScreen:update( dt )
@@ -67,12 +72,14 @@ function TitleScreen:update( dt )
 		end
 	end
 	gui.group.pop{}
+	titleText:update( dt )
 end
 
 function TitleScreen:render()
 	love.graphics.draw(img_title_back)
 	
 	love.graphics.draw(img_title_weed[self.weed],100,0)
+	titleText:render()
 end
 
 HelpScreen = Screen:extends()
@@ -352,7 +359,7 @@ function bossHealth( boss )
 	local bhealth = boss.health
 	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
 	love.graphics.setColor(191,0,0)
-	love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
+	--love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
 	if(boss.health > 0) then
 		love.graphics.setColor(191,0,0)
 		love.graphics.rectangle("line", x - 250 , camera._y + 40, boss.health * 2 + 2, 15)
