@@ -86,6 +86,7 @@ function Whale:__init( x, y )
 	self.spriteset.hurt = love.graphics.newImage("assets/sprites/hurt_whale.png")
 	self.spriteset.shoot = love.graphics.newImage("assets/sprites/hungry_whale.png")
 	self.spriteset.dead = love.graphics.newImage("assets/sprites/dead_whale.png")
+	self.spriteset.drowning = love.graphics.newImage("assets/sprites/choking_whale01.png")
 	self.spriteset.ouch1 = love.graphics.newImage("assets/sprites/ouch01.png")
 	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
 	self.spriteset.choke1 = love.graphics.newImage("assets/sprites/choking_whale01.png")
@@ -534,7 +535,7 @@ function Boss:__init( x, y )
 	Boss.super:__init()
 	self.image = SpriteSet.boss_1
 
-	self.health = 240
+	self.health = 200
 	self.pos.x = x
 	self.pos.y = y
 	self.pos.w = self.image:getWidth()
@@ -579,7 +580,7 @@ function Boss:update( dt )
 end
 
 function Boss:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 

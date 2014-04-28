@@ -503,11 +503,11 @@ function bossHealth( boss )
 	local bhealth = boss.health
 	local x, y = camera._x + love.window.getWidth() / 2 - 100, boss.health * 2 + 2
 	love.graphics.setColor(191,0,0)
-	--love.graphics.print("Boss: " .. x , camera._y + 30, math.floor(x),  math.floor(y))
+	love.graphics.print("Boss Health: " .. math.floor(bhealth), x - 300 , camera._y + 40)
 	if(boss.health > 0) then
 		love.graphics.setColor(191,0,0)
-		love.graphics.rectangle("line", x - 250 , camera._y + 40, boss.health * 2 + 2, 15)
-		love.graphics.rectangle("fill", x - 249, camera._y + 40, boss.health * 2, 15)
+		love.graphics.rectangle("line", x - 170 , camera._y + 40, boss.health * 2 + 2, 15)
+		love.graphics.rectangle("fill", x - 169, camera._y + 40, boss.health * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
 end
