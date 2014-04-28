@@ -294,7 +294,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
 		tempA.toKill = true
 		tempB.toKill = true
-		ActiveScreen.whale.air = ActiveScreen.whale.air + 15
+		ActiveScreen.whale.air = ActiveScreen.whale.air + 10
 		if(ActiveScreen.whale.air >= 100) then
 			ActiveScreen.whale.air = 100
 		end
