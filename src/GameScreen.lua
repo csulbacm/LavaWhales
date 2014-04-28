@@ -272,7 +272,7 @@ function beginContact( a, b, coll )
 		end
 
 		if other:is( Whale ) then
-			other.dwarf_col = other.dwarf_col + 1
+			other.dwarf_col = other.dwarf_col + 5
 			src_hurt:play()
 		elseif not other:is( Boss ) then
 			other.toKill = true

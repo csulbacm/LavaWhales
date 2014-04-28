@@ -112,7 +112,6 @@ function Ships:update( dt )
 end
 
 function Ships:render()
-	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
 end
 
@@ -145,7 +144,7 @@ function Squid:__init( x, y )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
 
-	self.accel = 500
+	self.accel = 200
 	self.movement = 1
 end
 
