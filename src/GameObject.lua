@@ -7,6 +7,7 @@ SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
 SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
 SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
+SpriteSet.boss = love.graphics.newImage("assets/sprites/boss.png")
 
 SpriteSet.fishes = {}
 	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
@@ -166,13 +167,13 @@ function Whale:update( dt )
 		self.body:applyLinearImpulse(0, -1 * y)
 	end
 
-	if(self:getY() > seaLevel) then
+	if(self:getY() > seaLevel + 50) then
 		self.air = self.air - 6 * dt
 		if(self.air <= 0) then
 			self.air = 0
 			self.health = self.health - 5 * dt
 		end
-	elseif(self:getY() <= seaLevel) then
+	elseif(self:getY() <= seaLevel + 50) then
 		self.air = self.air + 5 * dt
 		if(self.air >= 100) then
 			self.air = 100
@@ -323,7 +324,7 @@ Ships = GameObject:extends()
 
 function Ships:__init( x, y )
 	Ships.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boat.png")
+	self.image = love.graphics.newImage("assets/sprites/wtfduckboat.png")
 
 	self.pos.x = x
 	self.pos.y = y
@@ -338,7 +339,7 @@ function Ships:__init( x, y )
 end
 
 function Ships:update( dt )
-	local seaLevel = love.window.getHeight() / 2
+	local seaLevel = love.window.getHeight() / 2 - 50
 	if(self:getX() < self:getWidth() / 2 + 100) then
 		self.toKill = true
 	end
@@ -489,18 +490,18 @@ Boss = GameObject:extends()
 
 function Boss:__init( x, y )
 	Boss.super:__init()
-	self.image = love.graphics.newImage("assets/sprites/boss.png")
+	self.image = SpriteSet.boss
 
 	self.health = 420
 	self.pos.x = x
 	self.pos.y = y
-	self.pos.w = 100
-	self.pos.h = 120
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
 	self.hits = 0
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
-	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
 end

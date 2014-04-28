@@ -123,7 +123,7 @@ function GameScreen:__init()
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 2 do
+	for i = 1, 1 do
 		spawnShip( self.objects )
 	end
 
@@ -267,6 +267,18 @@ function beginContact( a, b, coll )
 		tempB.toKill = true
 		src_explosion:play()
 		score = score + 10
+	elseif tempA:is( Shots ) and tempB:is( Boss ) then
+		tempA.toKill = true
+		boss.hits = 1
+		if boss.health == 0 then
+			tempB.toKill = true
+		end
+	elseif tempA:is( Boss ) and tempB:is( Shots ) then
+		tempB.toKill = true
+		boss.hits = 1
+		if boss.health == 0 then
+			tempB.toKill = true
+		end
 	end
 
 end
@@ -309,7 +321,7 @@ function spawnFish( objects )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth(), love.graphics.getHeight() * math.random())
+	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random())
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
@@ -388,4 +400,8 @@ end
 
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
+end
+
+function getCollided( a, ta, b, tb )
+	
 end
