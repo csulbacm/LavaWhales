@@ -28,6 +28,9 @@ dwarf_probb = .2
 ammo_count = 0
 ammo_quota = 3
 ammo_probb = .1
+airBubble_count = 0
+airBubble_quota = 3
+airBubble_probb = .1
 fish_count = 0
 fish_quota = 3
 fish_probb = .1
@@ -161,6 +164,9 @@ function GameScreen:__init()
 	ammo_count = 0
 	ammo_quota = 3
 	ammo_probb = .1
+	airBubble_count = 0
+	airBubble_quota = 3
+	airBubble_probb = .1
 	fish_count = 0
 	fish_quota = 3
 	fish_probb = .1
@@ -180,7 +186,7 @@ function GameScreen:__init()
 	end
 	
 	for i = 1, 3 do
-		table.insert( self.objects, AirBubble(1000 * math.random(), 1000 * math.random()) )
+		spawnAirBubbles( self.objects )
 	end	
 
 	for i = 1, 1 do
@@ -218,7 +224,7 @@ function GameScreen:__init()
   posX2 = imageWidth
   posX3 = imageWidth * 2
   love.graphics.setNewFont(14)
-  --self.whale:setGhost()
+  self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -259,6 +265,7 @@ function GameScreen:update( dt )
 			ammo_count = ammo_count - 1
 		elseif cur:is ( AirBubble ) then
 			spawnAirBubbles( ActiveScreen.objects )
+			airBubble_count = airBubble_count - 1
 		elseif cur:is( Ships ) then
 			--spawnShip( self.objects )
 			ship_count = ship_count - 1
@@ -286,6 +293,10 @@ function GameScreen:update( dt )
 
 	if ammo_count < ammo_quota and math.random() <= ammo_probb then
 		spawnLava( self.objects )
+	end
+
+	if airBubble_count < airBubble_quota and math.random() <= airBubble_probb then
+		spawnAirBubbles( self.objects )
 	end
 
 	if fish_count < fish_quota and math.random() <= fish_probb then
@@ -419,7 +430,8 @@ function spawnFish( objects )
 end
 
 function spawnAirBubbles( objects )
-	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	airBubble_count = airBubble_count + 1
+	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() * 2 * math.random() + love.graphics.getHeight() / 2) )
 end
 
 function spawnBoss( objects )
