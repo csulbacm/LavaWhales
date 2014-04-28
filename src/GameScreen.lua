@@ -15,7 +15,7 @@ function GameScreen:__init()
 	dwarf_quota = 5
 	dwarf_probb = 1
 	ammo_count = 0
-	ammo_quota = 3
+	ammo_quota = 10
 	ammo_probb = .1
 	airBubble_count = 0
 	airBubble_quota = 3
@@ -313,7 +313,8 @@ end
 
 function spawnLava( objects )
 	ammo_count = ammo_count + 1
-	table.insert( objects, Ammo(love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2- boss:getWidth(), love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.5 + 300) )
+	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function spawnFish( objects )
