@@ -7,7 +7,8 @@ SpriteSet.dwarf = love.graphics.newImage("assets/sprites/new_unicorn2.png")
 SpriteSet.ammo = love.graphics.newImage("assets/sprites/new_crystal.png")
 SpriteSet.fireball = love.graphics.newImage("assets/sprites/fireball.png")
 SpriteSet.airBubble = love.graphics.newImage("assets/sprites/air_bubble.png")
-SpriteSet.boss = love.graphics.newImage("assets/sprites/boss.png")
+SpriteSet.boss_1 = love.graphics.newImage("assets/sprites/gnome01_2.png")
+SpriteSet.boss_2 = love.graphics.newImage("assets/sprites/gnome02_2.png")
 
 SpriteSet.fishes = {}
 	SpriteSet.fishes[1] = love.graphics.newImage("assets/sprites/fish01l.png")
@@ -519,7 +520,7 @@ Boss = GameObject:extends()
 
 function Boss:__init( x, y )
 	Boss.super:__init()
-	self.image = SpriteSet.boss
+	self.image = SpriteSet.boss_1
 
 	self.health = 240
 	self.pos.x = x
@@ -527,6 +528,10 @@ function Boss:__init( x, y )
 	self.pos.w = self.image:getWidth()
 	self.pos.h = self.image:getHeight()
 	self.hits = 0
+
+	self.state = true
+	self.state_time = 0
+	self.maxVel = 300
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
 	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
@@ -536,25 +541,22 @@ function Boss:__init( x, y )
 end
 
 function Boss:update( dt )
-	self.count = 0
-	self.body:applyLinearImpulse(math.random()*10, math.random()*10)
 	if self.hits >= 1 then
 		self.health = self.health -5
 		src_explosion:play()
-		self.count = self.count + 1
 		self.hits = 0
 	end
 
-	if self.count >= 5 then
-		self.health = self.health - 5
-		self.hits = 0
-		spawnDwarf( ActiveScreen.objects )
-		self.count = 0
-		--self.special_state = "hurt"
-		--self.hurt_time = 1
-		--self.state_time = 1
+	self.state_time = self.state_time + dt
+	if(self.state_time > .5) then
+		self.state_time = 0
+		if(self.state) then
+			self.image = SpriteSet.boss_2
+		else
+		   self.image = SpriteSet.boss_1
+		end
+		self.state = not self.state
 	end
-
 end
 
 function Boss:render()

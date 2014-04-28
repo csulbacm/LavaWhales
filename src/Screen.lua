@@ -288,7 +288,7 @@ function GameScreen:update( dt )
 
 
 	--respawn objects
-	for i=1,10 do
+	for i=1,1 do
 		if dwarf_count < dwarf_quota and math.random() <= dwarf_probb * dt then
 			spawnDwarf( self.objects )
 		end
