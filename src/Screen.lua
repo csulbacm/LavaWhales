@@ -376,12 +376,21 @@ function beginContact( a, b, coll )
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempB.dwarf_col + 1
 		tempA.toKill = true
-	--elseif tempA:is ( Boss_attack ) or tempB:is( Boss_attack ) then
-		--if(tempA:is ( Boss_attack )) then
-			--tempA.toKill = true
-		--else
-		  --  tempB.toKill = true
-		--end
+		src_hurt:play()
+	elseif tempA:is( Whale ) and tempB:is( Boss_attack ) then
+		tempA.dwarf_col = tempA.dwarf_col + 1
+		tempB.toKill = true
+		src_hurt:play()
+	elseif tempA:is( Boss_attack ) and tempB:is( Whale ) then
+		tempB.dwarf_col = tempB.dwarf_col + 1
+		tempA.toKill = true
+		src_hurt:play()
+	elseif tempA:is ( Boss_attack ) or tempB:is( Boss_attack ) then
+		if(tempA:is ( Boss_attack )) then
+			tempA.toKill = true
+		else
+		    tempB.toKill = true
+		end
 	elseif typesCollided( tempA, Shots, tempB, Dwarves ) then
 		tempA.toKill = true
 		tempB.toKill = true
