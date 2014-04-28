@@ -21,6 +21,12 @@ img_title_weed[1] = love.graphics.newImage("assets/sprites/left_seaweed03.png")
 img_title_weed[2] = love.graphics.newImage("assets/sprites/left_seaweed01.png")
 img_title_weed[3] = love.graphics.newImage("assets/sprites/left_seaweed02.png")
 img_title_weed[4] = img_title_weed[2]
+
+img_title_weed2 = {}
+img_title_weed2[1] = love.graphics.newImage("assets/sprites/right_seaweed03.png")
+img_title_weed2[2] = love.graphics.newImage("assets/sprites/right_seaweed01.png")
+img_title_weed2[3] = love.graphics.newImage("assets/sprites/right_seaweed02.png")
+img_title_weed2[4] = img_title_weed2[2]
 score = 0
 
 title = {}
@@ -80,7 +86,7 @@ function TitleScreen:__init()
 end
 
 function TitleScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}	}
+	gui.group.push{grow="down",pos={ love.graphics.getWidth()/2 - 100,love.graphics.getHeight()/2 - 100 }	}
 	if gui.Button{id = "start", text = "Start"} then
 		self.start_button = true
 				src_button:play()
@@ -107,6 +113,7 @@ function TitleScreen:render()
 	love.graphics.draw(img_title_back)
 	
 	love.graphics.draw(img_title_weed[self.weed],100,0)
+	love.graphics.draw(img_title_weed2[self.weed],100,0)
 	titleText:render()
 end
 
