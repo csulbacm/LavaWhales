@@ -9,6 +9,8 @@ src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+src_pop = love.audio.newSource("assets/sounds/pop.ogg")
+src_eat = love.audio.newSource("assets/sounds/eat.wav")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
 img_title_weed = {}
@@ -363,6 +365,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_pop:play()
 		ActiveScreen.whale.air = ActiveScreen.whale.air + 10
 		if(ActiveScreen.whale.air >= 100) then
 			ActiveScreen.whale.air = 100
@@ -370,6 +373,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, Fish ) then
 		tempA.toKill = true
 		tempB.toKill = true
+		src_eat:play()
 		ActiveScreen.whale.health = ActiveScreen.whale.health + 5
 		if ActiveScreen.whale.health > 100 then
 			ActiveScreen.whale.health = 100
