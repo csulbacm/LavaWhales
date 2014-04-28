@@ -11,6 +11,7 @@ src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
+img_instruction_back = love.graphics.newImage("assets/sprites/instruction_screen.png")
 img_title_weed = {}
 img_title_weed[1] = love.graphics.newImage("assets/sprites/left_seaweed03.png")
 img_title_weed[2] = love.graphics.newImage("assets/sprites/left_seaweed01.png")
@@ -109,9 +110,14 @@ function  HelpScreen:__init()
 end
 
 function HelpScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.\n\nMove with the arrow keys\nSpace to shoot\nm to mute\tesc to return to the menu\np to pause the game.",
+	gui.group.push{grow="down",pos={300,200}}
+	gui.Label{text="Try to get a high score through killing unicorns, ships, and gnomes.\nHave a whale of a time.",
 		size={2}}
+	gui.Label{text="\nControls\nArrows: move\nSpace: shoot\nS: tri-shot\nB: bubble\nM: mute\nESC: return to the menu\nP: pause"}
+	gui.Label{text=""}
+	gui.Label{text=""}
+	gui.Label{text=""}
+	gui.Label{text=""}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
 		src_button:play()
@@ -119,6 +125,10 @@ function HelpScreen:update( dt )
 		ActiveScreen = TitleScreen()
 	end
 	gui.group.pop{}
+end
+
+function HelpScreen:render()
+	love.graphics.draw(img_instruction_back)
 end
 
 FailScreen = Screen:extends()
