@@ -9,6 +9,7 @@ src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
 src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
+boss_img = love.graphics.newImage("assets/sprites/gnome01_3.png")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
 img_title_weed = {}
@@ -345,6 +346,12 @@ function beginContact( a, b, coll )
 	elseif tempA:is( Dwarves ) and tempB:is( Whale ) then
 		tempB.dwarf_col = tempB.dwarf_col + 1
 		tempA.toKill = true
+	--elseif tempA:is ( Boss_attack ) or tempB:is( Boss_attack ) then
+		--if(tempA:is ( Boss_attack )) then
+			--tempA.toKill = true
+		--else
+		  --  tempB.toKill = true
+		--end
 	elseif typesCollided( tempA, Shots, tempB, Dwarves ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -442,7 +449,7 @@ function spawnAirBubbles( objects )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
+	boss = Boss( love.graphics.getWidth() * 2 - boss_img:getWidth(), love.graphics.getHeight() * 2 - boss_img:getHeight() * 2)
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end

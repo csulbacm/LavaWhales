@@ -533,10 +533,11 @@ function Boss:__init( x, y )
 
 	self.state = true
 	self.state_time = 0
+	self.attack_time = 0
 	self.maxVel = 300
 
-	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
-	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "static")
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w / 2, self.pos.h)
 	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
@@ -558,12 +559,17 @@ function Boss:update( dt )
 		   self.image = SpriteSet.boss_1
 		end
 		self.state = not self.state
+	end
+
+	self.attack_time = self.attack_time + dt
+	if(self.attack_time > 1) then
+		self.attack_time = 0
 		self:attack()
 	end
 end
 
 function Boss:render()
-	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
@@ -621,7 +627,16 @@ function Boss_attack:update( dt )
 		end
 		self.state = not self.state
 	end
-	self.body:applyLinearImpulse(50,0)
+	
+	local x,y = self.body:getLinearVelocity()
+	if(x > 10) then
+		self.body:applyLinearImpulse(100,0)
+	end
+
+	if(self.body:getX() >= love.window.getWidth() * 2 - 200 or 
+		self.body:getY() <= love.window.getWidth() / 2 - 200) then
+		self.toKill = true
+	end
 end
 
 function Boss_attack:render()
