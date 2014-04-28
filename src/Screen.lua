@@ -7,6 +7,7 @@ src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
@@ -28,6 +29,9 @@ dwarf_probb = .2
 ammo_count = 0
 ammo_quota = 3
 ammo_probb = .1
+airBubble_count = 0
+airBubble_quota = 3
+airBubble_probb = .1
 fish_count = 0
 fish_quota = 3
 fish_probb = .1
@@ -159,8 +163,11 @@ function GameScreen:__init()
 	dwarf_quota = 5
 	dwarf_probb = 10
 	ammo_count = 0
-	ammo_quota = 30
-	ammo_probb = 10
+	ammo_quota = 3
+	ammo_probb = .1
+	airBubble_count = 0
+	airBubble_quota = 3
+	airBubble_probb = .1
 	fish_count = 0
 	fish_quota = 30
 	fish_probb = 10
@@ -179,8 +186,8 @@ function GameScreen:__init()
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end
 
-	for i = 1, 30 do
-		table.insert( self.objects, AirBubble(1000 * math.random(), 1000 * math.random()) )
+	for i = 1, 3 do
+		spawnAirBubbles( self.objects )
 	end	
 
 	for i = 1, 1 do
@@ -218,7 +225,7 @@ function GameScreen:__init()
   posX2 = imageWidth
   posX3 = imageWidth * 2
   love.graphics.setNewFont(14)
-  --self.whale:setGhost()
+  self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -259,6 +266,7 @@ function GameScreen:update( dt )
 			ammo_count = ammo_count - 1
 		elseif cur:is ( AirBubble ) then
 			spawnAirBubbles( ActiveScreen.objects )
+			airBubble_count = airBubble_count - 1
 		elseif cur:is( Ships ) then
 			--spawnShip( self.objects )
 			ship_count = ship_count - 1
@@ -283,7 +291,7 @@ function GameScreen:update( dt )
 
 
 	--respawn objects
-	for i=1,10 do
+	for i=1,1 do
 		if dwarf_count < dwarf_quota and math.random() <= dwarf_probb * dt then
 			spawnDwarf( self.objects )
 		end
@@ -292,11 +300,15 @@ function GameScreen:update( dt )
 			spawnLava( self.objects )
 		end
 
-		if fish_count < fish_quota and math.random() <= fish_probb * dt then
-			spawnFish( self.objects )
-		end
+	if airBubble_count < airBubble_quota and math.random() <= airBubble_probb then
+		spawnAirBubbles( self.objects )
+	end
 
-		if ship_count < ship_quota and math.random() <= ship_probb * dt then
+	if fish_count < fish_quota and math.random() <= fish_probb then
+		spawnFish( self.objects )
+	end
+
+	if ship_count < ship_quota and math.random() <= ship_probb * dt then
 			spawnShip( self.objects )
 		end
 	end
@@ -351,7 +363,7 @@ function beginContact( a, b, coll )
 	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
 		tempA.toKill = true
 		tempB.toKill = true
-		ActiveScreen.whale.air = ActiveScreen.whale.air + 15
+		ActiveScreen.whale.air = ActiveScreen.whale.air + 10
 		if(ActiveScreen.whale.air >= 100) then
 			ActiveScreen.whale.air = 100
 		end
@@ -372,6 +384,7 @@ function beginContact( a, b, coll )
 		shot.toKill = true
 		boss.hits = 1
 		if boss.health == 0 then
+			src_victory:play()
 			boss.toKill = true
 		end
 	elseif typesCollided( tempA, Shots, tempB, Ships ) then
@@ -424,7 +437,8 @@ function spawnFish( objects )
 end
 
 function spawnAirBubbles( objects )
-	table.insert( objects, AirBubble(love.graphics.getWidth() * 2-10, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+	airBubble_count = airBubble_count + 1
+	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() * 2 * math.random() + love.graphics.getHeight() / 2) )
 end
 
 function spawnBoss( objects )
