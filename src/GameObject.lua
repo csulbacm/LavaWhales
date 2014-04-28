@@ -547,7 +547,7 @@ function Boss:__init( x, y )
 	self.maxVel = 300
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "static")
-	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w / 2, self.pos.h)
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w / 2, self.pos.h * .75)
 	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
@@ -572,7 +572,7 @@ function Boss:update( dt )
 	end
 
 	self.attack_time = self.attack_time + dt
-	if(self.attack_time > 1) then
+	if(self.attack_time > 1.5) then
 		self.attack_time = 0
 		self:attack()
 	end
@@ -618,6 +618,8 @@ function Boss_attack:__init( x, y )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 50 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
+
+	self.fx, self.fy = ActiveScreen.whale:getX() - x, ActiveScreen.whale:getY() - y
 end
 
 function Boss_attack:update( dt )
@@ -638,10 +640,7 @@ function Boss_attack:update( dt )
 		self.state = not self.state
 	end
 	
-	local x,y = self.body:getLinearVelocity()
-	if(x > -10) then
-		self.body:applyLinearImpulse(-100,0)
-	end
+	self.body:applyLinearImpulse(self.fx,self.fy)
 
 	if(self.body:getX() <= self:getWidth() or 
 		self.body:getY() <= love.window.getWidth() / 2 - 200) then
