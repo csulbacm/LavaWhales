@@ -59,7 +59,7 @@ function love.keypressed( key, isrepeat )
 		ActiveScreen.whale.state_time = 0
 		src_shoot:play()
 	end
-	if key == 'b' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.air > 0 then
+	if key == 'b' and ActiveScreen:is( GameScreen ) and ActiveScreen.whale.air > 10 then
 		if(ActiveScreen.whale:getDirection() == "right") then
 			table.insert( ActiveScreen.objects, Shots( ActiveScreen.whale:getX() + ActiveScreen.whale:getWidth() / 2,
 			 ActiveScreen.whale:getY(), 0, -50000 * 64, "air" ) )

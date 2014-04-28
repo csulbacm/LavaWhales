@@ -332,7 +332,7 @@ function Ships:__init( x, y )
 	self.pos.h = 50
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic")
-	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w, self.pos.h )
+	self.shape = love.physics.newRectangleShape( 0, 0, self.pos.w + self.pos.w, self.pos.h )
 	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
 	self.fixture:setUserData( self )
 	self.body:setFixedRotation( true )
@@ -356,8 +356,8 @@ function Ships:update( dt )
 end
 
 function Ships:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
-	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
+		love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
 function Ships:getWidth()
@@ -519,7 +519,7 @@ function Boss:update( dt )
 end
 
 function Boss:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 

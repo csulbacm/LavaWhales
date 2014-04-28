@@ -134,19 +134,19 @@ function GameScreen:__init()
 	score = 0
 	self.objects = {}
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		spawnDwarf( self.objects )
 	end
 
-	for i = 1, 1 do
+	for i = 1, 3 do
 		table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end	
 
-	for i = 1, 1 do
+	for i = 1, 3 do
 		spawnFish( self.objects )
 	end
 
-	for i = 1, 1 do
+	for i = 1, 2 do
 		spawnShip( self.objects )
 	end
 
@@ -177,6 +177,7 @@ function GameScreen:__init()
   posX2 = imageWidth
   posX3 = imageWidth * 2
   --self.whale:setGhost()
+  love.graphics.setNewFont(14)
 end
 
 function GameScreen:update( dt )
@@ -245,6 +246,7 @@ function GameScreen:render()
 	bossHealth(boss)
 	ammoBar(self.whale)
 	airBar(self.whale)
+	scoreBar()
 	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
 	--love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
    camera:unset()
@@ -288,6 +290,17 @@ function beginContact( a, b, coll )
 		tempB.toKill = true
 		src_explosion:play()
 		score = score + 10
+	elseif typesCollided( tempA, Shots, tempB, Boss ) then
+		local shot, boss = getCollided( tempA, Shots, tempB, Boss )
+		shot.toKill = true
+		boss.hits = 1
+		if boss.health == 0 then
+			boss.toKill = true
+		end
+	elseif typesCollided( tempA, Shots, tempB, Ships ) then
+		local shot, ship = getCollided( tempA, Shots, tempB, Ships )
+		shot.toKill = true
+		ship.toKill = true
 	end
 
 end
@@ -311,7 +324,7 @@ function printBackground(posX1, posX2, posx3, imageWidth)
 end
 
 function spawnDwarf( objects )
-	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Dwarves( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 	objects[ #objects ].body:applyForce(  -1000000 -100*math.random(), 0 )
 end
 
@@ -321,16 +334,16 @@ function spawnShip( objects )
 end
 
 function spawnLava( objects )
-	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random()) )
+	table.insert( objects, Ammo(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
 end
 
 function spawnFish( objects )
-	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() ) )
+	table.insert( objects, Fish( love.graphics.getWidth() * 2, love.graphics.getHeight()/2 + love.graphics.getHeight() * math.random() * 0.75 + 300 ) )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
 function spawnBoss( objects )
-	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random())
+	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
 end
@@ -401,6 +414,28 @@ function airBar(whale)
 	love.graphics.setColor(255,255,255)
 end
 
+function scoreBar()
+	local x, y = camera._x + love.window.getWidth() / 2, camera._y + love.window.getHeight() - 50
+	love.graphics.setColor(255,255,255)
+	love.graphics.print("Score: "..score, x, y)
+end
+
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
+end
+
+function getCollided( a, ta, b, tb )
+	local temp = {}
+	if a:is( ta ) then
+		temp.a = a
+	elseif a:is( tb ) then
+		temp.b = a
+	end
+
+	if b:is( tb ) then
+		temp.b = b
+	elseif b:is( ta ) then
+		temp.a = b
+	end
+	return temp.a, temp.b
 end
