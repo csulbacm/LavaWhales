@@ -7,6 +7,7 @@ src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
@@ -159,7 +160,7 @@ function GameScreen:__init()
 	self.gameOver = false
 	score = 0
 	dwarf_count = 0
-	dwarf_quota = 5
+	dwarf_quota = 5000
 	dwarf_probb = 1
 	ammo_count = 0
 	ammo_quota = 3
@@ -168,15 +169,15 @@ function GameScreen:__init()
 	airBubble_quota = 3
 	airBubble_probb = .1
 	fish_count = 0
-	fish_quota = 3
-	fish_probb = .1
+	fish_quota = 3000
+	fish_probb = 1
 	ship_count = 0
-	ship_quota = 2
+	ship_quota = 2000
 	ship_probb = .1
 
 	self.objects = {}
 
-	for i = 1, 5 do
+	for i = 1, 1 do
 		spawnDwarf( self.objects )
 	end
 
@@ -184,7 +185,7 @@ function GameScreen:__init()
 		spawnLava( self.objects )
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
 	end
-	
+
 	for i = 1, 3 do
 		spawnAirBubbles( self.objects )
 	end	
@@ -287,13 +288,14 @@ function GameScreen:update( dt )
 
 
 	--respawn objects
-	if dwarf_count < dwarf_quota and math.random() <= dwarf_probb then
-		spawnDwarf( self.objects )
-	end
+	for i=1,10 do
+		if dwarf_count < dwarf_quota and math.random() <= dwarf_probb * dt then
+			spawnDwarf( self.objects )
+		end
 
-	if ammo_count < ammo_quota and math.random() <= ammo_probb then
-		spawnLava( self.objects )
-	end
+		if ammo_count < ammo_quota and math.random() <= ammo_probb * dt then
+			spawnLava( self.objects )
+		end
 
 	if airBubble_count < airBubble_quota and math.random() <= airBubble_probb then
 		spawnAirBubbles( self.objects )
@@ -303,8 +305,9 @@ function GameScreen:update( dt )
 		spawnFish( self.objects )
 	end
 
-	if ship_count < ship_quota and math.random() <= ship_probb then
-		spawnShip( self.objects )
+	if ship_count < ship_quota and math.random() <= ship_probb * dt then
+			spawnShip( self.objects )
+		end
 	end
 end
 
@@ -378,6 +381,7 @@ function beginContact( a, b, coll )
 		shot.toKill = true
 		boss.hits = 1
 		if boss.health == 0 then
+			src_victory:play()
 			boss.toKill = true
 		end
 	elseif typesCollided( tempA, Shots, tempB, Ships ) then
