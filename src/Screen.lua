@@ -154,6 +154,7 @@ function GameScreen:__init()
   posX2 = imageWidth
   posX3 = imageWidth * 2
   --self.whale:setGhost()
+  love.graphics.setNewFont(14)
 end
 
 function GameScreen:update( dt )
@@ -222,6 +223,7 @@ function GameScreen:render()
 	bossHealth(boss)
 	ammoBar(self.whale)
 	airBar(self.whale)
+	scoreBar()
 	--love.graphics.print(math.floor(self.whale:getX()),camera._x,camera._y)
 	--love.graphics.print(math.floor(self.whale:getY()),camera._x + 50,camera._y)
    camera:unset()
@@ -387,6 +389,12 @@ function airBar(whale)
 		love.graphics.rectangle("fill", x + 61, y, air * 2, 15)
 	end
 	love.graphics.setColor(255,255,255)
+end
+
+function scoreBar()
+	local x, y = camera._x + love.window.getWidth() / 2, camera._y + love.window.getHeight() - 50
+	love.graphics.setColor(255,255,255)
+	love.graphics.print("Score: "..score, x, y)
 end
 
 function typesCollided( a, ta, b, tb )

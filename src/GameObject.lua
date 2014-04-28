@@ -357,7 +357,7 @@ end
 
 function Ships:render()
 	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
-	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
+	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
 end
 
 function Ships:getWidth()
