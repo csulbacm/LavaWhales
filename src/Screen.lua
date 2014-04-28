@@ -381,3 +381,7 @@ end
 function typesCollided( a, ta, b, tb )
 	return a:is( ta ) and b:is( tb ) or a:is( tb ) and b:is( ta )
 end
+
+function getCollided( a, ta, b, tb )
+	
+end

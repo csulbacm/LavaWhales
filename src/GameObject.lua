@@ -519,7 +519,7 @@ function Boss:update( dt )
 end
 
 function Boss:render()
-	love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 )
 end
 
