@@ -445,6 +445,35 @@ function Ammo:render()
 	love.graphics.pop()
 end
 
+AirBubble = GameObject:extends()
+
+function AirBubble:__init( x, y )
+	self.image = SpriteSet.airBubble
+	self.body = love.physics.newBody( world, x, y, "dynamic" )
+	self.shape = love.physics.newRectangleShape( 0, 0, self.image:getWidth(), self.image:getHeight() )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
+	self.fixture:setUserData( self )
+end
+
+function AirBubble:update( dt )
+	if(self:getX() < self:getWidth() / 2 + 20) then
+		self.toKill = true
+	end
+	x,y = self.body:getLinearVelocity()
+	if(x > -10) then
+		self.body:applyLinearImpulse(-100,0)
+	end
+end
+
+function AirBubble:render()
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
+	love.graphics.push()
+	love.graphics.translate( self.body:getX(), self.body:getY() )
+	love.graphics.rotate( self.body:getAngle() )
+	love.graphics.draw( self.image, -self.image:getWidth()/2, -self.image:getHeight()/2 )
+	love.graphics.pop()
+end
+
 Fish = GameObject:extends()
 
 function Fish:__init( x, y )
@@ -492,7 +521,7 @@ function Boss:__init( x, y )
 	Boss.super:__init()
 	self.image = SpriteSet.boss
 
-	self.health = 420
+	self.health = 240
 	self.pos.x = x
 	self.pos.y = y
 	self.pos.w = self.image:getWidth()
@@ -507,10 +536,20 @@ function Boss:__init( x, y )
 end
 
 function Boss:update( dt )
+	self.count = 0
 	self.body:applyLinearImpulse(math.random()*10, math.random()*10)
 	if self.hits >= 1 then
+		self.health = self.health -5
+		src_explosion:play()
+		self.count = self.count + 1
+		self.hits = 0
+	end
+
+	if self.count >= 5 then
 		self.health = self.health - 5
 		self.hits = 0
+		spawnDwarf( ActiveScreen.objects )
+		self.count = 0
 		--self.special_state = "hurt"
 		--self.hurt_time = 1
 		--self.state_time = 1

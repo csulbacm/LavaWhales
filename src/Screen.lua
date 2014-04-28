@@ -177,6 +177,10 @@ function GameScreen:__init()
 	for i = 1, 1 do
 		spawnLava( self.objects )
 		--table.insert( self.objects, Ammo(1000 * math.random(), 1000 * math.random()) )
+	end
+	
+	for i = 1, 3 do
+		table.insert( self.objects, AirBubble(1000 * math.random(), 1000 * math.random()) )
 	end	
 
 	for i = 1, 1 do
@@ -213,8 +217,8 @@ function GameScreen:__init()
   posX1 = 0
   posX2 = imageWidth
   posX3 = imageWidth * 2
-  --self.whale:setGhost()
   love.graphics.setNewFont(14)
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -253,6 +257,8 @@ function GameScreen:update( dt )
 		elseif cur:is( Ammo ) then
 			--spawnLava( self.objects )
 			ammo_count = ammo_count - 1
+		elseif cur:is ( AirBubble ) then
+			spawnAirBubbles( ActiveScreen.objects )
 		elseif cur:is( Ships ) then
 			--spawnShip( self.objects )
 			ship_count = ship_count - 1
@@ -337,6 +343,13 @@ function beginContact( a, b, coll )
 		if(ActiveScreen.whale.ammo >= 20) then
 			ActiveScreen.whale.ammo = 20
 		end
+	elseif typesCollided( tempA, Whale, tempB, AirBubble ) then
+		tempA.toKill = true
+		tempB.toKill = true
+		ActiveScreen.whale.air = ActiveScreen.whale.air + 15
+		if(ActiveScreen.whale.air >= 100) then
+			ActiveScreen.whale.air = 100
+		end
 	elseif typesCollided( tempA, Whale, tempB, Fish ) then
 		tempA.toKill = true
 		tempB.toKill = true
@@ -405,6 +418,9 @@ function spawnFish( objects )
 	objects[ #objects ].body:applyForce(  -5000 -100*math.random(), 0 )
 end
 
+function spawnAirBubbles( objects )
+	table.insert( objects, AirBubble(love.graphics.getWidth() * 2, love.graphics.getHeight() + love.graphics.getHeight() * math.random() * 0.75 + 300) )
+end
 
 function spawnBoss( objects )
 	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
