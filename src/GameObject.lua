@@ -89,7 +89,9 @@ function Whale:__init( x, y )
 	self.spriteset.drowning = love.graphics.newImage("assets/sprites/choking_whale01.png")
 	self.spriteset.ouch1 = love.graphics.newImage("assets/sprites/ouch01.png")
 	self.spriteset.ouch2 = love.graphics.newImage("assets/sprites/ouch02.png")
-	
+	self.spriteset.choke1 = love.graphics.newImage("assets/sprites/choking_whale01.png")
+	self.spriteset.choke2 = love.graphics.newImage("assets/sprites/choking_whale02.png")
+
 	self.image = love.graphics.newImage("assets/sprites/whale01.png")
 	self.norm_state = "down"
 	self.direction = "right"
@@ -196,10 +198,18 @@ function Whale:update( dt )
 	if(self.state_time > .5 and self.special_state ~= "hurt") then
 		self.state_time = 0
 		self.special_state = nil
-		if self.norm_state == "up" then
-			self.norm_state = "down"
+		if self.air > 0 then
+			if self.norm_state == "up" then
+				self.norm_state = "down"
+			else
+			    self.norm_state = "up"
+			end
 		else
-		    self.norm_state = "up"
+			if self.norm_state == "choke1" then
+				self.norm_state = "choke2"
+			else
+				self.norm_state = "choke1"
+			end
 		end
 	end
 
