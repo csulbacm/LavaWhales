@@ -13,6 +13,7 @@ src_pop = love.audio.newSource("assets/sounds/pop.ogg")
 src_eat = love.audio.newSource("assets/sounds/eat.wav")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
+img_instruction_back = love.graphics.newImage("assets/sprites/instruction_screen.png")
 img_title_weed = {}
 img_title_weed[1] = love.graphics.newImage("assets/sprites/left_seaweed03.png")
 img_title_weed[2] = love.graphics.newImage("assets/sprites/left_seaweed01.png")
@@ -24,6 +25,9 @@ title = {}
 title.falling = love.graphics.newImage("assets/sprites/lavawhale_title01.png")
 title.squash = love.graphics.newImage("assets/sprites/lavawhale_titlesquash.png")
 
+GameOver = {}
+GameOver.first = love.graphics.newImage("assets/sprites/loser_screen.png")
+GameOver.second = love.graphics.newImage("assets/sprites/loser_screen_ver2.png")
 
 dwarf_count = 0
 dwarf_quota = 5
@@ -111,9 +115,14 @@ function  HelpScreen:__init()
 end
 
 function HelpScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}}
-	gui.Label{text="These will be instructions on how to not play the game.\nHave a whale of a time.\n\nMove with the arrow keys\nSpace to shoot\nm to mute\tesc to return to the menu\np to pause the game.",
+	gui.group.push{grow="down",pos={300,200}}
+	gui.Label{text="Try to get a high score through killing unicorns, ships, and gnomes.\nHave a whale of a time.",
 		size={2}}
+	gui.Label{text="\nControls\nArrows: move\nSpace: shoot\nS: tri-shot\nB: bubble\nM: mute\nESC: return to the menu\nP: pause"}
+	gui.Label{text=""}
+	gui.Label{text=""}
+	gui.Label{text=""}
+	gui.Label{text=""}
 	gui.Label{text=""}
 	if gui.Button{id = "return", text = "Return"} then
 		src_button:play()
@@ -123,16 +132,23 @@ function HelpScreen:update( dt )
 	gui.group.pop{}
 end
 
+function HelpScreen:render()
+	love.graphics.draw(img_instruction_back)
+end
+
 FailScreen = Screen:extends()
 
 function  FailScreen:__init()
 	FailScreen.super:__init( "FailScreen" )
 	src_lose:play()
-	self.image = love.graphics.newImage("assets/sprites/dead_whale.png")
+	self.image = GameOver.first
+
+	self.first = true
+	self.switch_time = 0
 end
 
 function FailScreen:update( dt )
-	gui.group.push{grow="down",pos={200,100}}
+	gui.group.push{grow="down",pos={400,350}}
 	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going\n Your score was: " .. score,
 		size={2}}
 	gui.Label{text=""}
@@ -144,10 +160,21 @@ function FailScreen:update( dt )
 		src_button:play()
 	end
 	gui.group.pop{}
+
+	self.switch_time = self.switch_time + dt
+	if self.switch_time >= 0.5 then
+		self.switch_time = 0
+		if self.first then
+			self.image = GameOver.first
+		else
+			self.image = GameOver.second
+		end
+		self.first = not self.first
+	end
 end
 
 function FailScreen:render()
-	love.graphics.draw( self.image, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+	love.graphics.draw( self.image, (love.graphics.getWidth() - self.image:getWidth() )/2, (love.graphics.getHeight() - self.image:getHeight() )/2 )
 end
 
 GameScreen = Screen:extends()
@@ -227,7 +254,7 @@ function GameScreen:__init()
   posX2 = imageWidth
   posX3 = imageWidth * 2
   love.graphics.setNewFont(14)
-  self.whale:setGhost()
+  --self.whale:setGhost()
 end
 
 function GameScreen:update( dt )
@@ -449,6 +476,10 @@ function spawnBoss( objects )
 	boss = Boss( love.graphics.getWidth() * 1.75, love.graphics.getHeight() * 2 * math.random() )
 	table.insert( objects, boss )
 	objects[ #objects ].body:applyForce( 0, 0 )
+end
+
+function spawnBossAttack (objects)
+	table.insert( objects, 	Boss_attack(boss:getX() + boss:getWidth() / 2, boss:getY()))
 end
 
 function bossHealth( boss ) 
