@@ -7,6 +7,7 @@ src_hurt = love.audio.newSource("assets/sounds/arr.wav")
 src_button = love.audio.newSource("assets/sounds/button_click.wav")
 src_power = love.audio.newSource("assets/sounds/drain.ogg")
 src_lose = love.audio.newSource("assets/sounds/lose.wav")
+src_victory = love.audio.newSource("assets/sounds/victory.wav")
 src2 = love.audio.newSource("assets/sounds/cave_theme.ogg", "static")
 
 img_title_back = love.graphics.newImage("assets/sprites/title_screen.png")
@@ -367,6 +368,7 @@ function beginContact( a, b, coll )
 		shot.toKill = true
 		boss.hits = 1
 		if boss.health == 0 then
+			src_victory:play()
 			boss.toKill = true
 		end
 	elseif typesCollided( tempA, Shots, tempB, Ships ) then
