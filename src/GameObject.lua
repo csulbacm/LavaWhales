@@ -113,7 +113,7 @@ function Whale:__init( x, y )
 
 	self.body = love.physics.newBody( world, self.pos.x, self.pos.y, "dynamic" )
 	self.shape = love.physics.newCircleShape( 100 )
-	self.fixture = love.physics.newFixture( self.body, self.shape, 10 )
+	self.fixture = love.physics.newFixture( self.body, self.shape, 1 )
 	self.fixture:setUserData( self )
 end
 
@@ -356,8 +356,8 @@ function Ships:update( dt )
 end
 
 function Ships:render()
+	--love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 	love.graphics.draw( self.image, self.body:getX() - self:getWidth()/2, self.body:getY() - self:getHeight()/2 , 0, -1, 1, self:getWidth(), 0)
-		love.graphics.polygon("fill", self.body:getWorldPoints( self.shape:getPoints() ))
 end
 
 function Ships:getWidth()
@@ -529,4 +529,35 @@ end
 
 function Boss:getHeight()
 	return self.image:getHeight()
+end
+
+
+FallingTitle = GameObject:extends()
+
+function FallingTitle:__init()
+	self.state = "falling"
+	self.image = title[ self.state ]
+
+	self.pos = {}
+	self.pos.x = ( love.graphics.getWidth() - self.image:getWidth() ) / 2
+	self.pos.y = -10
+	self.pos.w = self.image:getWidth()
+	self.pos.h = self.image:getHeight()
+end
+
+function FallingTitle:update( dt )
+	if self.state == "falling" then
+		if self.pos.y > love.graphics.getHeight() - self.image:getHeight() then
+			self.state = "squash"
+			self.image = title[ self.state ]
+			self.pos.x = ( love.graphics.getWidth() - self.image:getWidth() ) / 2
+			self.pos.y = love.graphics.getHeight() - self.image:getHeight()
+		else
+			self.pos.y = self.pos.y + 1000 * dt
+		end
+	end
+end
+
+function FallingTitle:render()
+	love.graphics.draw( self.image, self.pos.x, self.pos.y )
 end
