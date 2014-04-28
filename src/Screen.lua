@@ -154,6 +154,7 @@ function FailScreen:update( dt )
 	gui.Label{text="You have failed whalekind.\nWhales they are now extinct. \n Good going\n Your score was: " .. score,
 		size={2}}
 	gui.Label{text=""}
+	gui.Label{text=""}
 	src1:pause()
 	
 	if gui.Button{id = "return", text = "Return"} then
