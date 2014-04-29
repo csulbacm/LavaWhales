@@ -66,17 +66,17 @@ function Whale:update( dt )
 	local x, y = self.body:getLinearVelocity()
 	local seaLevel = love.window.getHeight() / 2	
 	if love.keyboard.isDown('up') and  y > -self.maxVel then
-		self.body:applyLinearImpulse( 0, -self.accel )
+		self.body:setLinearVelocity( x, -self.accel )
 	end
 	if love.keyboard.isDown('down') and y < self.maxVel then
-		self.body:applyLinearImpulse( 0, self.accel )
+		self.body:setLinearVelocity( x, self.accel )
 	end
 	if love.keyboard.isDown('left') and x > -self.maxVel then
-		self.body:applyLinearImpulse( -self.accel, 0 )
+		self.body:setLinearVelocity( -self.accel, y )
 		self.direction = "left"
 	end
 	if love.keyboard.isDown('right') and x < self.maxVel then
-		self.body:applyLinearImpulse( self.accel, 0 )
+		self.body:setLinearVelocity( self.accel, y )
 		self.direction = "right"
 	end
 
