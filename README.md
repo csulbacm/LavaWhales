@@ -1,6 +1,6 @@
 LavaWhales
 ==========
-You are the last pregnant female(in all of the multiverses) whale that needs food and water. You can obtain lava balls, fish, and oxygen from the enviroment while avoiding the dwarves and the Japanese.
+You are the last pregnant female whale, in all of the multiverses, that needs food and water. You can obtain lava balls, fish, and oxygen from the enviroment while avoiding dwarves, gnomes, and a giant squid.
 
 Running the Game
 ================
